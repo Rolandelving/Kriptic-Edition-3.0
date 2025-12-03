@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information | Kriptic Edition 3.0</title>
+    <style>
+        @font-face {
+            font-family: 'DripOctober';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/DripOctober-vm0JA%5B1%5D.ttf') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DripOctober', sans-serif;
+            background: radial-gradient(ellipse at top, #0a0e27, #000000);
+            color: #e0e7ff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .header {
+            padding: 2rem 4rem;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(100, 150, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6495ff, #9d7dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .title {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ffffff, #6495ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #6495ff;
+            margin-bottom: 1rem;
+        }
+
+        .section p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-box {
+            background: rgba(100, 150, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            color: #6495ff;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.5rem 2rem;
+            }
+
+            .content {
+                margin: 2rem auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">KRIPTIC EDITION</div>
+    </div>
+
+    <div class="content">
+        <h1 class="title">Platform Information</h1>
+
+        <div class="section">
+            <h2 class="section-title">About Kriptic Edition 3.0</h2>
+            <p>
+                Kriptic Edition is a comprehensive entertainment platform developed over 600+ days with dedication to quality and user experience. This is the third major iteration, representing a complete overhaul from the previous Google Sites version.
+            </p>
+            <p>
+                The platform combines a Netflix-style movie interface, instant-launch game technology, community polls, and various utility tools into a unified astronomy-themed experience.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Development Journey</h2>
+            <p>
+                <strong>Version 1.0:</strong> Initial concept and basic website structure<br>
+                <strong>Version 2.0:</strong> Google Sites implementation with expanded content<br>
+                <strong>Version 3.0:</strong> Independent hosting with advanced features and professional design
+            </p>
+            <p>
+                All design decisions, content curation, and project management handled personally, with AI assistance for coding implementation.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Platform Statistics</h2>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value">176+</div>
+                    <div class="stat-label">Movies & Shows</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">Games</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">600+</div>
+                    <div class="stat-label">Days Developed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Dedication</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Technical Stack</h2>
+            <p>
+                <strong>Frontend:</strong> HTML5, CSS3, JavaScript (ES6+)<br>
+                <strong>Database:</strong> Supabase (PostgreSQL)<br>
+                <strong>Real-time:</strong> Firebase Realtime Database<br>
+                <strong>CDN:</strong> JSDelivr, GitHub<br>
+                <strong>Hosting:</strong> GitHub Pages<br>
+                <strong>Analytics:</strong> Google Analytics
+            </p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Features</h2>
+            <p>
+                • Netflix-style movie streaming interface with search and sort<br>
+                • Instant-launch game technology with 50+ embedded games<br>
+                • Real-time community polls with anti-cheat protection<br>
+                • Live visitor counter powered by Firebase<br>
+                • Astronomy-themed UI with realistic physics effects<br>
+                • Fully responsive design for all devices<br>
+                • Multiple theme options and custom fonts
+            </p>
+        </div>
+    </div>
+</body>
+</html>
