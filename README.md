@@ -1,7 +1,7 @@
 # Kriptic-Edition-3.0
 ===============================================
     KRIPTIC EDITION 3.0 - README
-===============================================
+
 
 ABOUT
 -----
@@ -43,4 +43,4 @@ This platform is a passion project focused on delivering an immersive entertainm
 
 ===============================================
            Developed with dedication
-===============================================
+
