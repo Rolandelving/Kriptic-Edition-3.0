@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kriptic Edition 3.0 | Cosmic Entertainment Platform</title>
+    <meta name="description" content="Kriptic Edition 3.0 - A comprehensive streaming and gaming platform with 176+ movies, 50+ games, chatrooms, and more in a cosmic-themed interface.">
+    <style>
+        /* Custom Fonts */
+        @font-face {
+            font-family: 'DripOctober';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/DripOctober-vm0JA%5B1%5D.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Chainsaw Carnage';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/ChainsawCarnage%5B1%5D.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Halloween';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/SuperCursed.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'CrotahItalic';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/CrotahFreeVersionItalic-z8Ev3.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Dangernight';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Dangernight-vnZ5y.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'HeavyJack';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/HeavyJack-DYz7R.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Marlita';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/MarlitaDemo-2vXRK.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'MockBear';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/MockBear-3lgA8.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Mulinarstamp';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/MulinarstampRegularDemo-q2V9d.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'UnderThreat';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/UnderThreatDemo-vnVD4.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'BlackDahlia';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/BlackDahlia-LBRG.woff2') format('woff2'),
+                 url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/BlackDahlia-LBRG_1_.woff') format('woff');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Halloween', sans-serif;
+            background: linear-gradient(to bottom, 
+                #000000 0%, 
+                #0a0a14 30%, 
+                #1a1a2e 60%, 
+                #2d2d44 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            perspective: 1000px;
+            min-height: 100vh;
+        }
+
+        /* Theme Variables */
+        :root {
+            --primary: #4169e1;
+            --secondary: #9d4edd;
+            --accent: #00d9ff;
+            --star-color: #ffffff;
+        }
+
+        .theme-nebula {
+            --primary: #4169e1;
+            --secondary: #9d4edd;
+            --accent: #00d9ff;
+        }
+
+        .theme-aurora {
+            --primary: #00ff88;
+            --secondary: #00ffff;
+            --accent: #88ff00;
+        }
+
+        .theme-supernova {
+            --primary: #ff6b35;
+            --secondary: #ff0055;
+            --accent: #ffaa00;
+        }
+
+        .theme-galaxy {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+        }
+
+        .theme-creme {
+            --primary: #d4a574;
+            --secondary: #c9a581;
+            --accent: #f9f5f0;
+        }
+
+        /* Starfield Canvas */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Milky Way Band */
+        .milky-way {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(120deg, 
+                transparent 0%, 
+                rgba(200, 200, 255, 0.05) 30%, 
+                rgba(180, 180, 255, 0.1) 50%, 
+                rgba(200, 200, 255, 0.05) 70%, 
+                transparent 100%);
+            transform: rotate(-20deg) translateY(-10%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Nebula Background */
+        .nebula-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 800px 600px at 15% 30%, rgba(65, 105, 225, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse 600px 800px at 85% 70%, rgba(157, 78, 221, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse 700px 700px at 50% 50%, rgba(0, 217, 255, 0.12) 0%, transparent 60%);
+            z-index: 2;
+            pointer-events: none;
+            animation: nebulaPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes nebulaPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Moon Surface Horizon */
+        .moon-surface {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40vh;
+            background: linear-gradient(to bottom, 
+                rgba(80, 80, 90, 0.3) 0%,
+                rgba(60, 60, 70, 0.5) 50%,
+                rgba(40, 40, 50, 0.8) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .moon-surface::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 200px 100px at 20% 30%, rgba(0, 0, 0, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse 150px 80px at 60% 50%, rgba(0, 0, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse 180px 90px at 85% 40%, rgba(0, 0, 0, 0.35) 0%, transparent 50%),
+                radial-gradient(ellipse 120px 60px at 40% 70%, rgba(0, 0, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse 100px 50px at 75% 80%, rgba(0, 0, 0, 0.25) 0%, transparent 50%);
+        }
+
+        /* Helmet Vignette Effect */
+        .helmet-vignette {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            pointer-events: none;
+            background: radial-gradient(ellipse 70% 60% at 50% 40%, 
+                transparent 40%, 
+                rgba(0, 0, 0, 0.3) 70%, 
+                rgba(0, 0, 0, 0.7) 100%);
+        }
+
+        /* Animated Gradient Waves */
+        @keyframes waveShift {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        .cosmic-waves {
+            position: fixed;
+            inset: 0;
+            z-index: 3;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(65, 105, 225, 0.03) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(157, 78, 221, 0.03) 50%, transparent 70%);
+            background-size: 400% 400%;
+            animation: waveShift 20s ease infinite;
+            pointer-events: none;
+        }
+
+        /* Rocket Launch */
+        .rocket-container {
+            position: fixed;
+            bottom: -100px;
+            left: -50px;
+            z-index: 5;
+            animation: rocketLaunchDiagonal 30s ease-in-out infinite;
+        }
+
+        @keyframes rocketLaunchDiagonal {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(100vw + 200px), calc(-100vh - 200px)) scale(0.3) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        .rocket {
+            width: 30px;
+            height: 80px;
+            position: relative;
+            filter: drop-shadow(0 0 15px rgba(255, 150, 50, 0.8));
+        }
+
+        .rocket-body {
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            background: linear-gradient(to bottom, #f0f0f0, #c0c0c0);
+            border-radius: 15px 15px 0 0;
+            bottom: 20px;
+        }
+
+        .rocket-body::before {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 40px;
+            background: #2a5d8a;
+            left: 10px;
+            top: 10px;
+            border-radius: 2px;
+        }
+
+        .rocket-nose {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #ff6b35;
+            bottom: 80px;
+        }
+
+        .rocket-fin {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 15px solid #808080;
+            border-right: 10px solid transparent;
+            bottom: 5px;
+        }
+
+        .rocket-fin-left {
+            left: -8px;
+        }
+
+        .rocket-fin-right {
+            right: -8px;
+            transform: scaleX(-1);
+        }
+
+        .rocket-flame {
+            position: absolute;
+            width: 20px;
+            height: 30px;
+            background: linear-gradient(to bottom, 
+                #ffff00 0%, 
+                #ff9500 40%, 
+                #ff4500 70%, 
+                transparent 100%);
+            bottom: -10px;
+            left: 5px;
+            border-radius: 50% 50% 0 0;
+            animation: flameFlicker 0.1s infinite;
+        }
+
+        @keyframes flameFlicker {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.2); }
+        }
+
+        /* Orbital Rings */
+        .orbital-ring {
+            position: fixed;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 4;
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .ring-1 {
+            width: 400px;
+            height: 400px;
+            top: 10%;
+            left: 5%;
+        }
+
+        .ring-2 {
+            width: 300px;
+            height: 300px;
+            bottom: 15%;
+            right: 10%;
+            animation-duration: 45s;
+        }
+
+        /* Main Content */
+        .content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+        }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .logo {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: cosmicShift 8s ease infinite, logoFloat 4s ease-in-out infinite;
+            text-shadow: 0 0 60px var(--primary);
+            filter: drop-shadow(0 0 20px var(--primary));
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-15px) scale(1.02); }
+        }
+
+        @keyframes cosmicShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .tagline {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: var(--accent);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+        }
+
+        /* Navigation Cards */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+
+        .nav-card {
+            position: relative;
+            padding: 2.5rem 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            overflow: hidden;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .nav-card:nth-child(1) { animation-delay: 0s; }
+        .nav-card:nth-child(2) { animation-delay: 0.5s; }
+        .nav-card:nth-child(3) { animation-delay: 1s; }
+        .nav-card:nth-child(4) { animation-delay: 1.5s; }
+        .nav-card:nth-child(5) { animation-delay: 2s; }
+        .nav-card:nth-child(6) { animation-delay: 2.5s; }
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .nav-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary)20, transparent);
+            transform: translate(-50%, -50%);
+            transition: all 0.6s;
+        }
+
+        .nav-card:hover::before {
+            opacity: 1;
+        }
+
+        .nav-card:hover::after {
+            width: 400px;
+            height: 400px;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-12px);
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 20px 60px rgba(65, 105, 225, 0.4),
+                        0 0 100px rgba(157, 78, 221, 0.2);
+        }
+
+        .nav-card-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1.5rem;
+            stroke: var(--primary);
+            transition: all 0.4s;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px var(--primary));
+        }
+
+        .nav-card:hover .nav-card-icon {
+            stroke: var(--accent);
+            transform: scale(1.15) rotate(5deg);
+            filter: drop-shadow(0 0 20px var(--accent));
+        }
+
+        .nav-card-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #ffffff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-card-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Theme Switcher */
+        .controls-panel {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1.25rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .control-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.75rem;
+        }
+
+        .theme-options {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 30px currentColor;
+        }
+
+        .theme-btn.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 40px currentColor, 0 0 20px #ffffff;
+            transform: scale(1.2);
+        }
+
+        .theme-nebula-btn { background: linear-gradient(135deg, #4169e1, #9d4edd, #00d9ff); }
+        .theme-aurora-btn { background: linear-gradient(135deg, #00ff88, #00ffff, #88ff00); }
+        .theme-supernova-btn { background: linear-gradient(135deg, #ff6b35, #ff0055, #ffaa00); }
+        .theme-galaxy-btn { background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); }
+        .theme-creme-btn { background: linear-gradient(135deg, #f9f5f0, #f1e9dc); }
+
+        .font-selector {
+            width: 100%;
+        }
+
+        .font-dropdown {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .font-dropdown:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .font-dropdown:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(0, 255, 195, 0.3);
+        }
+
+        .font-dropdown option {
+            background: #1a1a1a;
+            color: white;
+            padding: 0.5rem;
+        }
+
+        /* Stats Container */
+        .stats-container {
+            display: flex;
+            gap: 3rem;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 10px var(--primary));
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+            letter-spacing: 0.1em;
+        }
+
+        /* Shooting Stars */
+        .shooting-star {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 3px white, 0 0 30px 6px rgba(255, 255, 255, 0.5);
+            z-index: 5;
+        }
+
+        @keyframes meteorFall {
+            0% {
+                transform: translate(0, 0) scale(0.3);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                transform: translate(var(--tx), var(--ty)) scale(1.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(var(--tx) * 2), calc(var(--ty) * 2)) scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .content {
+                padding: 2rem 1.5rem;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .controls-panel {
+                top: 1rem;
+                right: 1rem;
+                padding: 1rem;
+            }
+
+            .theme-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .stats-container {
+                padding: 1.5rem 2rem;
+                gap: 2rem;
+                flex-wrap: wrap;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .footer {
+                bottom: 1rem;
+                padding: 0 1rem;
+                font-size: 0.75rem;
+            }
+
+            .orbital-ring {
+                display: none;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .nav-card:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 4px;
+        }
+    </style>
+</head>
+<body class="theme-nebula">
+    <!-- Starfield Canvas -->
+    <canvas id="starfield"></canvas>
+
+    <!-- Milky Way Band -->
+    <div class="milky-way"></div>
+
+    <!-- Nebula Overlay -->
+    <div class="nebula-overlay"></div>
+
+    <!-- Moon Surface -->
+    <div class="moon-surface"></div>
+
+    <!-- Cosmic Waves -->
+    <div class="cosmic-waves"></div>
+
+    <!-- Helmet Vignette -->
+    <div class="helmet-vignette"></div>
+
+    <!-- Orbital Rings -->
+    <div class="orbital-ring ring-1"></div>
+    <div class="orbital-ring ring-2"></div>
+
+    <!-- Rocket Launch Animation -->
+    <div class="rocket-container">
+        <div class="rocket">
+            <div class="rocket-nose"></div>
+            <div class="rocket-body"></div>
+            <div class="rocket-fin rocket-fin-left"></div>
+            <div class="rocket-fin rocket-fin-right"></div>
+            <div class="rocket-flame"></div>
+        </div>
+    </div>
+
+    <!-- Theme Controls -->
+    <div class="controls-panel">
+        <div class="control-label">Cosmic Themes</div>
+        <div class="theme-options">
+            <button class="theme-btn theme-nebula-btn active" data-theme="theme-nebula" title="Nebula"></button>
+            <button class="theme-btn theme-aurora-btn" data-theme="theme-aurora" title="Aurora"></button>
+            <button class="theme-btn theme-supernova-btn" data-theme="theme-supernova" title="Supernova"></button>
+            <button class="theme-btn theme-galaxy-btn" data-theme="theme-galaxy" title="Galaxy"></button>
+            <button class="theme-btn theme-creme-btn" data-theme="theme-creme" title="Creme"></button>
+        </div>
+        <div class="control-label">Font Style</div>
+        <div class="font-selector">
+            <select class="font-dropdown" id="fontSelector">
+                <option value="Halloween">Halloween</option>
+                <option value="DripOctober">Drip October</option>
+                <option value="Chainsaw Carnage">Chainsaw Carnage</option>
+                <option value="CrotahItalic">Crotah Italic</option>
+                <option value="Dangernight">Dangernight</option>
+                <option value="HeavyJack">Heavy Jack</option>
+                <option value="Marlita">Marlita</option>
+                <option value="MockBear">Mock Bear</option>
+                <option value="Mulinarstamp">Mulinarstamp</option>
+                <option value="UnderThreat">Under Threat</option>
+                <option value="BlackDahlia">Black Dahlia</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Header -->
+        <div class="header-section">
+            <h1 class="logo">KRIPTIC EDITION</h1>
+            <p class="tagline">3.0</p>
+            <p class="subtitle">Your Cosmic Entertainment Hub</p>
+        </div>
+
+        <!-- Navigation Grid -->
+        <div class="nav-grid">
+            <a href="movies.html" class="nav-card">
+                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                </svg>
+                <h3 class="nav-card-title">Movies</h3>
+                <p class="nav-card-desc">176+ movies in a Netflix-style interface. Browse, search, and stream your favorites.</p>
+            </a>
+
+            <a href="games.html" class="nav-card">
+                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                </svg>
+                <h3 class="nav-card-title">Games</h3>
+                <p class="nav-card-desc">50+ embedded games ready to play instantly. From classics to modern favorites.</p>
+            </a>
+
+            <a href="chatrooms.html" class="nav-card">
+                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                <h3 class="nav-card-title">Chatrooms</h3>
+                <p class="nav-card-desc">Connect with the community in real-time. Multiple themed rooms with moderation.</p>
+            </a>
+
+            <a href="utilities.html" class="nav-card">
+                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <h3 class="nav-card-title">Utilities</h3>
+                <p class="nav-card-desc">Physics formulas, Spotify widget, and various helpful tools at your fingertips.</p>
+            </a>
+
+            <a href="polls.html" class="nav-card">
+                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <h3 class="nav-card-title">Polls</h3>
+                <p class="nav-card-desc">Vote on community polls and see real-time results with anti-cheat protection.</p>
+            </a>
+
+            <a href="about.html" class="nav-card">
+                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 class="nav-card-title">About</h3>
+                <p class="nav-card-desc">Learn more about Kriptic Edition and its 600+ days of development journey.</p>
+            </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-value">176+</div>
+                <div class="stat-label">Movies</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">50+</div>
+                <div class="stat-label">Games</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">600+</div>
+                <div class="stat-label">Days Developed</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        KRIPTIC EDITION 3.0 © 2024
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Starfield Animation
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let shootingStars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speed = Math.random() * 0.5;
+                this.opacity = Math.random();
+                this.twinkleSpeed = Math.random() * 0.02 + 0.01;
+            }
+
+            update() {
+                this.opacity += this.twinkleSpeed;
+                if (this.opacity > 1 || this.opacity < 0) {
+                    this.twinkleSpeed *= -1;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fillRect(this.x, this.y, this.size, this.size);
+            }
+        }
+
+        class ShootingStar {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height * 0.5;
+                this.length = Math.random() * 80 + 40;
+                this.speed = Math.random() * 15 + 10;
+                this.opacity = 1;
+                this.angle = Math.PI / 4;
+            }
+
+            update() {
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+                this.opacity -= 0.02;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                const gradient = ctx.createLinearGradient(0, 0, -this.length, 0);
+                gradient.addColorStop(0, `rgba(255, 255, 255, ${this.opacity})`);
+                gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(-this.length, 0);
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push(new Star());
+            }
+        }
+
+        function createShootingStar() {
+            if (Math.random() < 0.01) {
+                shootingStars.push(new ShootingStar());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            createShootingStar();
+            shootingStars = shootingStars.filter(star => star.opacity > 0);
+            shootingStars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initStars();
+        });
+
+        resizeCanvas();
+        initStars();
+        animate();
+
+        // Theme Switcher
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        const body = document.body;
+
+        themeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.dataset.theme;
+                body.className = theme;
+                
+                themeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                localStorage.setItem('selectedTheme', theme);
+            });
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('selectedTheme');
+        if (savedTheme) {
+            body.className = savedTheme;
+            themeButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.theme === savedTheme) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Font Selector
+        const fontSelector = document.getElementById('fontSelector');
+        
+        fontSelector.addEventListener('change', (e) => {
+            document.body.style.fontFamily = `'${e.target.value}', sans-serif`;
+            localStorage.setItem('selectedFont', e.target.value);
+        });
+
+        // Load saved font
+        const savedFont = localStorage.getItem('selectedFont');
+        if (savedFont) {
+            document.body.style.fontFamily = `'${savedFont}', sans-serif`;
+            fontSelector.value = savedFont;
+        }
+
+        // Google Analytics
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-HXQCDRCM1H');
+    </script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HXQCDRCM1H"></script>
+</body>
+</html>
