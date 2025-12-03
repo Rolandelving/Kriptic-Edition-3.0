@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Kriptic Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        :root {
+            --primary: #4169e1;
+            --secondary: #9d4edd;
+            --accent: #00d9ff;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .nebula-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 1000px 800px at 15% 30%, rgba(65, 105, 225, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 800px 1000px at 85% 70%, rgba(157, 78, 221, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 900px 900px at 50% 50%, rgba(0, 217, 255, 0.08) 0%, transparent 70%);
+            z-index: 2;
+            pointer-events: none;
+            animation: nebulaPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes nebulaPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: cosmicShift 8s ease infinite;
+        }
+
+        @keyframes cosmicShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .support-container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .support-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.4s;
+        }
+
+        .support-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(65, 105, 225, 0.3);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 15px var(--primary));
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .card-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .support-link {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .support-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(65, 105, 225, 0.5);
+        }
+
+        .divider {
+            text-align: center;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 2rem 0;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .support-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <div class="nebula-overlay"></div>
+
+    <div class="content">
+        <div class="header">
+            <h1 class="title">Support & Contact</h1>
+            <p class="subtitle">Get help or request new features</p>
+        </div>
+
+        <div class="support-container">
+            <div class="support-card">
+                <div class="card-icon">💬</div>
+                <h2 class="card-title">Discord Server</h2>
+                <p class="card-description">
+                    Want more games or have questions? Join our Discord community to chat, get support, and request new features.
+                </p>
+                <a href="https://discord.gg/uDfXCpktzv" class="support-link" target="_blank">
+                    Join Discord Server →
+                </a>
+            </div>
+
+            <div class="divider">OR</div>
+
+            <div class="support-card">
+                <div class="card-icon">📝</div>
+                <h2 class="card-title">Support Form</h2>
+                <p class="card-description">
+                    Submit feedback, report issues, or request features through our Google Form. We read every submission!
+                </p>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScfPKx2Ke8_7eP0w_1tLyIKG3rE2l1q6GZBauyXDuK1IaeNVA/viewform" class="support-link" target="_blank">
+                    Open Support Form →
+                </a>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="https://sites.google.com/view/kriptic-edition-2/" class="back-btn">← Back to Hub</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const stars = Array.from({ length: 200 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2,
+            speed: Math.random() * 0.5
+        }));
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                star.y += star.speed;
+                if (star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
+            
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+    </script>
+</body>
+</html>
