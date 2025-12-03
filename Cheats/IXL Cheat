@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IXL Inspect Element Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        :root {
+            --primary: #4169e1;
+            --secondary: #9d4edd;
+            --accent: #00d9ff;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .nebula-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 1000px 800px at 15% 30%, rgba(65, 105, 225, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 800px 1000px at 85% 70%, rgba(157, 78, 221, 0.12) 0%, transparent 60%);
+            z-index: 2;
+            pointer-events: none;
+            animation: nebulaPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes nebulaPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: cosmicShift 8s ease infinite;
+        }
+
+        @keyframes cosmicShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .info-card {
+            max-width: 900px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .description {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .example-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .example-title {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .example-text {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .step {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .step::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .step-text {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: rgba(157, 78, 221, 0.1);
+            border: 1px solid var(--secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .warning-text {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .code-container {
+            position: relative;
+            background: rgba(10, 10, 30, 0.9);
+            border: 1px solid rgba(65, 105, 225, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-label {
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: 1px solid var(--accent);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(65, 105, 225, 0.4);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #00d9ff, #4169e1);
+        }
+
+        pre {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.9);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        @media (max-width: 768px) {
+            .info-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .code-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <div class="nebula-overlay"></div>
+    
+    <div class="content">
+        <div class="header">
+            <h1 class="title">IXL Inspect Element Cheat</h1>
+            <p class="subtitle">Learn to use browser developer tools</p>
+        </div>
+
+        <div class="info-card">
+            <h2 class="section-title">What is Inspect Element?</h2>
+            <p class="description">
+                Inspect Element is a built-in browser tool that lets you view and analyze the code behind any webpage. It's useful for learning web development, debugging, and understanding how websites work.
+            </p>
+
+            <h2 class="section-title">Opening Developer Tools</h2>
+            <div class="step">
+                <p class="step-text"><strong>Chrome/Edge:</strong> Press F12 or Right-click anywhere and select "Inspect"</p>
+            </div>
+            <div class="step">
+                <p class="step-text"><strong>Firefox:</strong> Press F12 or Right-click and select "Inspect Element"</p>
+            </div>
+            <div class="step">
+                <p class="step-text"><strong>Safari:</strong> Enable developer tools in Preferences > Advanced, then press Option + Command + I</p>
+            </div>
+
+            <h2 class="section-title">How to Use the Console</h2>
+            <div class="step">
+                <p class="step-text">Open Developer Tools (press F12)</p>
+            </div>
+            <div class="step">
+                <p class="step-text">Click on the "Console" tab at the top</p>
+            </div>
+            <div class="step">
+                <p class="step-text">Copy the JavaScript code below</p>
+            </div>
+            <div class="step">
+                <p class="step-text">Paste it into the console and press Enter</p>
+            </div>
+            <div class="step">
+                <p class="step-text">The code will analyze the page and display results</p>
+            </div>
+
+            <h2 class="section-title">IXL Question Analyzer Script</h2>
+            <p class="description">
+                This JavaScript code analyzes IXL math questions and helps you understand how the page structure works. It demonstrates DOM manipulation, element selection, and mathematical operations.
+            </p>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-label">JavaScript Code</span>
+                    <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+                </div>
+                <pre id="codeBlock">// Step 1: Find ALL buttons (including non-interactable ones)
+const practiceSection = document.querySelector('.question-and-submission-view');
+const allButtons = practiceSection ? 
+    practiceSection.querySelectorAll('.SelectableTile.MULTIPLE_CHOICE') : 
+    document.querySelectorAll('.SelectableTile.MULTIPLE_CHOICE');
+
+console.log(`Found ${allButtons.length} button(s):`);
+console.log('─────────────────────────────');
+
+// Step 2: Extract the question
+const questionElement = practiceSection ? 
+    practiceSection.querySelector('.ixl-html-crate-root .secContentPiece') :
+    document.querySelector('.practice-item-display .secContentPiece');
+    
+const questionText = questionElement ? questionElement.textContent.trim() : 'Question not found';
+console.log('Question:', questionText);
+console.log('─────────────────────────────');
+
+// Step 3: Log all button options (even non-interactable)
+let answerButtons = [];
+allButtons.forEach((button, index) => {
+    const textDiv = button.querySelector('.GeneticallyModified div');
+    const buttonText = textDiv ? textDiv.textContent.trim() : 'No text found';
+    const isNonInteractive = button.classList.contains('nonInteractive');
+    
+    console.log(`Option ${index + 1}: "${buttonText}" ${isNonInteractive ? '(non-interactable)' : '(clickable)'}`);
+    answerButtons.push({ element: button, text: buttonText, interactive: !isNonInteractive });
+});
+console.log('─────────────────────────────');
+
+// Step 4: Parse and solve the question
+let calculatedAnswer = null;
+// Replace commas and normalize all dash types to regular minus
+let cleanQuestion = questionText
+    .replace(/,/g, '')
+    .replace(/[–—−]/g, '-');
+
+console.log('Cleaned question:', cleanQuestion);
+
+// TYPE 1: Positive/Negative Questions
+// ===========================================
+if (cleanQuestion.toLowerCase().includes('positive or negative')) {
+    let result = null;
+    
+    // Multiplication: "–24 × –572889"
+    const multMatch = cleanQuestion.match(/(-?\d+)\s*[×*]\s*(-?\d+)/);
+    if (multMatch) {
+        const num1 = parseInt(multMatch[1]);
+        const num2 = parseInt(multMatch[2]);
+        result = num1 * num2;
+        console.log(`Calculation: ${num1} × ${num2} = ${result}`);
+    }
+    
+    // Division: "–100 ÷ –5"
+    const divMatch = cleanQuestion.match(/(-?\d+)\s*[÷/]\s*(-?\d+)/);
+    if (divMatch && !multMatch) {
+        const num1 = parseInt(divMatch[1]);
+        const num2 = parseInt(divMatch[2]);
+        result = num1 / num2;
+        console.log(`Calculation: ${num1} ÷ ${num2} = ${result}`);
+    }
+    
+    // Addition: "4532622 + -99"
+    const addMatch = cleanQuestion.match(/(-?\d+)\s*\+\s*(-?\d+)/);
+    if (addMatch && !multMatch && !divMatch) {
+        const num1 = parseInt(addMatch[1]);
+        const num2 = parseInt(addMatch[2]);
+        result = num1 + num2;
+        console.log(`Calculation: ${num1} + ${num2} = ${result}`);
+    }
+    
+    // Subtraction: "100 - 50"
+    const subMatch = cleanQuestion.match(/(-?\d+)\s*-\s*(-?\d+)/);
+    if (subMatch && !addMatch && !multMatch && !divMatch) {
+        const num1 = parseInt(subMatch[1]);
+        const num2 = parseInt(subMatch[2]);
+        result = num1 - num2;
+        console.log(`Calculation: ${num1} - ${num2} = ${result}`);
+    }
+    
+    if (result !== null) {
+        calculatedAnswer = result >= 0 ? 'positive' : 'negative';
+    }
+}
+
+// TYPE 2: Greater/Less Than Questions
+// ===========================================
+else if (cleanQuestion.match(/[><]/)) {
+    // Extract the comparison: "Is 5 > 3?"
+    const compMatch = cleanQuestion.match(/(-?\d+(?:\.\d+)?)\s*([><])\s*(-?\d+(?:\.\d+)?)/);
+    if (compMatch) {
+        const num1 = parseFloat(compMatch[1]);
+        const operator = compMatch[2];
+        const num2 = parseFloat(compMatch[3]);
+        
+        let result;
+        if (operator === '>') {
+            result = num1 > num2;
+            console.log(`Comparison: ${num1} > ${num2} = ${result}`);
+        } else {
+            result = num1 < num2;
+            console.log(`Comparison: ${num1} < ${num2} = ${result}`);
+        }
+        
+        calculatedAnswer = result ? 'yes' : 'no';
+        // Also check for "true"/"false" options
+        if (answerButtons.some(btn => btn.text.toLowerCase() === 'true')) {
+            calculatedAnswer = result ? 'true' : 'false';
+        }
+    }
+}
+
+// TYPE 3: Exact Answer Questions (What is X?)
+// ===========================================
+else if (cleanQuestion.match(/what is|calculate|solve|=|\?$/i)) {
+    let result = null;
+    
+    // Multiplication
+    const multMatch = cleanQuestion.match(/(-?\d+(?:\.\d+)?)\s*[×*]\s*(-?\d+(?:\.\d+)?)/);
+    if (multMatch) {
+        const num1 = parseFloat(multMatch[1]);
+        const num2 = parseFloat(multMatch[2]);
+        result = num1 * num2;
+        console.log(`Calculation: ${num1} × ${num2} = ${result}`);
+    }
+    
+    // Division
+    const divMatch = cleanQuestion.match(/(-?\d+(?:\.\d+)?)\s*[÷/]\s*(-?\d+(?:\.\d+)?)/);
+    if (divMatch && !multMatch) {
+        const num1 = parseFloat(divMatch[1]);
+        const num2 = parseFloat(divMatch[2]);
+        result = num1 / num2;
+        console.log(`Calculation: ${num1} ÷ ${num2} = ${result}`);
+    }
+    
+    // Addition
+    const addMatch = cleanQuestion.match(/(-?\d+(?:\.\d+)?)\s*\+\s*(-?\d+(?:\.\d+)?)/);
+    if (addMatch && !multMatch && !divMatch) {
+        const num1 = parseFloat(addMatch[1]);
+        const num2 = parseFloat(addMatch[2]);
+        result = num1 + num2;
+        console.log(`Calculation: ${num1} + ${num2} = ${result}`);
+    }
+    
+    // Subtraction
+    const subMatch = cleanQuestion.match(/(-?\d+(?:\.\d+)?)\s*-\s*(-?\d+(?:\.\d+)?)/);
+    if (subMatch && !addMatch && !multMatch && !divMatch) {
+        const num1 = parseFloat(subMatch[1]);
+        const num2 = parseFloat(subMatch[2]);
+        result = num1 - num2;
+        console.log(`Calculation: ${num1} - ${num2} = ${result}`);
+    }
+    
+    if (result !== null) {
+        calculatedAnswer = result.toString();
+        // Round if needed
+        if (!Number.isInteger(result)) {
+            calculatedAnswer = result.toFixed(2);
+        }
+    }
+}
+
+// TYPE 4: True/False Questions
+// ===========================================
+else if (answerButtons.some(btn => ['true', 'false'].includes(btn.text.toLowerCase()))) {
+    console.log('Detected: True/False question');
+    // Would need more context to solve these automatically
+    calculatedAnswer = 'true'; // Placeholder
+}
+
+// TYPE 5: Even/Odd Questions
+// ===========================================
+else if (cleanQuestion.toLowerCase().includes('even or odd')) {
+    const numMatch = cleanQuestion.match(/(-?\d+)/);
+    if (numMatch) {
+        const num = parseInt(numMatch[1]);
+        calculatedAnswer = num % 2 === 0 ? 'even' : 'odd';
+        console.log(`${num} is ${calculatedAnswer}`);
+    }
+}
+
+// Step 5: Log the answer
+console.log('─────────────────────────────');
+if (calculatedAnswer) {
+    console.log(`✅ ANSWER: ${calculatedAnswer.toUpperCase()}`);
+    console.log('─────────────────────────────');
+    
+    // Check if answer exists in the options
+    const matchingButton = answerButtons.find(btn => 
+        btn.text.toLowerCase() === calculatedAnswer.toLowerCase() ||
+        btn.text.toLowerCase().includes(calculatedAnswer.toLowerCase())
+    );
+    
+    if (matchingButton) {
+        console.log(`Found "${calculatedAnswer}" button - ${matchingButton.interactive ? 'CLICKABLE' : 'NON-INTERACTABLE'}`);
+    } else {
+        console.log('Available options:', answerButtons.map(b => b.text).join(', '));
+    }
+} else {
+    console.log('❌ Could not calculate answer');
+    console.log('Available options:', answerButtons.map(b => b.text).join(', '));
+}
+console.log('─────────────────────────────');</pre>
+            </div>
+
+            <div class="warning-box">
+                <h3 class="warning-title">⚠️ Educational Purpose Only</h3>
+                <p class="warning-text">
+                    This code is provided for educational purposes to help you understand web development concepts like DOM manipulation, JavaScript parsing, and element selection. It demonstrates how websites work and should only be used for learning. Always follow your school's academic integrity policies and use these tools responsibly.
+                </p>
+            </div>
+
+            <h2 class="section-title">What This Code Does</h2>
+            <div class="step">
+                <p class="step-text">Finds and identifies all answer buttons on the page</p>
+            </div>
+            <div class="step">
+                <p class="step-text">Extracts the question text from the DOM</p>
+            </div>
+            <div class="step">
+                <p class="step-text">Parses different types of math problems (multiplication, division, addition, subtraction)</p>
+            </div>
+            <div class="step">
+                <p class="step-text">Determines question type (positive/negative, greater/less than, exact answer, etc.)</p>
+            </div>
+            <div class="step">
+                <p class="step-text">Calculates the answer and displays it in the console</p>
+            </div>
+
+            <h2 class="section-title">Learning Opportunities</h2>
+            <p class="description">
+                By studying this code, you can learn about querySelector methods, regular expressions, string manipulation, mathematical operations in JavaScript, and how to interact with webpage elements programmatically.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const stars = [];
+        const starCount = 200;
+
+        for (let i = 0; i < starCount; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5,
+                speed: Math.random() * 0.5 + 0.1,
+                opacity: Math.random()
+            });
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                ctx.fill();
+                
+                star.y += star.speed;
+                star.opacity = Math.sin(Date.now() * 0.001 + star.x) * 0.5 + 0.5;
+                
+                if (star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
+            
+            requestAnimationFrame(animateStars);
+        }
+
+        animateStars();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        function copyCode() {
+            const codeBlock = document.getElementById('codeBlock');
+            const button = document.querySelector('.copy-btn');
+            
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                button.textContent = '✓ Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = 'Copy Code';
+                    button.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                button.textContent = 'Failed to copy';
+            }
+            
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+</html>
