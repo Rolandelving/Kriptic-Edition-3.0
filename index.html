@@ -1,12 +1,506 @@
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7452690493067355"
+     crossorigin="anonymous"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popup Gorilla</title>
+  <style>
+    body {
+      background: #f6f6f6;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Transparent popup, no background box */
+    .thankyou-popup {
+      display: none;
+      position: fixed;
+      top: 3%;
+      right: 50%;
+      transform: translateX(50%);
+      border-radius: 16px;
+      text-align: center;
+      z-index: 999999;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .thankyou-popup img {
+      width: 600px;
+      height: auto;
+      border-radius: 20px;
+      display: block;
+      margin: 0 auto 10px auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    .thankyou-popup p {
+      color: #FFFDD0;
+      font-size: 24px;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(50%) translateY(-20px); }
+      to { opacity: 1; transform: translateX(50%) translateY(0); }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateX(50%) translateY(0); }
+      to { opacity: 0; transform: translateX(50%) translateY(-20px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Simple transparent popup -->
+  <div class="thankyou-popup" id="popup">
+    <img src="https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/images/Celebrating%20Gorilla%20Gif.gif" alt="Gorilla">
+    <p>ADDED 40+ MOVIES, HOLLOW KNIGHT, BAD TIME SIMULATOR, A NEW CHATROOM, AND MORE!</p>
+  </div>
+
+<script>
+  window.onload = () => {
+    const popup = document.getElementById('popup');
+    popup.style.display = 'block';
+    popup.style.animation = 'fadeIn 0.5s ease-out';
+
+    // Stay for 8 seconds, THEN fade out
+    setTimeout(() => {
+      popup.style.animation = 'fadeOut 0.5s ease-in';
+      setTimeout(() => popup.style.display = 'none', 500);
+    }, 8000);
+  };
+</script>
+
+</body>
+</html>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HXQCDRCM1H"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-HXQCDRCM1H');
+</script>
+<!-- Your main page content -->
+<div class="main-content">
+  <h1>Welcome to My Website</h1>
+  <p>Some content here...</p>
+</div>
+
+<!-- Floating thank-you card -->
+<div class="thankyou-popup">
+  <img src="https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/images/%7B2D01A303-E9BD-468C-B64E-FC341473E62F%7D.png" alt="Thank you image">
+  <p>Fixed Some of em the other ones are on you lil bro</p>
+</div>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kriptic Edition 3.0 | Cosmic Entertainment Platform</title>
-    <meta name="description" content="Kriptic Edition 3.0 - A comprehensive streaming and gaming platform with 176+ movies, 50+ games, chatrooms, and more in a cosmic-themed interface.">
+    <title>Spotify Search Widget</title>
     <style>
-        /* Custom Fonts */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Floating menu button */
+        #menuButton {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: #1DB954;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        #menuButton:hover {
+            background: #1ed760;
+            transform: scale(1.1);
+        }
+
+        #menuButton svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        /* Sliding panel */
+        #spotifyPanel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-width: 450px;
+            height: 80vh;
+            background: linear-gradient(135deg, #1DB954 0%, #191414 100%);
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            border-radius: 0 20px 0 0;
+        }
+
+        #spotifyPanel.open {
+            transform: translateX(0);
+        }
+
+        /* Panel header */
+        .panel-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 0 20px 0 0;
+        }
+
+        .panel-title {
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        #closeButton {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        #closeButton:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Panel content */
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1em;
+            padding: 5px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        #searchButton {
+            background: #1DB954;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        #searchButton:hover {
+            background: #1ed760;
+        }
+
+        #searchButton:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        #loading {
+            text-align: center;
+            color: white;
+            font-size: 1em;
+            margin: 20px 0;
+            display: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        #error {
+            background: rgba(255, 59, 48, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 15px 0;
+            display: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        #results {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .track-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .track-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .track-info {
+            padding: 12px;
+        }
+
+        .track-name {
+            font-size: 1em;
+            font-weight: bold;
+            color: #191414;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .track-artist {
+            color: #666;
+            font-size: 0.9em;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .spotify-embed {
+            width: 100%;
+            height: 152px;
+            border: none;
+        }
+
+        /* Scrollbar styling */
+        .panel-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .panel-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .panel-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            #spotifyPanel {
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .panel-header {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating menu button -->
+    <button id="menuButton" aria-label="Open Spotify Search">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+        </svg>
+    </button>
+
+    <!-- Sliding panel -->
+    <div id="spotifyPanel">
+        <div class="panel-header">
+            <div class="panel-title">🎵 Spotify Search</div>
+            <button id="closeButton" aria-label="Close">×</button>
+        </div>
+
+        <div class="panel-content">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search for songs..."
+                    autocomplete="off"
+                >
+                <button id="searchButton">Search</button>
+            </div>
+
+            <div id="loading">Searching Spotify...</div>
+            <div id="error"></div>
+            <div id="results"></div>
+        </div>
+    </div>
+
+    <script>
+        // Replace with your actual Supabase function URL
+        const FUNCTION_URL = 'https://zkrdbvjmessktzlxommr.supabase.co/functions/v1/hyper-action';
+
+        const menuButton = document.getElementById('menuButton');
+        const closeButton = document.getElementById('closeButton');
+        const spotifyPanel = document.getElementById('spotifyPanel');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const results = document.getElementById('results');
+
+        // Toggle panel
+        menuButton.addEventListener('click', () => {
+            spotifyPanel.classList.add('open');
+            setTimeout(() => searchInput.focus(), 300);
+        });
+
+        closeButton.addEventListener('click', () => {
+            spotifyPanel.classList.remove('open');
+        });
+
+        // Close panel when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!spotifyPanel.contains(e.target) && !menuButton.contains(e.target) && spotifyPanel.classList.contains('open')) {
+                spotifyPanel.classList.remove('open');
+            }
+        });
+
+        async function searchSpotify() {
+            const query = searchInput.value.trim();
+            
+            if (!query) {
+                showError('Please enter a search term');
+                return;
+            }
+
+            error.style.display = 'none';
+            results.innerHTML = '';
+            loading.style.display = 'block';
+            searchButton.disabled = true;
+
+            try {
+                const response = await fetch(`${FUNCTION_URL}?q=${encodeURIComponent(query)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                displayResults(data.tracks.items);
+
+            } catch (err) {
+                showError(`Error: ${err.message}`);
+            } finally {
+                loading.style.display = 'none';
+                searchButton.disabled = false;
+            }
+        }
+
+        function displayResults(tracks) {
+            if (!tracks || tracks.length === 0) {
+                showError('No results found. Try a different search term.');
+                return;
+            }
+
+            results.innerHTML = tracks.map(track => {
+                const artistNames = track.artists.map(a => a.name).join(', ');
+                const trackId = track.id;
+
+                return `
+                    <div class="track-card">
+                        <iframe 
+                            class="spotify-embed"
+                            src="https://open.spotify.com/embed/track/${trackId}?utm_source=generator" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                            loading="lazy">
+                        </iframe>
+                        <div class="track-info">
+                            <div class="track-name" title="${escapeHtml(track.name)}">
+                                ${escapeHtml(track.name)}
+                            </div>
+                            <div class="track-artist" title="${escapeHtml(artistNames)}">
+                                ${escapeHtml(artistNames)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showError(message) {
+            error.textContent = message;
+            error.style.display = 'block';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        searchButton.addEventListener('click', searchSpotify);
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchSpotify();
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kriptic Edition | Cosmic Platform</title>
+    <style>
         @font-face {
             font-family: 'DripOctober';
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/DripOctober-vm0JA%5B1%5D.ttf') format('truetype');
@@ -25,30 +519,37 @@
             font-family: 'CrotahItalic';
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/CrotahFreeVersionItalic-z8Ev3.ttf') format('truetype');
         }
+
         @font-face {
             font-family: 'Dangernight';
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Dangernight-vnZ5y.otf') format('opentype');
         }
+
         @font-face {
             font-family: 'HeavyJack';
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/HeavyJack-DYz7R.ttf') format('truetype');
         }
+
         @font-face {
             font-family: 'Marlita';
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/MarlitaDemo-2vXRK.otf') format('opentype');
         }
+
         @font-face {
             font-family: 'MockBear';
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/MockBear-3lgA8.ttf') format('truetype');
         }
+
         @font-face {
             font-family: 'Mulinarstamp';
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/MulinarstampRegularDemo-q2V9d.otf') format('opentype');
         }
+
         @font-face {
             font-family: 'UnderThreat';
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/UnderThreatDemo-vnVD4.ttf') format('truetype');
         }
+
         @font-face {
             font-family: 'BlackDahlia';
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/BlackDahlia-LBRG.woff2') format('woff2'),
@@ -71,7 +572,140 @@
             color: #ffffff;
             overflow-x: hidden;
             perspective: 1000px;
-            min-height: 100vh;
+        }
+
+        /* Moon Surface Horizon */
+        .moon-surface {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40vh;
+            background: linear-gradient(to bottom, 
+                rgba(80, 80, 90, 0.3) 0%,
+                rgba(60, 60, 70, 0.5) 50%,
+                rgba(40, 40, 50, 0.8) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Moon Craters and Texture */
+        .moon-surface::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 200px 100px at 20% 30%, rgba(0, 0, 0, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse 150px 80px at 60% 50%, rgba(0, 0, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse 180px 90px at 85% 40%, rgba(0, 0, 0, 0.35) 0%, transparent 50%),
+                radial-gradient(ellipse 120px 60px at 40% 70%, rgba(0, 0, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse 100px 50px at 75% 80%, rgba(0, 0, 0, 0.25) 0%, transparent 50%);
+        }
+
+        /* Moon Dust Particles */
+        .moon-dust {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, rgba(100, 100, 110, 0.2), transparent);
+            z-index: 2;
+            pointer-events: none;
+            filter: blur(2px);
+        }
+
+        /* Helmet Vignette Effect */
+        .helmet-vignette {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            pointer-events: none;
+            background: radial-gradient(ellipse 70% 60% at 50% 40%, 
+                transparent 40%, 
+                rgba(0, 0, 0, 0.3) 70%, 
+                rgba(0, 0, 0, 0.7) 100%);
+        }
+
+        /* Helmet HUD Elements */
+        .helmet-hud {
+            position: fixed;
+            inset: 0;
+            z-index: 201;
+            pointer-events: none;
+        }
+
+        .hud-element {
+            position: absolute;
+            color: rgba(0, 255, 200, 0.6);
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            text-shadow: 0 0 5px rgba(0, 255, 200, 0.8);
+        }
+
+        .hud-top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .hud-top-right {
+            top: 20px;
+            right: 20px;
+            text-align: right;
+        }
+
+        .hud-bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        /* Oxygen Level Bar */
+        .oxygen-bar {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 255, 200, 0.6);
+            border-radius: 10px;
+            z-index: 201;
+            overflow: hidden;
+        }
+
+        .oxygen-fill {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00ffcc);
+            animation: oxygenPulse 3s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(0, 255, 200, 0.8);
+        }
+
+        @keyframes oxygenPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Helmet Reflection */
+        .helmet-reflection {
+            position: fixed;
+            top: 10%;
+            right: 15%;
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.03) 0%, 
+                rgba(255, 255, 255, 0.08) 50%, 
+                rgba(255, 255, 255, 0.03) 100%);
+            border-radius: 50% 30% 40% 60%;
+            z-index: 199;
+            pointer-events: none;
+            filter: blur(3px);
+            opacity: 0.4;
         }
 
         /* Theme Variables */
@@ -106,12 +740,6 @@
             --accent: #f093fb;
         }
 
-        .theme-creme {
-            --primary: #d4a574;
-            --secondary: #c9a581;
-            --accent: #f9f5f0;
-        }
-
         /* Starfield Canvas */
         #starfield {
             position: fixed;
@@ -140,7 +768,7 @@
             pointer-events: none;
         }
 
-        /* Nebula Background */
+        /* Nebula Background - Based on emission nebula physics */
         .nebula-overlay {
             position: fixed;
             top: 0;
@@ -161,68 +789,37 @@
             50% { opacity: 0.8; }
         }
 
-        /* Moon Surface Horizon */
-        .moon-surface {
+        /* Cosmic Dust */
+        .cosmic-dust {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40vh;
-            background: linear-gradient(to bottom, 
-                rgba(80, 80, 90, 0.3) 0%,
-                rgba(60, 60, 70, 0.5) 50%,
-                rgba(40, 40, 50, 0.8) 100%);
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .moon-surface::before {
-            content: '';
-            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(ellipse 200px 100px at 20% 30%, rgba(0, 0, 0, 0.4) 0%, transparent 50%),
-                radial-gradient(ellipse 150px 80px at 60% 50%, rgba(0, 0, 0, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse 180px 90px at 85% 40%, rgba(0, 0, 0, 0.35) 0%, transparent 50%),
-                radial-gradient(ellipse 120px 60px at 40% 70%, rgba(0, 0, 0, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse 100px 50px at 75% 80%, rgba(0, 0, 0, 0.25) 0%, transparent 50%);
-        }
-
-        /* Helmet Vignette Effect */
-        .helmet-vignette {
-            position: fixed;
-            inset: 0;
-            z-index: 200;
-            pointer-events: none;
-            background: radial-gradient(ellipse 70% 60% at 50% 40%, 
-                transparent 40%, 
-                rgba(0, 0, 0, 0.3) 70%, 
-                rgba(0, 0, 0, 0.7) 100%);
-        }
-
-        /* Animated Gradient Waves */
-        @keyframes waveShift {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
-
-        .cosmic-waves {
-            position: fixed;
-            inset: 0;
             z-index: 3;
-            background: 
-                linear-gradient(45deg, transparent 30%, rgba(65, 105, 225, 0.03) 50%, transparent 70%),
-                linear-gradient(-45deg, transparent 30%, rgba(157, 78, 221, 0.03) 50%, transparent 70%);
-            background-size: 400% 400%;
-            animation: waveShift 20s ease infinite;
             pointer-events: none;
         }
 
-        /* Rocket Launch */
+        /* Mouse Constellation Effect */
+        #mouseGlow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 4;
+            filter: blur(100px);
+            opacity: 0.4;
+            transition: opacity 0.3s, transform 0.1s;
+        }
+
+        /* Pulsing Stars */
+        @keyframes starPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        /* Rocket Launch - Behind Content */
         .rocket-container {
             position: fixed;
             bottom: -100px;
@@ -317,34 +914,107 @@
             50% { transform: scaleY(1.2); }
         }
 
-        /* Orbital Rings */
-        .orbital-ring {
-            position: fixed;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .rocket-smoke {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(200, 200, 200, 0.4), transparent);
             border-radius: 50%;
+            bottom: -20px;
+            left: -5px;
+            animation: smokeRise 2s ease-out infinite;
+        }
+
+        @keyframes smokeRise {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Animated Gradient Waves */
+        @keyframes waveShift {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        .cosmic-waves {
+            position: fixed;
+            inset: 0;
+            z-index: 3;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(65, 105, 225, 0.03) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(157, 78, 221, 0.03) 50%, transparent 70%);
+            background-size: 400% 400%;
+            animation: waveShift 20s ease infinite;
             pointer-events: none;
-            z-index: 4;
-            animation: rotate 60s linear infinite;
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* Energy Pulses */
+        .energy-pulse {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            pointer-events: none;
+            z-index: 5;
+            animation: pulse-expand 4s ease-out infinite;
         }
 
-        .ring-1 {
-            width: 400px;
-            height: 400px;
-            top: 10%;
-            left: 5%;
+        @keyframes pulse-expand {
+            0% {
+                transform: scale(0.5);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
         }
 
-        .ring-2 {
-            width: 300px;
-            height: 300px;
-            bottom: 15%;
-            right: 10%;
-            animation-duration: 45s;
+        .pulse-1 {
+            top: 20%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .pulse-2 {
+            bottom: 30%;
+            right: 20%;
+            animation-delay: 2s;
+        }
+
+        /* Solar Flare Effect */
+        .solar-flare {
+            position: fixed;
+            pointer-events: none;
+            z-index: 6;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(180deg, rgba(255, 200, 100, 0.8), transparent);
+            filter: blur(2px);
+            animation: flare-burst 3s ease-out;
+        }
+
+        @keyframes flare-burst {
+            0% {
+                transform: translateY(0) scaleY(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-100px) scaleY(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-200px) scaleY(0.5);
+                opacity: 0;
+            }
         }
 
         /* Main Content */
@@ -374,7 +1044,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 1rem;
+            margin-bottom: -2rem;
             animation: cosmicShift 8s ease infinite, logoFloat 4s ease-in-out infinite;
             text-shadow: 0 0 60px var(--primary);
             filter: drop-shadow(0 0 20px var(--primary));
@@ -395,7 +1065,7 @@
             color: rgba(255, 255, 255, 0.8);
             font-weight: 300;
             letter-spacing: 0.3em;
-            margin-bottom: 0.5rem;
+            margin-bottom: -2rem;
             text-transform: uppercase;
         }
 
@@ -433,6 +1103,7 @@
             flex-direction: column;
             align-items: flex-start;
             animation: cardFloat 6s ease-in-out infinite;
+            z-index: 100;
         }
 
         @keyframes cardFloat {
@@ -552,35 +1223,6 @@
             margin-bottom: 1.5rem;
         }
 
-        .theme-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .theme-btn:hover {
-            transform: scale(1.15);
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 30px currentColor;
-        }
-
-        .theme-btn.active {
-            border-color: #ffffff;
-            box-shadow: 0 0 40px currentColor, 0 0 20px #ffffff;
-            transform: scale(1.2);
-        }
-
-        .theme-nebula-btn { background: linear-gradient(135deg, #4169e1, #9d4edd, #00d9ff); }
-        .theme-aurora-btn { background: linear-gradient(135deg, #00ff88, #00ffff, #88ff00); }
-        .theme-supernova-btn { background: linear-gradient(135deg, #ff6b35, #ff0055, #ffaa00); }
-        .theme-galaxy-btn { background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); }
-        .theme-creme-btn { background: linear-gradient(135deg, #f9f5f0, #f1e9dc); }
-
         .font-selector {
             width: 100%;
         }
@@ -614,6 +1256,51 @@
             padding: 0.5rem;
         }
 
+        .font-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 30px currentColor;
+        }
+
+        .theme-btn.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 40px currentColor, 0 0 20px #ffffff;
+            transform: scale(1.2);
+        }
+
+        .theme-nebula { background: linear-gradient(135deg, #4169e1, #9d4edd, #00d9ff); }
+        .theme-aurora { background: linear-gradient(135deg, #00ff88, #00ffff, #88ff00); }
+        .theme-supernova { background: linear-gradient(135deg, #ff6b35, #ff0055, #ffaa00); }
+        .theme-galaxy { background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); }
+.theme-creme {
+  background: linear-gradient(135deg, #f9f5f0, #f1e9dc);
+  color: #111;
+}
         /* Stats Container */
         .stats-container {
             display: flex;
@@ -625,6 +1312,7 @@
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            z-index: 100;
         }
 
         .stat-item {
@@ -649,6 +1337,357 @@
             letter-spacing: 0.15em;
         }
 
+        /* Poll Section */
+        .poll-section {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .poll-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            width: 100%;
+        }
+
+        .poll-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(65, 105, 225, 0.4);
+        }
+
+        .poll-subtitle {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        #pollContainer {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .poll-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .poll-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 12px 40px rgba(65, 105, 225, 0.3);
+        }
+
+        .poll-question {
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .poll-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .poll-option {
+            position: relative;
+            padding: 1.25rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .poll-option::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: var(--vote-percent, 0%);
+            background: linear-gradient(90deg, rgba(65, 105, 225, 0.2), rgba(65, 105, 225, 0.05));
+            transition: width 0.5s ease;
+            z-index: 0;
+        }
+
+        .poll-option:hover {
+            border-color: var(--primary);
+            background: rgba(65, 105, 225, 0.1);
+        }
+
+        .poll-option.selected {
+            border-color: var(--accent);
+            background: rgba(0, 255, 195, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 195, 0.3);
+        }
+
+        .poll-option-text {
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .poll-option-stats {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .poll-vote-count {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .poll-option.selected .poll-vote-count {
+            background: var(--accent);
+            color: black;
+        }
+
+        .poll-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .poll-meta {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .poll-submit-btn {
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: 2px solid var(--accent);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+        }
+
+        .poll-submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(65, 105, 225, 0.5);
+        }
+
+        .poll-submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .poll-message {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        .poll-message.success {
+            background: rgba(0, 255, 100, 0.1);
+            border: 2px solid rgba(0, 255, 100, 0.5);
+            color: #00ff64;
+        }
+
+        .poll-message.error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid rgba(255, 0, 0, 0.5);
+            color: #ff4444;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .poll-loading {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.2rem;
+        }
+
+        /* Physics Calculator Panel */
+        .physics-panel {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 150;
+        }
+
+        .physics-toggle {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            font-size: 1.8rem;
+        }
+
+        .physics-toggle:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 30px var(--primary);
+        }
+
+        .physics-calculator {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 400px;
+            max-height: 600px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        .physics-calculator.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .calc-header {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.75rem;
+        }
+
+        .calc-input-group {
+            margin-bottom: 1rem;
+        }
+
+        .calc-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .calc-select, .calc-input, .calc-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            font-family: 'DripOctober', monospace;
+            transition: all 0.3s;
+        }
+
+        .calc-textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: monospace;
+        }
+
+        .calc-select:focus, .calc-input:focus, .calc-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(var(--primary), 0.3);
+        }
+
+        .calc-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .calc-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--primary);
+        }
+
+        .calc-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 255, 195, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            color: var(--accent);
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+
+        .calc-result.error {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: #ff4444;
+            color: #ff4444;
+        }
         .footer {
             position: fixed;
             bottom: 2rem;
@@ -661,7 +1700,7 @@
             letter-spacing: 0.1em;
         }
 
-        /* Shooting Stars */
+        /* Shooting Stars with First Person Perspective */
         .shooting-star {
             position: fixed;
             width: 4px;
@@ -688,6 +1727,36 @@
                 transform: translate(calc(var(--tx) * 2), calc(var(--ty) * 2)) scale(2.5);
                 opacity: 0;
             }
+        }
+
+        /* Orbital Rings */
+        .orbital-ring {
+            position: fixed;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 4;
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .ring-1 {
+            width: 400px;
+            height: 400px;
+            top: 10%;
+            left: 5%;
+        }
+
+        .ring-2 {
+            width: 300px;
+            height: 300px;
+            bottom: 15%;
+            right: 10%;
+            animation-duration: 45s;
         }
 
         /* Mobile Responsive */
@@ -754,26 +1823,16 @@
     <!-- Starfield Canvas -->
     <canvas id="starfield"></canvas>
 
-    <!-- Milky Way Band -->
-    <div class="milky-way"></div>
-
     <!-- Nebula Overlay -->
     <div class="nebula-overlay"></div>
 
-    <!-- Moon Surface -->
-    <div class="moon-surface"></div>
+    <!-- Cosmic Dust Canvas -->
+    <canvas class="cosmic-dust" id="cosmicDust"></canvas>
 
-    <!-- Cosmic Waves -->
-    <div class="cosmic-waves"></div>
+    <!-- Mouse Constellation Effect -->
+    <div id="mouseGlow"></div>
 
-    <!-- Helmet Vignette -->
-    <div class="helmet-vignette"></div>
-
-    <!-- Orbital Rings -->
-    <div class="orbital-ring ring-1"></div>
-    <div class="orbital-ring ring-2"></div>
-
-    <!-- Rocket Launch Animation -->
+    <!-- Rocket Launch -->
     <div class="rocket-container">
         <div class="rocket">
             <div class="rocket-nose"></div>
@@ -781,280 +1840,1214 @@
             <div class="rocket-fin rocket-fin-left"></div>
             <div class="rocket-fin rocket-fin-right"></div>
             <div class="rocket-flame"></div>
+            <div class="rocket-smoke"></div>
         </div>
     </div>
 
+    <!-- Cosmic Waves -->
+    <div class="cosmic-waves"></div>
+
     <!-- Theme Controls -->
     <div class="controls-panel">
-        <div class="control-label">Cosmic Themes</div>
+        <div class="control-label">Theme</div>
         <div class="theme-options">
-            <button class="theme-btn theme-nebula-btn active" data-theme="theme-nebula" title="Nebula"></button>
-            <button class="theme-btn theme-aurora-btn" data-theme="theme-aurora" title="Aurora"></button>
-            <button class="theme-btn theme-supernova-btn" data-theme="theme-supernova" title="Supernova"></button>
-            <button class="theme-btn theme-galaxy-btn" data-theme="theme-galaxy" title="Galaxy"></button>
-            <button class="theme-btn theme-creme-btn" data-theme="theme-creme" title="Creme"></button>
+            <div class="theme-btn theme-nebula active" data-theme="nebula" title="Nebula"></div>
+            <div class="theme-btn theme-aurora" data-theme="aurora" title="Aurora"></div>
+            <div class="theme-btn theme-supernova" data-theme="supernova" title="Supernova"></div>
+            <div class="theme-btn theme-galaxy" data-theme="galaxy" title="Galaxy"></div>
+            <div class="theme-btn theme-creme" data-theme="creme" title="Crème & Black"></div>
         </div>
+
         <div class="control-label">Font Style</div>
         <div class="font-selector">
             <select class="font-dropdown" id="fontSelector">
-                <option value="Halloween">Halloween</option>
-                <option value="DripOctober">Drip October</option>
-                <option value="Chainsaw Carnage">Chainsaw Carnage</option>
+                <option value="DripOctober">Drip October (Default)</option>
                 <option value="CrotahItalic">Crotah Italic</option>
                 <option value="Dangernight">Dangernight</option>
                 <option value="HeavyJack">Heavy Jack</option>
                 <option value="Marlita">Marlita</option>
                 <option value="MockBear">Mock Bear</option>
                 <option value="Mulinarstamp">Mulinarstamp</option>
+                <option value="Chainsaw Carnage">Chainsaw Carnage</option>
                 <option value="UnderThreat">Under Threat</option>
+                <option value="Halloween">Halloween</option>
                 <option value="BlackDahlia">Black Dahlia</option>
             </select>
+            <div class="font-preview" id="fontPreview">Preview Text</div>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="content">
-        <!-- Header -->
-        <div class="header-section">
+        <header class="header-section">
             <h1 class="logo">KRIPTIC EDITION</h1>
-            <p class="tagline">3.0</p>
-            <p class="subtitle">Your Cosmic Entertainment Hub</p>
-        </div>
+            <p class="tagline"></p>
+            <p class="subtitle"></p>
+        </header>
 
-        <!-- Navigation Grid -->
-        <div class="nav-grid">
-            <a href="movies.html" class="nav-card">
-                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                </svg>
-                <h3 class="nav-card-title">Movies</h3>
-                <p class="nav-card-desc">176+ movies in a Netflix-style interface. Browse, search, and stream your favorites.</p>
-            </a>
+<nav class="nav-grid" role="navigation" aria-label="Main Navigation">
 
-            <a href="games.html" class="nav-card">
-                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
-                </svg>
-                <h3 class="nav-card-title">Games</h3>
-                <p class="nav-card-desc">50+ embedded games ready to play instantly. From classics to modern favorites.</p>
-            </a>
+    <!-- Entertainment -->
+    <a href="https://sites.google.com/view/kriptic-edition-2/entertainment/つ-つmovies-shows?authuser=0" class="nav-card">
+        <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+            <polyline points="17 2 12 7 7 2"></polyline>
+        </svg>
+        <h2 class="nav-card-title">Entertainment</h2>
+        <p class="nav-card-desc">Browse our premium content collection</p>
+    </a>
 
-            <a href="chatrooms.html" class="nav-card">
-                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-                <h3 class="nav-card-title">Chatrooms</h3>
-                <p class="nav-card-desc">Connect with the community in real-time. Multiple themed rooms with moderation.</p>
-            </a>
+    <!-- Applications -->
+    <a href="https://sites.google.com/view/kriptic-edition-2/apps?authuser=0" class="nav-card">
+        <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        <h2 class="nav-card-title">Applications</h2>
+        <p class="nav-card-desc">Access professional tools and utilities</p>
+    </a>
 
-            <a href="utilities.html" class="nav-card">
-                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <h3 class="nav-card-title">Utilities</h3>
-                <p class="nav-card-desc">Physics formulas, Spotify widget, and various helpful tools at your fingertips.</p>
-            </a>
+    <!-- Partnerships -->
+    <a href="https://sites.google.com/view/kriptic-edition-2/home/partners?authuser=0" class="nav-card">
+        <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <h2 class="nav-card-title">Partnerships</h2>
+        <p class="nav-card-desc">Connect with industry professionals</p>
+    </a>
 
-            <a href="polls.html" class="nav-card">
-                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                <h3 class="nav-card-title">Polls</h3>
-                <p class="nav-card-desc">Vote on community polls and see real-time results with anti-cheat protection.</p>
-            </a>
+    <!-- Support -->
+    <a href="https://sites.google.com/view/kriptic-edition-2/home/support?authuser=0" class="nav-card">
+        <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <h2 class="nav-card-title">Support</h2>
+        <p class="nav-card-desc">Professional assistance available</p>
+    </a>
 
-            <a href="about.html" class="nav-card">
-                <svg class="nav-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h3 class="nav-card-title">About</h3>
-                <p class="nav-card-desc">Learn more about Kriptic Edition and its 600+ days of development journey.</p>
-            </a>
-        </div>
+    <!-- Information -->
+    <a href="https://sites.google.com/view/kriptic-edition-2/home/information?authuser=0" class="nav-card">
+        <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <h2 class="nav-card-title">Information</h2>
+        <p class="nav-card-desc">Learn about our team and services</p>
+    </a>
+    <!-- Cheats -->
+    <a href="https://sites.google.com/view/kriptic-edition-2/cheats?authuser=0" class="nav-card">
+        <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+  <circle cx="12" cy="12" r="3"></circle>
+</svg>
+        <h2 class="nav-card-title">Cheats</h2>
+        <p class="nav-card-desc">Cheat Your Way Through The System</p>
+    </a>
+    <!-- Community Polls (NO LINK) -->
+    <div class="nav-card" style="cursor: default;">
+        <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+        <h2 class="nav-card-title">Community Polls</h2>
+        <p class="nav-card-desc">Participate in community feedback</p>
+    </div>
 
-        <!-- Stats -->
+</nav>
+
         <div class="stats-container">
             <div class="stat-item">
-                <div class="stat-value">176+</div>
-                <div class="stat-label">Movies</div>
+                <div class="stat-value" id="visitors">0</div>
+                <div class="stat-label">Active Users</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">50+</div>
-                <div class="stat-label">Games</div>
+                <div class="stat-value" id="daysActive">0</div>
+                <div class="stat-label">Days Active</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">600+</div>
-                <div class="stat-label">Days Developed</div>
+                <div class="stat-value" id="fps">60</div>
+                <div class="stat-label">Performance</div>
             </div>
         </div>
     </div>
+
+    <!-- Poll Section -->
+    <section class="poll-section" id="polls">
+        <div class="poll-header">
+            <h2 class="poll-title">Community Polls</h2>
+            <p class="poll-subtitle">Share your voice and see what others think</p>
+        </div>
+        <div id="pollContainer">
+            <div class="poll-loading">Loading polls...</div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <div class="footer">
-        KRIPTIC EDITION 3.0 © 2024
+        © 2025 Kriptic Edition • All Rights Reserved
     </div>
 
-    <!-- Scripts -->
-    <script>
-        // Starfield Animation
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-        let shootingStars = [];
+    <!-- Physics Calculator Panel -->
+    <div class="physics-panel">
+        <div class="physics-calculator" id="physicsCalc">
+            <div class="calc-header">🔬 Physics Calculator</div>
+            
+            <div class="calc-input-group">
+                <label class="calc-label">Physics Formula Type</label>
+                <select class="calc-select" id="formulaType">
+                    <option value="">Select a formula...</option>
+                    <option value="gravity">Gravitational Force (F = G·m₁·m₂/r²)</option>
+                    <option value="escape">Escape Velocity (v = √(2GM/r))</option>
+                    <option value="orbital">Orbital Period (T = 2π√(r³/GM))</option>
+                    <option value="doppler">Doppler Shift (Δλ/λ = v/c)</option>
+                    <option value="schwarzschild">Schwarzschild Radius (rs = 2GM/c²)</option>
+                    <option value="luminosity">Stellar Luminosity (L = 4πr²σT⁴)</option>
+                    <option value="redshift">Cosmological Redshift (z = Δλ/λ)</option>
+                    <option value="custom">Custom Physics Code</option>
+                </select>
+            </div>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
+            <div class="calc-input-group" id="customCodeGroup" style="display: none;">
+                <label class="calc-label">Custom JavaScript Physics Code</label>
+                <textarea class="calc-textarea" id="customCode" placeholder="// Enter your physics calculation code
+// Example:
+const mass = 5.972e24; // Earth mass in kg
+const radius = 6371000; // Earth radius in m
+const g = 6.674e-11; // Gravitational constant
+const gravity = (g * mass) / (radius * radius);
+console.log('Surface gravity:', gravity, 'm/s²');"></textarea>
+            </div>
+
+            <div id="formulaInputs"></div>
+
+            <button class="calc-button" onclick="executePhysics()">Calculate & Apply</button>
+            
+            <div class="calc-result" id="calcResult" style="display: none;"></div>
+        </div>
+
+        <div class="physics-toggle" onclick="togglePhysicsCalc()">
+            ⚛️
+        </div>
+    </div>
+
+    <!-- Chatbot Integration -->
+    <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
+    <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmf5oahdm001grnj42h7edfx7'></zapier-interfaces-chatbot-embed>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<div id="kr-poll" style="font-family: Arial; color: white; background: #111; padding: 18px; border-radius: 12px; max-width:420px;">
+  <h3 id="kr-question">Loading poll…</h3>
+  <div id="kr-options"></div>
+  <div id="kr-result" style="margin-top:12px; font-size:13px; opacity:.9;"></div>
+</div>
+
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = 'https://zkrdbvjmessktzlxommr.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcmRidmptZXNza3R6bHhvbW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI4ODMzNzUsImV4cCI6MjA2ODQ1OTM3NX0.XDNQGD7Jl-2zmjFyfGVFRjdq-9rVFfhCyExfO8Fzb7Q';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const pollId = '42eacb4c-db45-4925-89f0-38f927c04ad8';
+const deviceId = localStorage.getItem('kr_device_id') || crypto.randomUUID();
+localStorage.setItem('kr_device_id', deviceId);
+
+const questionEl = document.getElementById('kr-question');
+const optionsEl = document.getElementById('kr-options');
+const resultEl = document.getElementById('kr-result');
+
+async function loadPoll() {
+  const { data: poll, error } = await supabase
+    .from('polls')
+    .select('*')
+    .eq('id', pollId)
+    .single();
+
+  if (error || !poll) {
+    questionEl.textContent = 'Poll not found';
+    console.error(error);
+    return;
+  }
+
+  questionEl.textContent = poll.question;
+
+  const { data: existing } = await supabase
+    .from('poll_votes')
+    .select('*')
+    .eq('poll_id', pollId)
+    .eq('device_id', deviceId)
+    .limit(1);
+
+  const hasVoted = existing && existing.length > 0;
+
+  optionsEl.innerHTML = '';
+
+  poll.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = `${opt} (${poll.votes[i] || 0})`;
+    btn.style.margin = '5px';
+    btn.style.padding = '8px 12px';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '6px';
+    btn.style.cursor = hasVoted ? 'default' : 'pointer';
+    btn.disabled = hasVoted;
+    btn.onclick = () => vote(i);
+    optionsEl.appendChild(btn);
+  });
+
+  resultEl.textContent = hasVoted ? 'You have already voted!' : '';
+}
+
+async function vote(index) {
+  // record voter
+  await supabase.from('poll_votes').insert([{ poll_id: pollId, device_id: deviceId }]);
+
+  resultEl.textContent = 'Thanks for voting!';
+  // reload to show buttons disabled and vote counts
+  loadPoll();
+}
+
+// initial load
+loadPoll();
+</script>
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBf86NMHrnOCUui_2VFF00wwehencFzF0Y",
+            authDomain: "kriptic-edition.firebaseapp.com",
+            databaseURL: "https://kriptic-edition-default-rtdb.firebaseio.com",
+            projectId: "kriptic-edition",
+            storageBucket: "kriptic-edition.firebasestorage.app",
+            messagingSenderId: "208515615130",
+            appId: "1:208515615130:web:2f94d2afdea3a668f91223"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Generate unique session ID
+        const sessionId = Math.random().toString(36).substring(2, 15);
+        let viewerCountRef = database.ref('viewers');
+        let mySessionRef = database.ref('sessions/' + sessionId);
+
+        // Track this session as active
+        mySessionRef.set(true);
+        mySessionRef.onDisconnect().remove();
+
+        // Listen for viewer count changes
+        viewerCountRef.on('value', (snapshot) => {
+            const count = snapshot.numChildren();
+            document.getElementById('visitors').textContent = count;
+        });
+
+        // Add this session to active viewers
+        let myViewerRef = viewerCountRef.push();
+        myViewerRef.set(true);
+        myViewerRef.onDisconnect().remove();
+
+        // Mathematically Accurate Starfield with Parallax
+        const starfield = document.getElementById('starfield');
+        const starsCtx = starfield.getContext('2d');
+        starfield.width = window.innerWidth;
+        starfield.height = window.innerHeight;
+
+        const stars = [];
+        const starCount = 1000;
+        
+        // Star color temperature based on real stellar classification
+        const starColors = [
+            { temp: 'O', color: '#9bb0ff', size: 2.5 },  // Blue giants
+            { temp: 'B', color: '#aabfff', size: 2.0 },  // Blue-white
+            { temp: 'A', color: '#cad7ff', size: 1.8 },  // White
+            { temp: 'F', color: '#f8f7ff', size: 1.5 },  // Yellow-white
+            { temp: 'G', color: '#fff4ea', size: 1.2 },  // Yellow (Sun-like)
+            { temp: 'K', color: '#ffd2a1', size: 1.0 },  // Orange
+            { temp: 'M', color: '#ffcc6f', size: 0.8 }   // Red dwarf
+        ];
 
         class Star {
             constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2;
-                this.speed = Math.random() * 0.5;
-                this.opacity = Math.random();
-                this.twinkleSpeed = Math.random() * 0.02 + 0.01;
+                // Parallax depth (distance from viewer)
+                this.z = Math.random() * 1000 + 100;
+                
+                // 3D position
+                this.x = (Math.random() - 0.5) * 2000;
+                this.y = (Math.random() - 0.5) * 2000;
+                
+                // Stellar classification based on Hertzsprung-Russell diagram distribution
+                const rand = Math.random();
+                let classification;
+                if (rand < 0.76) classification = starColors[6]; // M stars (76%)
+                else if (rand < 0.88) classification = starColors[5]; // K stars (12%)
+                else if (rand < 0.96) classification = starColors[4]; // G stars (8%)
+                else if (rand < 0.98) classification = starColors[3]; // F stars (2%)
+                else if (rand < 0.99) classification = starColors[2]; // A stars (1%)
+                else if (rand < 0.995) classification = starColors[1]; // B stars (0.5%)
+                else classification = starColors[0]; // O stars (0.5%)
+                
+                this.color = classification.color;
+                this.baseSize = classification.size;
+                
+                // Brightness variation (magnitude)
+                this.brightness = 0.3 + Math.random() * 0.7;
+                
+                // Very subtle proper motion (barely noticeable)
+                this.vx = (Math.random() - 0.5) * 0.01;
+                this.vy = (Math.random() - 0.5) * 0.01;
+                
+                // Atmospheric scintillation (twinkling) - slower
+                this.twinklePhase = Math.random() * Math.PI * 2;
+                this.twinkleSpeed = 0.01 + Math.random() * 0.015;
             }
 
             update() {
-                this.opacity += this.twinkleSpeed;
-                if (this.opacity > 1 || this.opacity < 0) {
-                    this.twinkleSpeed *= -1;
+                // Very subtle movement
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Wrap around edges
+                if (this.x < -1000) this.x = 1000;
+                if (this.x > 1000) this.x = -1000;
+                if (this.y < -1000) this.y = 1000;
+                if (this.y > 1000) this.y = -1000;
+                
+                // Gentle twinkling
+                this.twinklePhase += this.twinkleSpeed;
+            }
+
+            draw() {
+                // Perspective projection
+                const scale = 200 / this.z;
+                const x2d = this.x * scale + starfield.width / 2;
+                const y2d = this.y * scale + starfield.height / 2;
+                
+                if (x2d < 0 || x2d > starfield.width || y2d < 0 || y2d > starfield.height) return;
+                
+                // Size based on distance and stellar type
+                const size = this.baseSize * scale;
+                
+                // Gentle twinkling effect using sine wave
+                const twinkle = 0.7 + Math.sin(this.twinklePhase) * 0.3;
+                const alpha = this.brightness * twinkle;
+                
+                // Draw star with subtle glow
+                starsCtx.beginPath();
+                starsCtx.arc(x2d, y2d, size, 0, Math.PI * 2);
+                starsCtx.fillStyle = this.color;
+                starsCtx.globalAlpha = alpha;
+                starsCtx.fill();
+                
+                // Add subtle glow for larger stars
+                if (size > 1) {
+                    starsCtx.beginPath();
+                    starsCtx.arc(x2d, y2d, size * 2, 0, Math.PI * 2);
+                    starsCtx.globalAlpha = alpha * 0.3;
+                    starsCtx.fill();
                 }
-            }
-
-            draw() {
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                ctx.fillRect(this.x, this.y, this.size, this.size);
+                
+                starsCtx.globalAlpha = 1;
             }
         }
 
-        class ShootingStar {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height * 0.5;
-                this.length = Math.random() * 80 + 40;
-                this.speed = Math.random() * 15 + 10;
-                this.opacity = 1;
-                this.angle = Math.PI / 4;
-            }
-
-            update() {
-                this.x += Math.cos(this.angle) * this.speed;
-                this.y += Math.sin(this.angle) * this.speed;
-                this.opacity -= 0.02;
-            }
-
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
-                const gradient = ctx.createLinearGradient(0, 0, -this.length, 0);
-                gradient.addColorStop(0, `rgba(255, 255, 255, ${this.opacity})`);
-                gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.lineTo(-this.length, 0);
-                ctx.stroke();
-                ctx.restore();
-            }
+        for (let i = 0; i < starCount; i++) {
+            stars.push(new Star());
         }
 
-        function initStars() {
-            stars = [];
-            for (let i = 0; i < 200; i++) {
-                stars.push(new Star());
-            }
-        }
-
-        function createShootingStar() {
-            if (Math.random() < 0.01) {
-                shootingStars.push(new ShootingStar());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function animateStars() {
+            starsCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            starsCtx.fillRect(0, 0, starfield.width, starfield.height);
 
             stars.forEach(star => {
                 star.update();
                 star.draw();
             });
 
-            createShootingStar();
-            shootingStars = shootingStars.filter(star => star.opacity > 0);
-            shootingStars.forEach(star => {
-                star.update();
-                star.draw();
-            });
-
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animateStars);
         }
 
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            initStars();
+        animateStars();
+
+        // Update HUD Time
+        function updateHUDTime() {
+            const hudTimeElement = document.getElementById('hudTime');
+            if (hudTimeElement) {
+                const now = new Date();
+                const timeStr = now.toTimeString().split(' ')[0];
+                hudTimeElement.textContent = timeStr;
+            }
+        }
+        setInterval(updateHUDTime, 1000);
+        updateHUDTime();
+
+        // Realistic Cosmic Dust with Brownian Motion
+        const dustCanvas = document.getElementById('cosmicDust');
+        const dustCtx = dustCanvas.getContext('2d');
+        dustCanvas.width = window.innerWidth;
+        dustCanvas.height = window.innerHeight;
+
+        const dustParticles = [];
+        const dustCount = 250;
+
+        class DustParticle {
+            constructor() {
+                // Position in 3D space
+                this.z = Math.random() * 500 + 50;
+                this.x = (Math.random() - 0.5) * 1500;
+                this.y = (Math.random() - 0.5) * 1500;
+                
+                // Brownian motion (random walk)
+                this.vx = 0;
+                this.vy = 0;
+                
+                // Dust particle size based on distance
+                this.baseSize = 0.5 + Math.random() * 1;
+                
+                // Color variation (interstellar dust colors)
+                const dustHue = 20 + Math.random() * 40; // Orange-red tint
+                this.color = `hsl(${dustHue}, 70%, 50%)`;
+                
+                this.opacity = 0.2 + Math.random() * 0.3;
+            }
+
+            update() {
+                // Brownian motion: random acceleration
+                const randomWalk = 0.05;
+                this.vx += (Math.random() - 0.5) * randomWalk;
+                this.vy += (Math.random() - 0.5) * randomWalk;
+                
+                // Friction/damping
+                this.vx *= 0.95;
+                this.vy *= 0.95;
+                
+                // Apply velocity
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Boundary wrapping
+                const boundary = 750;
+                if (this.x < -boundary) this.x = boundary;
+                if (this.x > boundary) this.x = -boundary;
+                if (this.y < -boundary) this.y = boundary;
+                if (this.y > boundary) this.y = -boundary;
+            }
+
+            draw() {
+                // Perspective projection
+                const scale = 200 / this.z;
+                const x2d = this.x * scale + dustCanvas.width / 2;
+                const y2d = this.y * scale + dustCanvas.height / 2;
+                
+                if (x2d < 0 || x2d > dustCanvas.width || y2d < 0 || y2d > dustCanvas.height) return;
+                
+                const size = this.baseSize * scale;
+                
+                dustCtx.beginPath();
+                dustCtx.arc(x2d, y2d, size, 0, Math.PI * 2);
+                dustCtx.fillStyle = this.color;
+                dustCtx.globalAlpha = this.opacity * (1 - this.z / 550);
+                dustCtx.shadowBlur = size * 3;
+                dustCtx.shadowColor = this.color;
+                dustCtx.fill();
+                dustCtx.shadowBlur = 0;
+                dustCtx.globalAlpha = 1;
+            }
+        }
+
+        for (let i = 0; i < dustCount; i++) {
+            dustParticles.push(new DustParticle());
+        }
+
+        function animateDust() {
+            dustCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            dustCtx.fillRect(0, 0, dustCanvas.width, dustCanvas.height);
+
+            dustParticles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            requestAnimationFrame(animateDust);
+        }
+
+        animateDust();
+
+        // Realistic Shooting Stars - First Person POV (coming towards you)
+        function createShootingStar() {
+            const meteor = document.createElement('div');
+            meteor.className = 'shooting-star';
+            
+            // Start from center-ish area (where you're looking up)
+            const startX = window.innerWidth / 2 + (Math.random() - 0.5) * 400;
+            const startY = window.innerHeight / 3 + (Math.random() - 0.5) * 300;
+            
+            meteor.style.left = startX + 'px';
+            meteor.style.top = startY + 'px';
+            
+            // Calculate trajectory moving towards viewer (expanding outward)
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 300 + Math.random() * 500;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            
+            const duration = 1 + Math.random() * 1.5;
+            
+            meteor.style.setProperty('--tx', tx + 'px');
+            meteor.style.setProperty('--ty', ty + 'px');
+            meteor.style.animation = `meteorFall ${duration}s ease-out`;
+            
+            document.body.appendChild(meteor);
+            setTimeout(() => meteor.remove(), duration * 1000);
+        }
+
+        // More frequent meteors for first-person effect
+        setInterval(createShootingStar, 2000 + Math.random() * 3000);
+
+        // Solar Flares (random bursts of light)
+        function createSolarFlare() {
+            const flare = document.createElement('div');
+            flare.className = 'solar-flare';
+            flare.style.left = Math.random() * window.innerWidth + 'px';
+            flare.style.top = Math.random() * window.innerHeight + 'px';
+            flare.style.transform = `rotate(${Math.random() * 360}deg)`;
+            
+            document.body.appendChild(flare);
+            setTimeout(() => flare.remove(), 3000);
+        }
+
+        setInterval(createSolarFlare, 8000 + Math.random() * 7000);
+
+        // Cosmic Ray Particles (fast-moving light streaks)
+        function createCosmicRay() {
+            const ray = document.createElement('div');
+            ray.style.position = 'fixed';
+            ray.style.width = '2px';
+            ray.style.height = '50px';
+            ray.style.background = 'linear-gradient(180deg, rgba(100, 200, 255, 0.8), transparent)';
+            ray.style.filter = 'blur(1px)';
+            ray.style.zIndex = '7';
+            ray.style.pointerEvents = 'none';
+            
+            const startX = Math.random() * window.innerWidth;
+            const startY = -100;
+            ray.style.left = startX + 'px';
+            ray.style.top = startY + 'px';
+            
+            const angle = 60 + Math.random() * 60; // 60-120 degrees
+            const speed = 2000 + Math.random() * 2000;
+            
+            ray.style.transform = `rotate(${angle}deg)`;
+            ray.style.transition = `all ${speed}ms linear`;
+            
+            document.body.appendChild(ray);
+            
+            setTimeout(() => {
+                ray.style.top = window.innerHeight + 100 + 'px';
+                ray.style.opacity = '0';
+            }, 50);
+            
+            setTimeout(() => ray.remove(), speed);
+        }
+
+        setInterval(createCosmicRay, 6000 + Math.random() * 8000);
+
+        // Mouse Constellation Effect with Trail
+        const mouseGlow = document.getElementById('mouseGlow');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let currentX = mouseX;
+        let currentY = mouseY;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         });
 
-        resizeCanvas();
-        initStars();
-        animate();
+        function updateMouseGlow() {
+            // Smooth follow
+            currentX += (mouseX - currentX) * 0.1;
+            currentY += (mouseY - currentY) * 0.1;
+            
+            const primary = getComputedStyle(document.body).getPropertyValue('--primary');
+            mouseGlow.style.left = (currentX - 300) + 'px';
+            mouseGlow.style.top = (currentY - 300) + 'px';
+            mouseGlow.style.background = `radial-gradient(circle, ${primary}60, transparent)`;
+            
+            requestAnimationFrame(updateMouseGlow);
+        }
+        updateMouseGlow();
 
-        // Theme Switcher
+        // Create particle trail on mouse move
+        let lastTrailTime = 0;
+        document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            if (now - lastTrailTime < 50) return;
+            lastTrailTime = now;
+            
+            const trail = document.createElement('div');
+            trail.style.position = 'fixed';
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            trail.style.width = '4px';
+            trail.style.height = '4px';
+            trail.style.borderRadius = '50%';
+            trail.style.background = getComputedStyle(document.body).getPropertyValue('--accent');
+            trail.style.pointerEvents = 'none';
+            trail.style.zIndex = '8';
+            trail.style.opacity = '0.6';
+            trail.style.transition = 'all 1s ease-out';
+            
+            document.body.appendChild(trail);
+            
+            setTimeout(() => {
+                trail.style.transform = 'scale(3)';
+                trail.style.opacity = '0';
+            }, 10);
+            
+            setTimeout(() => trail.remove(), 1000);
+        });
+
+        // Storage Helper with Expiration
+        const storage = {
+            set(key, value, expiryDays = 365) {
+                const item = {
+                    value: value,
+                    expiry: Date.now() + (expiryDays * 24 * 60 * 60 * 1000)
+                };
+                localStorage.setItem(key, JSON.stringify(item));
+            },
+            get(key) {
+                const itemStr = localStorage.getItem(key);
+                if (!itemStr) return null;
+                
+                try {
+                    const item = JSON.parse(itemStr);
+                    if (Date.now() > item.expiry) {
+                        localStorage.removeItem(key);
+                        return null;
+                    }
+                    return item.value;
+                } catch {
+                    return null;
+                }
+            }
+        };
+
+        // Theme Switcher with Storage
         const themeButtons = document.querySelectorAll('.theme-btn');
-        const body = document.body;
-
+        
+        // Load saved theme
+        const savedTheme = storage.get('preferredTheme') || 'nebula';
+        document.body.className = `theme-${savedTheme}`;
+        
+        const root = document.documentElement;
+        const themeColors = {
+            'nebula': { primary: '#4169e1', secondary: '#9d4edd', accent: '#00d9ff' },
+            'aurora': { primary: '#00ff88', secondary: '#00ffff', accent: '#88ff00' },
+            'supernova': { primary: '#ff6b35', secondary: '#ff0055', accent: '#ffaa00' },
+             'creme': { primary: '#f9f5f0', secondary: '#111111', accent: '#e0d8c3' }
+        };
+        
+        function applyTheme(theme) {
+            document.body.className = `theme-${theme}`;
+            const colors = themeColors[theme];
+            root.style.setProperty('--primary', colors.primary);
+            root.style.setProperty('--secondary', colors.secondary);
+            root.style.setProperty('--accent', colors.accent);
+        }
+        
+        applyTheme(savedTheme);
+        themeButtons.forEach(b => {
+            if (b.dataset.theme === savedTheme) {
+                b.classList.add('active');
+            }
+        });
+        
         themeButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const theme = btn.dataset.theme;
-                body.className = theme;
+                applyTheme(theme);
+                storage.set('preferredTheme', theme, 365); // Expires in 1 year
                 
                 themeButtons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                
-                localStorage.setItem('selectedTheme', theme);
             });
         });
 
-        // Load saved theme
-        const savedTheme = localStorage.getItem('selectedTheme');
-        if (savedTheme) {
-            body.className = savedTheme;
-            themeButtons.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.theme === savedTheme) {
-                    btn.classList.add('active');
-                }
-            });
-        }
-
-        // Font Selector
+        // Font Selector with Storage
         const fontSelector = document.getElementById('fontSelector');
-        
-        fontSelector.addEventListener('change', (e) => {
-            document.body.style.fontFamily = `'${e.target.value}', sans-serif`;
-            localStorage.setItem('selectedFont', e.target.value);
-        });
+        const fontPreview = document.getElementById('fontPreview');
 
-        // Load saved font
-        const savedFont = localStorage.getItem('selectedFont');
-        if (savedFont) {
-            document.body.style.fontFamily = `'${savedFont}', sans-serif`;
-            fontSelector.value = savedFont;
+        // Font settings with custom letter spacing for readability
+        const fontSettings = {
+            'DripOctober': { spacing: '0.02em' },
+            'CrotahItalic': { spacing: '0.03em' },
+            'Dangernight': { spacing: '0.05em' },
+            'HeavyJack': { spacing: '0.06em' },
+            'Marlita': { spacing: '0.04em' },
+            'MockBear': { spacing: '0.05em' },
+            'Mulinarstamp': { spacing: '0.03em' },
+            'Chainsaw Carnage': { spacing: '0.03em' },
+            'UnderThreat': { spacing: '0.07em' },
+            'Halloween': { spacing: '0.07em' },
+            'BlackDahlia': { spacing: '0.1em' }
+        };
+
+        // Load saved font from storage with expiration
+        const savedFont = storage.get('preferredFont') || 'DripOctober';
+        applyFont(savedFont);
+        fontSelector.value = savedFont;
+
+        function applyFont(fontName) {
+            const settings = fontSettings[fontName];
+            document.body.style.fontFamily = `'${fontName}', sans-serif`;
+            document.body.style.letterSpacing = settings.spacing;
+            fontPreview.style.fontFamily = `'${fontName}', sans-serif`;
+            fontPreview.style.letterSpacing = settings.spacing;
         }
 
-        // Google Analytics
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-HXQCDRCM1H');
-    </script>
+        // Preview font on change
+        fontSelector.addEventListener('change', function() {
+            const selectedFont = this.value;
+            const settings = fontSettings[selectedFont];
+            fontPreview.style.fontFamily = `'${selectedFont}', sans-serif`;
+            fontPreview.style.letterSpacing = settings.spacing;
+        });
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HXQCDRCM1H"></script>
+        // Save font on selection with 1 year expiration
+        fontSelector.addEventListener('change', function() {
+            const selectedFont = this.value;
+            applyFont(selectedFont);
+            storage.set('preferredFont', selectedFont, 365);
+        });
+
+        // FPS Counter - Store in Firebase
+        let lastTime = performance.now();
+        let frames = 0;
+        let fpsRef = database.ref('performance/' + sessionId);
+        
+        function updateFPS() {
+            frames++;
+            const now = performance.now();
+            if (now >= lastTime + 1000) {
+                const currentFPS = frames;
+                document.getElementById('fps').textContent = currentFPS;
+                
+                // Store FPS in Firebase
+                fpsRef.set(currentFPS);
+                
+                frames = 0;
+                lastTime = now;
+            }
+            requestAnimationFrame(updateFPS);
+        }
+        updateFPS();
+
+        // Cleanup FPS data on disconnect
+        fpsRef.onDisconnect().remove();
+        // Days Active Counter
+        function updateDaysActive() {
+        const launchDate = new Date('2024-03-24');
+        const today = new Date();
+        const diffTime = Math.abs(today - launchDate);
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        document.getElementById('daysActive').textContent = diffDays;
+        }
+updateDaysActive();
+        // Window Resize
+        window.addEventListener('resize', () => {
+            starfield.width = window.innerWidth;
+            starfield.height = window.innerHeight;
+            dustCanvas.width = window.innerWidth;
+            dustCanvas.height = window.innerHeight;
+        });
+
+        // ===== POLL SYSTEM =====
+        const SUPABASE_URL = 'https://zkrdbvjmessktzlxommr.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcmRidmptZXNza3R6bHhvbW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI4ODMzNzUsImV4cCI6MjA2ODQ1OTM3NX0.XDNQGD7Jl-2zmjFyfGVFRjdq-9rVFfhCyExfO8Fzb7Q';
+
+        let pollSupabase;
+        let polls = [];
+        let selectedOptions = {};
+        let votingInProgress = new Set();
+
+        // Initialize Poll Supabase Client
+        function initializePollSupabase() {
+            pollSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+
+        // Fetch polls from Supabase
+        async function fetchPolls() {
+            try {
+                const { data, error } = await pollSupabase
+                    .from('polls')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                polls = data || [];
+                renderPolls();
+            } catch (error) {
+                showPollMessage('error', 'Failed to load polls: ' + error.message);
+                console.error('Poll fetch error:', error);
+            }
+        }
+
+        // Show message
+        function showPollMessage(type, message) {
+            const container = document.getElementById('pollContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `poll-message ${type}`;
+            messageDiv.textContent = message;
+            
+            container.insertBefore(messageDiv, container.firstChild);
+            
+            setTimeout(() => messageDiv.remove(), type === 'success' ? 3000 : 5000);
+        }
+
+        // Select poll option
+        function selectPollOption(pollId, optionIndex) {
+            if (votingInProgress.has(pollId)) return;
+            selectedOptions[pollId] = optionIndex;
+            renderPolls();
+        }
+
+        // Submit vote
+        async function submitPollVote(pollId) {
+            const optionIndex = selectedOptions[pollId];
+// Check if the user already voted for this poll
+if (localStorage.getItem(`pollVoted_${pollId}`)) {
+    showPollMessage('error', 'You already voted on this poll.');
+    return;
+}
+            
+            if (optionIndex === undefined) {
+                showPollMessage('error', 'Please select an option before voting');
+                return;
+            }
+
+            if (votingInProgress.has(pollId)) return;
+
+            votingInProgress.add(pollId);
+            
+            try {
+                const poll = polls.find(p => p.id === pollId);
+                const updatedVotes = [...poll.votes];
+                updatedVotes[optionIndex] += 1;
+
+                const { data, error } = await pollSupabase
+                    .from('polls')
+                    .update({ votes: updatedVotes })
+                    .eq('id', pollId)
+                    .select();
+
+                if (error) throw error;
+
+                const pollIndex = polls.findIndex(p => p.id === pollId);
+                polls[pollIndex] = data[0];
+                delete selectedOptions[pollId];
+                // Mark as voted in browser storage
+localStorage.setItem(`pollVoted_${pollId}`, 'true');
+                showPollMessage('success', 'Vote submitted successfully!');
+                renderPolls();
+            } catch (error) {
+                showPollMessage('error', 'Vote failed: ' + error.message);
+                console.error('Vote error:', error);
+            } finally {
+                votingInProgress.delete(pollId);
+            }
+        }
+
+        // Render polls
+        function renderPolls() {
+            const container = document.getElementById('pollContainer');
+            
+            if (polls.length === 0) {
+                container.innerHTML = '<div class="poll-loading">No polls available at this time</div>';
+                return;
+            }
+
+            const pollsHTML = polls.map(poll => {
+                const totalVotes = poll.votes.reduce((sum, count) => sum + count, 0);
+                const selectedIndex = selectedOptions[poll.id];
+                const isVoting = votingInProgress.has(poll.id);
+const hasVoted = localStorage.getItem(`pollVoted_${poll.id}`);
+                const optionsHTML = poll.options.map((option, index) => {
+                    const voteCount = poll.votes[index];
+                    const percentage = totalVotes ? Math.round((voteCount / totalVotes) * 100) : 0;
+                    const isSelected = selectedIndex === index;
+
+                    return `
+                        <div class="poll-option ${isSelected ? 'selected' : ''}" 
+                             style="--vote-percent: ${percentage}%"
+                             onclick="selectPollOption('${poll.id}', ${index})"
+                             role="button"
+                             tabindex="0">
+                            <span class="poll-option-text">${escapeHtml(option)}</span>
+                            <div class="poll-option-stats">
+                                <span class="poll-vote-count">${voteCount} votes</span>
+                                <span>${percentage}%</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="poll-card">
+                        <h3 class="poll-question">${escapeHtml(poll.question)}</h3>
+                        <div class="poll-options">${optionsHTML}</div>
+                        <div class="poll-actions">
+                            <div class="poll-meta">
+                                Total: ${totalVotes} votes
+                            </div>
+                            <button class="poll-submit-btn" 
+                                    onclick="submitPollVote('${poll.id}')"
+                                    ${isVoting || selectedIndex === undefined ? 'disabled' : ''}>
+                                ${isVoting ? 'Submitting...' : 'Submit Vote'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = pollsHTML;
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Make functions global
+        window.selectPollOption = selectPollOption;
+        window.submitPollVote = submitPollVote;
+
+        // Initialize polls on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializePollSupabase();
+            fetchPolls();
+            
+            // Auto-refresh polls every 30 seconds
+            setInterval(() => {
+                if (votingInProgress.size === 0) {
+                    fetchPolls();
+                }
+            }, 30000);
+        });
+
+        // Physics Calculator Functions
+        function togglePhysicsCalc() {
+            const calc = document.getElementById('physicsCalc');
+            calc.classList.toggle('active');
+        }
+
+        document.getElementById('formulaType').addEventListener('change', function() {
+            const type = this.value;
+            const inputsDiv = document.getElementById('formulaInputs');
+            const customGroup = document.getElementById('customCodeGroup');
+            
+            if (type === 'custom') {
+                customGroup.style.display = 'block';
+                inputsDiv.innerHTML = '';
+                return;
+            } else {
+                customGroup.style.display = 'none';
+            }
+
+            let inputs = '';
+            
+            switch(type) {
+                case 'gravity':
+                    inputs = `
+                        <div class="calc-input-group">
+                            <label class="calc-label">Mass 1 (kg)</label>
+                            <input type="number" class="calc-input" id="mass1" value="5.972e24" step="any">
+                        </div>
+                        <div class="calc-input-group">
+                            <label class="calc-label">Mass 2 (kg)</label>
+                            <input type="number" class="calc-input" id="mass2" value="1000" step="any">
+                        </div>
+                        <div class="calc-input-group">
+                            <label class="calc-label">Distance (m)</label>
+                            <input type="number" class="calc-input" id="distance" value="6371000" step="any">
+                        </div>
+                    `;
+                    break;
+                case 'escape':
+                    inputs = `
+                        <div class="calc-input-group">
+                            <label class="calc-label">Mass (kg)</label>
+                            <input type="number" class="calc-input" id="mass" value="5.972e24" step="any">
+                        </div>
+                        <div class="calc-input-group">
+                            <label class="calc-label">Radius (m)</label>
+                            <input type="number" class="calc-input" id="radius" value="6371000" step="any">
+                        </div>
+                    `;
+                    break;
+                case 'orbital':
+                    inputs = `
+                        <div class="calc-input-group">
+                            <label class="calc-label">Central Mass (kg)</label>
+                            <input type="number" class="calc-input" id="mass" value="5.972e24" step="any">
+                        </div>
+                        <div class="calc-input-group">
+                            <label class="calc-label">Orbital Radius (m)</label>
+                            <input type="number" class="calc-input" id="radius" value="42164000" step="any">
+                        </div>
+                    `;
+                    break;
+                case 'schwarzschild':
+                    inputs = `
+                        <div class="calc-input-group">
+                            <label class="calc-label">Mass (kg)</label>
+                            <input type="number" class="calc-input" id="mass" value="1.989e30" step="any">
+                        </div>
+                    `;
+                    break;
+            }
+            
+            inputsDiv.innerHTML = inputs;
+        });
+
+        function executePhysics() {
+            const type = document.getElementById('formulaType').value;
+            const resultDiv = document.getElementById('calcResult');
+            
+            if (!type) {
+                resultDiv.className = 'calc-result error';
+                resultDiv.style.display = 'block';
+                resultDiv.textContent = 'Please select a formula type';
+                return;
+            }
+
+            try {
+                let result = '';
+                const G = 6.674e-11; // Gravitational constant
+                const c = 299792458; // Speed of light
+
+                if (type === 'custom') {
+                    const code = document.getElementById('customCode').value;
+                    const logs = [];
+                    const originalLog = console.log;
+                    console.log = (...args) => logs.push(args.join(' '));
+                    
+                    eval(code);
+                    
+                    console.log = originalLog;
+                    result = logs.join('\n') || 'Code executed successfully (no output)';
+                } else {
+                    switch(type) {
+                        case 'gravity':
+                            const m1 = parseFloat(document.getElementById('mass1').value);
+                            const m2 = parseFloat(document.getElementById('mass2').value);
+                            const r = parseFloat(document.getElementById('distance').value);
+                            const F = (G * m1 * m2) / (r * r);
+                            result = `Gravitational Force: ${F.toExponential(3)} N\n\nThis force would affect particle movement in the background.`;
+                            
+                            // Apply to dust particles
+                            dustParticles.forEach(p => {
+                                p.vx *= (1 + F / 1e10);
+                                p.vy *= (1 + F / 1e10);
+                            });
+                            break;
+                            
+                        case 'escape':
+                            const mass = parseFloat(document.getElementById('mass').value);
+                            const radius = parseFloat(document.getElementById('radius').value);
+                            const v = Math.sqrt((2 * G * mass) / radius);
+                            result = `Escape Velocity: ${v.toFixed(2)} m/s\n(${(v/1000).toFixed(2)} km/s)\n\nMeteor speeds adjusted!`;
+                            
+                            // Affect meteor speed
+                            window.meteorSpeedMultiplier = v / 11000;
+                            break;
+                            
+                        case 'orbital':
+                            const M = parseFloat(document.getElementById('mass').value);
+                            const R = parseFloat(document.getElementById('radius').value);
+                            const T = 2 * Math.PI * Math.sqrt((R * R * R) / (G * M));
+                            const hours = T / 3600;
+                            result = `Orbital Period: ${T.toFixed(2)} seconds\n(${hours.toFixed(2)} hours)\n\nEarth rotation adjusted!`;
+                            
+                            // Adjust Earth rotation speed
+                            const earth = document.querySelector('.earth');
+                            if (earth) {
+                                earth.style.animationDuration = `${T / 10}s`;
+                            }
+                            break;
+                            
+                        case 'schwarzschild':
+                            const M_bh = parseFloat(document.getElementById('mass').value);
+                            const rs = (2 * G * M_bh) / (c * c);
+                            result = `Schwarzschild Radius: ${rs.toExponential(3)} m\n(${(rs/1000).toFixed(2)} km)\n\nEvent horizon visualization added!`;
+                            
+                            // Create black hole effect
+                            const blackHole = document.createElement('div');
+                            blackHole.style.cssText = `
+                                position: fixed;
+                                top: 50%;
+                                left: 50%;
+                                width: ${Math.min(rs / 1000, 300)}px;
+                                height: ${Math.min(rs / 1000, 300)}px;
+                                transform: translate(-50%, -50%);
+                                background: radial-gradient(circle, black 40%, transparent 100%);
+                                border: 2px solid var(--primary);
+                                border-radius: 50%;
+                                z-index: 7;
+                                pointer-events: none;
+                                animation: pulse-expand 4s ease-out infinite;
+                            `;
+                            document.body.appendChild(blackHole);
+                            setTimeout(() => blackHole.remove(), 10000);
+                            break;
+                    }
+                }
+
+                resultDiv.className = 'calc-result';
+                resultDiv.style.display = 'block';
+                resultDiv.textContent = result;
+                
+            } catch (error) {
+                resultDiv.className = 'calc-result error';
+                resultDiv.style.display = 'block';
+                resultDiv.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
 </body>
 </html>
+<script type="text/javascript" src="https://pub47.bravenet.com/counter/code.php?id=409988&usernum=3958698770&cpv=3">
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2W798YNJP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Z2W798YNJP');
+</script>
