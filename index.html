@@ -112,12 +112,13 @@
             width: 300px;
             height: 300px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(100, 150, 255, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
             pointer-events: none;
             z-index: 5;
             mix-blend-mode: screen;
             filter: blur(40px);
             transition: transform 0.1s ease-out;
+            opacity: 0.15;
         }
 
         /* Theme Variables */
@@ -157,6 +158,36 @@
             --accent: #f9f5f0;
         }
 
+        body.theme-void {
+            --primary: #1a1a1a;
+            --secondary: #4a4a4a;
+            --accent: #ffffff;
+        }
+
+        body.theme-plasma {
+            --primary: #ff00ff;
+            --secondary: #00ffff;
+            --accent: #ffff00;
+        }
+
+        body.theme-solar {
+            --primary: #ffaa00;
+            --secondary: #ff6600;
+            --accent: #ffdd00;
+        }
+
+        body.theme-lunar {
+            --primary: #c0c0c0;
+            --secondary: #e0e0e0;
+            --accent: #ffffff;
+        }
+
+        body.theme-cosmic {
+            --primary: #ff1493;
+            --secondary: #00bfff;
+            --accent: #7fff00;
+        }
+
         /* Controls Panel */
         .controls-panel {
             position: fixed;
@@ -170,6 +201,73 @@
             backdrop-filter: blur(30px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             min-width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .controls-panel.collapsed {
+            padding: 0;
+            min-width: 0;
+            width: 0;
+            height: 0;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0);
+        }
+
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .controls-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .controls-close:hover {
+            background: rgba(255, 0, 0, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .controls-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s;
+            font-size: 1.5rem;
+        }
+
+        .controls-toggle.visible {
+            display: flex;
+        }
+
+        .controls-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--primary);
         }
 
         .control-label {
@@ -216,6 +314,11 @@
         .theme-supernova-btn { background: linear-gradient(135deg, #ff6b35, #ff0055, #ffaa00); }
         .theme-galaxy-btn { background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); }
         .theme-creme-btn { background: linear-gradient(135deg, #f9f5f0, #f1e9dc, #d4a574); }
+        .theme-void-btn { background: linear-gradient(135deg, #1a1a1a, #4a4a4a, #ffffff); }
+        .theme-plasma-btn { background: linear-gradient(135deg, #ff00ff, #00ffff, #ffff00); }
+        .theme-solar-btn { background: linear-gradient(135deg, #ffaa00, #ff6600, #ffdd00); }
+        .theme-lunar-btn { background: linear-gradient(135deg, #c0c0c0, #e0e0e0, #ffffff); }
+        .theme-cosmic-btn { background: linear-gradient(135deg, #ff1493, #00bfff, #7fff00); }
 
         .font-selector {
             width: 100%;
@@ -260,17 +363,17 @@
             align-items: center;
             background: rgba(10, 14, 39, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(100, 150, 255, 0.2);
+            border-bottom: 1px solid var(--primary);
         }
 
         .logo {
             font-size: 2.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #6495ff, #9d7dff);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 3px;
-            text-shadow: 0 0 30px rgba(100, 149, 237, 0.5);
+            text-shadow: 0 0 30px var(--primary);
         }
 
         .visitor-badge {
@@ -280,13 +383,13 @@
             background: rgba(0, 0, 0, 0.5);
             padding: 0.75rem 1.5rem;
             border-radius: 50px;
-            border: 1px solid rgba(100, 150, 255, 0.3);
+            border: 1px solid var(--primary);
         }
 
         .visitor-count {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #6495ff;
+            color: var(--primary);
         }
 
         .visitor-label {
@@ -308,7 +411,7 @@
             font-size: clamp(3rem, 8vw, 5rem);
             font-weight: 700;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff, #6495ff, #9d7dff);
+            background: linear-gradient(135deg, #ffffff, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 2px;
@@ -316,8 +419,8 @@
         }
 
         @keyframes titleGlow {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(100, 149, 237, 0.4)); }
-            50% { filter: drop-shadow(0 0 40px rgba(100, 149, 237, 0.8)); }
+            0%, 100% { filter: drop-shadow(0 0 20px var(--primary)); }
+            50% { filter: drop-shadow(0 0 40px var(--primary)); }
         }
 
         .hero-subtitle {
@@ -353,7 +456,7 @@
         .nav-card {
             position: relative;
             background: rgba(10, 14, 39, 0.6);
-            border: 1px solid rgba(100, 150, 255, 0.2);
+            border: 1px solid var(--primary);
             border-radius: 20px;
             padding: 2.5rem;
             cursor: pointer;
@@ -370,36 +473,36 @@
             position: absolute;
             inset: 0;
             background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-                        rgba(100, 150, 255, 0.15) 0%, 
+                        var(--primary) 0%, 
                         transparent 50%);
             opacity: 0;
             transition: opacity 0.4s;
         }
 
         .nav-card:hover::before {
-            opacity: 1;
+            opacity: 0.15;
         }
 
         .nav-card:hover {
             transform: translateY(-10px);
-            border-color: #6495ff;
-            box-shadow: 0 20px 60px rgba(100, 149, 237, 0.3),
-                        0 0 80px rgba(100, 149, 237, 0.2);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px var(--primary),
+                        0 0 80px var(--secondary);
         }
 
         .nav-icon {
             width: 60px;
             height: 60px;
             margin-bottom: 1.5rem;
-            stroke: #6495ff;
-            filter: drop-shadow(0 0 10px rgba(100, 149, 237, 0.5));
+            stroke: var(--primary);
+            filter: drop-shadow(0 0 10px var(--primary));
             transition: all 0.4s;
         }
 
         .nav-card:hover .nav-icon {
-            stroke: #9d7dff;
+            stroke: var(--accent);
             transform: scale(1.1) rotate(5deg);
-            filter: drop-shadow(0 0 20px rgba(157, 125, 255, 0.8));
+            filter: drop-shadow(0 0 20px var(--accent));
         }
 
         .nav-title {
@@ -421,7 +524,7 @@
             z-index: 10;
             padding: 6rem 4rem;
             background: rgba(10, 14, 39, 0.8);
-            border-top: 1px solid rgba(100, 150, 255, 0.2);
+            border-top: 1px solid var(--primary);
         }
 
         .polls-header {
@@ -432,7 +535,7 @@
         .polls-title {
             font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 700;
-            background: linear-gradient(135deg, #6495ff, #9d7dff);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 1rem;
@@ -450,7 +553,7 @@
 
         .poll-card {
             background: rgba(10, 14, 39, 0.8);
-            border: 2px solid rgba(100, 150, 255, 0.3);
+            border: 2px solid var(--primary);
             border-radius: 20px;
             padding: 2.5rem;
             margin-bottom: 2rem;
@@ -459,13 +562,13 @@
         }
 
         .poll-card:hover {
-            border-color: #6495ff;
-            box-shadow: 0 10px 40px rgba(100, 149, 237, 0.3);
+            border-color: var(--accent);
+            box-shadow: 0 10px 40px var(--primary);
         }
 
         .poll-question {
             font-size: 1.8rem;
-            color: #6495ff;
+            color: var(--primary);
             margin-bottom: 2rem;
             font-weight: 600;
         }
@@ -498,20 +601,23 @@
             top: 0;
             height: 100%;
             width: var(--vote-percent, 0%);
-            background: linear-gradient(90deg, rgba(100, 149, 237, 0.3), rgba(100, 149, 237, 0.1));
+            background: linear-gradient(90deg, var(--primary), transparent);
+            opacity: 0.3;
             transition: width 0.5s ease;
             z-index: 0;
         }
 
         .poll-option:hover {
-            border-color: #6495ff;
-            background: rgba(100, 149, 237, 0.1);
+            border-color: var(--primary);
+            background: var(--primary);
+            background-opacity: 0.1;
         }
 
         .poll-option.selected {
-            border-color: #9d7dff;
-            background: rgba(157, 125, 255, 0.15);
-            box-shadow: 0 0 20px rgba(157, 125, 255, 0.3);
+            border-color: var(--accent);
+            background: var(--accent);
+            background-opacity: 0.15;
+            box-shadow: 0 0 20px var(--accent);
         }
 
         .poll-option-text {
@@ -538,7 +644,7 @@
         }
 
         .poll-option.selected .poll-vote-count {
-            background: #9d7dff;
+            background: var(--accent);
             color: black;
         }
 
@@ -554,7 +660,7 @@
 
         .poll-submit-btn {
             padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, #6495ff, #9d7dff);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border: none;
             color: white;
             font-size: 1rem;
@@ -562,12 +668,12 @@
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 20px rgba(100, 149, 237, 0.4);
+            box-shadow: 0 4px 20px var(--primary);
         }
 
         .poll-submit-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(100, 149, 237, 0.6);
+            box-shadow: 0 6px 30px var(--primary);
         }
 
         .poll-submit-btn:disabled {
@@ -620,7 +726,7 @@
             text-align: center;
             padding: 3rem 2rem;
             color: rgba(255, 255, 255, 0.4);
-            border-top: 1px solid rgba(100, 150, 255, 0.1);
+            border-top: 1px solid var(--primary);
         }
 
         /* Orbital Planet Decoration */
@@ -629,8 +735,8 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #ffffff, #6495ff);
-            box-shadow: 0 0 60px rgba(100, 149, 237, 0.6),
+            background: radial-gradient(circle at 30% 30%, #ffffff, var(--primary));
+            box-shadow: 0 0 60px var(--primary),
                         inset -10px -10px 20px rgba(0, 0, 0, 0.4);
             z-index: 2;
             pointer-events: none;
@@ -670,9 +776,20 @@
                 min-width: 200px;
             }
 
+            .controls-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+
             .theme-btn {
                 width: 36px;
                 height: 36px;
+            }
+
+            .theme-options {
+                justify-content: center;
             }
         }
     </style>
@@ -687,15 +804,26 @@
     <!-- Orbital Planet -->
     <div class="orbital-planet" style="top: 20%; left: 50%;"></div>
 
+    <!-- Controls Toggle Button (shows when menu is closed) -->
+    <button class="controls-toggle" id="controlsToggle" aria-label="Open Controls">⚙️</button>
+
     <!-- Controls Panel -->
-    <div class="controls-panel">
-        <span class="control-label">Cosmic Themes</span>
+    <div class="controls-panel" id="controlsPanel">
+        <div class="controls-header">
+            <span class="control-label" style="margin-bottom: 0;">Cosmic Themes</span>
+            <button class="controls-close" id="controlsClose" aria-label="Close Controls">×</button>
+        </div>
         <div class="theme-options">
             <button class="theme-btn theme-nebula-btn active" data-theme="theme-nebula" title="Nebula" aria-label="Nebula Theme"></button>
             <button class="theme-btn theme-aurora-btn" data-theme="theme-aurora" title="Aurora" aria-label="Aurora Theme"></button>
             <button class="theme-btn theme-supernova-btn" data-theme="theme-supernova" title="Supernova" aria-label="Supernova Theme"></button>
             <button class="theme-btn theme-galaxy-btn" data-theme="theme-galaxy" title="Galaxy" aria-label="Galaxy Theme"></button>
             <button class="theme-btn theme-creme-btn" data-theme="theme-creme" title="Creme" aria-label="Creme Theme"></button>
+            <button class="theme-btn theme-void-btn" data-theme="theme-void" title="Void" aria-label="Void Theme"></button>
+            <button class="theme-btn theme-plasma-btn" data-theme="theme-plasma" title="Plasma" aria-label="Plasma Theme"></button>
+            <button class="theme-btn theme-solar-btn" data-theme="theme-solar" title="Solar" aria-label="Solar Theme"></button>
+            <button class="theme-btn theme-lunar-btn" data-theme="theme-lunar" title="Lunar" aria-label="Lunar Theme"></button>
+            <button class="theme-btn theme-cosmic-btn" data-theme="theme-cosmic" title="Cosmic" aria-label="Cosmic Theme"></button>
         </div>
         <span class="control-label">Font Style</span>
         <div class="font-selector">
@@ -792,7 +920,7 @@
                 <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
-                <h3 class="nav-title">Cheats & Tools</h3>
+                <h3 class="nav-title">Cheats</h3>
                 <p class="nav-description">
                     Game cheats, tools, and utilities. 
                     Enhance your gaming experience.
@@ -863,6 +991,20 @@
         // ===== THEME SWITCHER =====
         const themeButtons = document.querySelectorAll('.theme-btn');
         const body = document.body;
+        const controlsPanel = document.getElementById('controlsPanel');
+        const controlsToggle = document.getElementById('controlsToggle');
+        const controlsClose = document.getElementById('controlsClose');
+
+        // Controls panel collapse/expand
+        controlsClose.addEventListener('click', () => {
+            controlsPanel.classList.add('collapsed');
+            controlsToggle.classList.add('visible');
+        });
+
+        controlsToggle.addEventListener('click', () => {
+            controlsPanel.classList.remove('collapsed');
+            controlsToggle.classList.remove('visible');
+        });
 
         // Load saved theme
         const savedTheme = localStorage.getItem('kripticTheme') || 'theme-nebula';
@@ -980,7 +1122,14 @@
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
-                polls = data || [];
+                
+                // Ensure polls have proper structure
+                polls = (data || []).map(poll => ({
+                    ...poll,
+                    options: Array.isArray(poll.options) ? poll.options : [],
+                    votes: Array.isArray(poll.votes) ? poll.votes : poll.options.map(() => 0)
+                }));
+                
                 renderPolls();
             } catch (error) {
                 showPollMessage('error', 'Failed to load polls: ' + error.message);
