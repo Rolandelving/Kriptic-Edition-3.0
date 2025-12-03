@@ -1,0 +1,3061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kriptic TV | Movies & Shows</title>
+    <style>
+        @font-face {
+            font-family: 'DripOctober';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/DripOctober-vm0JA%5B1%5D.ttf') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DripOctober', sans-serif;
+            background: #141414;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .header {
+            padding: 20px 50px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.7) 10%, transparent);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e50914;
+            letter-spacing: 2px;
+        }
+
+        .hero {
+            height: 80vh;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(20,20,20,0.95)), 
+                        url('https://cdn.jsdelivr.net/gh/Rolandelving/image-storage@main/NetflixBG.png');
+            background-size: cover;
+            background-position: center top;
+            display: flex;
+            align-items: center;
+            padding: 0 50px;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            margin-top: 80px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            color: #ddd;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .search-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 100px 20px 40px;
+        }
+
+        #searchInput {
+            width: 60%;
+            max-width: 600px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            background: #2a2a2a;
+            color: #fff;
+            transition: all 0.3s;
+        }
+
+        #searchInput::placeholder {
+            color: #999;
+        }
+
+        #searchInput:focus {
+            background: #333;
+            transform: scale(1.02);
+        }
+
+        .section {
+            padding: 50px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #e5e5e5;
+        }
+
+        .show-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .show-card {
+            background: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .show-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+        }
+
+        .show-thumbnail {
+            width: 100%;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .show-thumbnail::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(42,42,42,1) 0%, transparent 50%);
+        }
+
+        .show-info {
+            padding: 20px;
+        }
+
+        .show-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .show-meta {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .show-description {
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .content-counter {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            width: fit-content;
+        }
+
+        .content-counter span {
+            color: #00d9ff;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .season-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .season-link {
+            padding: 8px 16px;
+            background: #e50914;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .season-link:hover {
+            background: #f40612;
+            transform: translateY(-2px);
+        }
+
+        .sort-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .sort-select {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: #2a2a2a;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header, .hero, .section {
+                padding: 20px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .show-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">KRIPTIC TV</div>
+    </div>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Unlimited entertainment</h1>
+            <p class="hero-description">Stream your favorite shows and movies, anytime, anywhere. New content added regularly.</p>
+        </div>
+    </div>
+
+    <div class="sort-container">
+        <label for="sortSelect" style="font-weight: bold;">Sort by: </label>
+        <select id="sortSelect" class="sort-select">
+            <option value="alphabetical">Title (A–Z)</option>
+            <option value="year">Year (Newest → Oldest)</option>
+            <option value="genre">Genre (A–Z)</option>
+        </select>
+    </div>
+
+    <div class="content-counter">
+        <span id="movieCount">0</span> Movies & Shows Available
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search movies or shows..." onkeyup="filterShows()">
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Popular Shows</h2>
+        <div class="show-grid">
+            
+            <!-- Squid Game -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(34).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Squid Game</h3>
+                    <div class="show-meta">2021 • 3 Seasons • Thriller</div>
+                    <p class="show-description">
+                        Hundreds of cash-strapped players accept a strange invitation to compete in children's games for a tempting prize, but the stakes are deadly.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/drive/folders/1Zs2H3Nxl-yQHm21RJNbh2bIAesJ5ouY9" class="season-link" target="_blank">Season 1</a>
+                        <a href="https://drive.google.com/drive/folders/1jm_NYoQ6L1qhW_6olONm67INsBTQsv1a" class="season-link" target="_blank">Season 2</a>
+                        <a href="https://drive.google.com/drive/folders/1Yol6neCY6QEvc4Prcsr0djVtJDH_vIGu" class="season-link" target="_blank">Season 3 Pt 1</a>
+                        <a href="https://drive.google.com/drive/folders/1jgtMGD4eibrEkjoWGbRHsxP0XxUXw1OV" class="season-link" target="_blank">Season 3 Pt 2</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Family Guy -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Family%20Guy.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Family Guy</h3>
+                    <div class="show-meta">1999 • 23 Seasons • Comedy • Animation</div>
+                    <p class="show-description">
+                        The Griffin family navigates life in Quahog, Rhode Island, where absurdity, satire, and chaos collide. From Peter’s stupidity to Stewie’s dark genius, Family Guy balances crude humor with cultural commentary that’s as outrageous as it is clever.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/drive/folders/1k0ndzzsCScUVY5l011g_5Q2MsuZK1oDx?usp=drive_link" class="season-link" target="_blank">Season 1</a>
+                        <a href="https://drive.google.com/drive/folders/1ZWfI5DdiSOTmsLi5qO0d927KAc92wW36?usp=drive_link" class="season-link" target="_blank">Season 2</a>
+                        <a href="https://drive.google.com/drive/folders/1-I24UNS48e5gFw-W3cg5cKIhOzHct2CN?usp=drive_link" class="season-link" target="_blank">Season 3</a>
+                        <a href="https://drive.google.com/drive/folders/1-ZsmZ1Ha38Zxf_AVUhlEpQfR90oto4Fr?usp=drive_link" class="season-link" target="_blank">Season 4</a>
+                        <a href="https://drive.google.com/drive/folders/1-Al60xKTILe6vjx7mAOjwpYkyJCmTdjh?usp=drive_link" class="season-link" target="_blank">Season 5</a>
+                        <a href="https://drive.google.com/drive/folders/1-umrP2J7fGO_dZwAQP82XJpK4kg0-peU?usp=drive_link" class="season-link" target="_blank">Season 6</a>
+                        <a href="https://drive.google.com/drive/folders/1x4sAk5p6WX3uW5OyBWAqnOaxGbhdGTi9?usp=drive_link" class="season-link" target="_blank">Season 7</a>
+                        <a href="https://drive.google.com/drive/folders/1XL0rgzqYQU6mPt5AgCvWZIHOTUCDyE0A?usp=drive_link" class="season-link" target="_blank">Season 8</a>
+                        <a href="https://drive.google.com/drive/folders/1b5XoMsSEIHYAKTOiRjhbdbnn21KEoLzy?usp=drive_link" class="season-link" target="_blank">Season 9</a>
+                        <a href="https://drive.google.com/drive/folders/1x74Ajcrszl8WZaG68gu58vMYYeFoeDk8?usp=drive_link" class="season-link" target="_blank">Season 10</a>
+                        <a href="https://drive.google.com/drive/folders/1w5yjNpu2iUa8_dd36qXbg8CgeU39Psl-?usp=drive_link" class="season-link" target="_blank">Season 11</a>
+                        <a href="https://drive.google.com/drive/folders/13eblQguHo-k0yX5Mv0_M-rtJ9T96bw6X?usp=drive_link" class="season-link" target="_blank">Season 12</a>
+                        <a href="https://drive.google.com/drive/folders/1xZMD9sOOKx9pVdGG1blfgTkUIRiGLY-T?usp=drive_link" class="season-link" target="_blank">Season 13</a>
+                        <a href="https://drive.google.com/drive/folders/1WXK6bUGqnypPwhAdL9rCG-guHS0ZW0y2?usp=drive_link" class="season-link" target="_blank">Season 14</a>
+                        <a href="https://drive.google.com/drive/folders/1umpI0kUxE9-Eg0I4C6q_WSbaqG5iJ6BI?usp=drive_link" class="season-link" target="_blank">Season 15</a>
+                        <a href="https://drive.google.com/drive/folders/1qBohKMmo3Wn2mH1y7IBc7iHvTtf7r8Xx?usp=drive_link" class="season-link" target="_blank">Season 16</a>
+                        <a href="https://drive.google.com/drive/folders/1sXNNtsu6nUljoJLt3KunIWayXfcMsnPL?usp=drive_link" class="season-link" target="_blank">Season 17</a>
+                        <a href="https://drive.google.com/drive/folders/1pQ0IfrXbCDa4sfXGUAWH9BiapHlhWnMh?usp=drive_link" class="season-link" target="_blank">Season 18</a>
+                        <a href="https://drive.google.com/drive/folders/1PJXPLQmMxozqQ4uGLmPYOcCymu6Bscef?usp=drive_link" class="season-link" target="_blank">Season 19</a>
+                        <a href="https://drive.google.com/drive/folders/1INRf1o3HkHM0c4BgFRmUY2ohOX81l_Uw?usp=drive_link" class="season-link" target="_blank">Season 20</a>
+                        <a href="https://drive.google.com/drive/folders/1qV927lPEj0EV3ATyCQUrFkRpgWDeCnHd?usp=drive_link" class="season-link" target="_blank">Season 21</a>
+                        <a href="https://drive.google.com/drive/folders/19nAiUZOu1E8ZI7ZKKiUdiSCf5QIXCvfw?usp=drive_link" class="season-link" target="_blank">Season 22</a>
+                        <a href="https://drive.google.com/drive/folders/1nds_3eUcY_xWQGIhypYZSKlHbv72PWCt?usp=drive_link" class="season-link" target="_blank">Season 23</a>
+                        <a href="https://drive.google.com/drive/folders/14Ov6HpS1aRU9PFnyDN5hmqZM2W5fVsMY" class="season-link" target="_blank">Secret Pilot</a>
+                    </div>
+                </div>
+            </div>
+            <!-- SpongeBob SquarePants -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Spongebob.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">SpongeBob SquarePants</h3>
+                    <div class="show-meta">1999 • 16 Seasons • Comedy • Animation</div>
+                    <p class="show-description">
+                        Deep in the underwater city of Bikini Bottom, SpongeBob SquarePants and his quirky friends get into hilarious adventures filled with laughs, nonsense, and heart. From flipping Krabby Patties to jellyfishing with Patrick, it’s pure oceanic chaos and fun.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/drive/folders/1POW9PmENDMDvuymjEPshRHavjreeeCel?usp=drive_link" class="season-link" target="_blank">Season 1</a>
+                        <a href="https://drive.google.com/drive/folders/1NZ6F15IK3HjlzizjFw8XoVbodSUtNPBd?usp=drive_link" class="season-link" target="_blank">Season 2</a>
+                        <a href="https://drive.google.com/drive/folders/1ZBWd_zQDE8KonbXt6qwoHq7Fv936L-G5?usp=drive_link" class="season-link" target="_blank">Season 3</a>
+                        <a href="https://drive.google.com/drive/folders/1PLzNDoMd7XP7cvIGhX1pI6oYyjyoOzG1?usp=drive_link" class="season-link" target="_blank">Season 4</a>
+                        <a href="https://drive.google.com/drive/folders/1Rx3a1v71MMNGdEtBbmsdq7SrCHYvgmeF?usp=drive_link" class="season-link" target="_blank">Season 5</a>
+                        <a href="https://drive.google.com/drive/folders/1d5R01Ys4ZsNHgkZEH1qs_YEk1bv2OZnY?usp=drive_link" class="season-link" target="_blank">Season 6</a>
+                        <a href="https://drive.google.com/drive/folders/18Sc-sn9I1Bp522QlesWDkZQ15OOQtlPI?usp=drive_link" class="season-link" target="_blank">Season 7</a>
+                        <a href="https://drive.google.com/drive/folders/1ohI-ff0xBlZXQG8bSGRJbTeXBEjx9JL1?usp=drive_link" class="season-link" target="_blank">Season 8</a>
+                        <a href="https://drive.google.com/drive/folders/1JJCy-ScZsvl-vFQDiAu5wWbbgrZZI7MX?usp=drive_link" class="season-link" target="_blank">Season 9</a>
+                        <a href="https://drive.google.com/drive/folders/1uWimadY7YFnL_blVJH9x40PA9nphV6P0?usp=drive_link" class="season-link" target="_blank">Season 10</a>
+                        <a href="https://drive.google.com/drive/folders/1PW6O_DGtinVKUrrlyidjRRqe42jqW1bW?usp=drive_link" class="season-link" target="_blank">Season 11</a>
+                        <a href="https://drive.google.com/drive/folders/1vllbwmiCPQT_mnk0bytFhqg1dHS4b6f5?usp=drive_link" class="season-link" target="_blank">Season 12</a>
+                        <a href="https://drive.google.com/drive/folders/1a1JjefeciLXFUgQ28FnrR0BBmWBDyyH3?usp=drive_link" class="season-link" target="_blank">Season 13</a>
+                        <a href="https://drive.google.com/drive/folders/1eZG4As8F5x3kexoTMM65z02mTvXmCfEe?usp=drive_link" class="season-link" target="_blank">Season 14</a>
+                        <a href="https://drive.google.com/drive/folders/11bE_om8hNi7OlddGawjkMifmzfDjRyPC?usp=drive_link" class="season-link" target="_blank">Season 15</a>
+                        <a href="https://drive.google.com/drive/folders/1i9A6ZVECwEDPQRcgP6s6cqbsvO6_ytVX?usp=drive_link" class="season-link" target="_blank">Season 16</a>
+                        <a href="https://drive.google.com/drive/folders/1WwMjqZPPF-Y3r2s2h5QQowBZzeRW4JFi?usp=drive_link" class="season-link" target="_blank">Shorts</a>
+                        <a href="https://drive.google.com/drive/folders/1HNtFzpGvxers6ed5MfUfrYw8T9EBAFa2?usp=drive_link" class="season-link" target="_blank">Rare Finds</a>
+                    </div>
+                </div>
+            </div>
+                        <!-- South Park -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/South%20Park.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">South Park</h3>
+                    <div class="show-meta">1997 • 27(ish) Seasons • Comedy • Animation</div>
+                    <p class="show-description">
+                        Four foul-mouthed kids wreak havoc in the small mountain town of South Park, Colorado. Satirical, absurd, and fearless, this show takes no prisoners in mocking pop culture, politics, and everyday life.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/open?id=1cUiEckvNFBO5KWJwJnouWIljMER6ugTC&usp=drive_copy" class="season-link" target="_blank">Season 0</a>
+                        <a href="https://drive.google.com/open?id=18B39vdIu4JqMk4SOne5dIkHVjoJjynxy&usp=drive_copy" class="season-link" target="_blank">Season 1</a>
+                        <a href="https://drive.google.com/open?id=1FevnkwSmQoTP5Rq5cQ2IuxiCI8PIt9ym&usp=drive_copy" class="season-link" target="_blank">Season 2</a>
+                        <a href="https://drive.google.com/open?id=141lvwEGhfGAjiopWMfh6SZx0MkiJbHqY&usp=drive_copy" class="season-link" target="_blank">Season 3</a>
+                        <a href="https://drive.google.com/open?id=1-mZNnY4-68JGoy2XGm8Dbj_zyP80gfnU&usp=drive_copy" class="season-link" target="_blank">Season 4</a>
+                        <a href="https://drive.google.com/open?id=1KrAM1B5BN87dZ3-BtxJg8XXmtHmItHrA&usp=drive_copy" class="season-link" target="_blank">Season 5</a>
+                        <a href="https://drive.google.com/open?id=1UzO8cVsp6c4va3xw-1QJZ5rGMacGDJc1&usp=drive_copy" class="season-link" target="_blank">Season 6</a>
+                        <a href="https://drive.google.com/open?id=1Rqz6rV37w-6LAkNoSjTjQycm6--CYe-l&usp=drive_copy" class="season-link" target="_blank">Season 7</a>
+                        <a href="https://drive.google.com/open?id=1ckdPO8_MngzKqoaSM-7HaSZdMO2dMCKo&usp=drive_copy" class="season-link" target="_blank">Season 8</a>
+                        <a href="https://drive.google.com/open?id=1TduNtTCr5eKDs4gupyvOXaWBprN9gt1p&usp=drive_copy" class="season-link" target="_blank">Season 9</a>
+                        <a href="https://drive.google.com/open?id=1Uz7Ibmxiid4Qx93fUYYQDm0wmZicWbrh&usp=drive_copy" class="season-link" target="_blank">Season 10</a>
+                        <a href="https://drive.google.com/open?id=1lv4jCAs9YIcQqirOwo070bHxINKILPQs&usp=drive_copy" class="season-link" target="_blank">Season 11</a>
+                        <a href="https://drive.google.com/open?id=1LWe-T7weexxvfeAwxBL822_rH5YALLRr&usp=drive_copy" class="season-link" target="_blank">Season 12</a>
+                        <a href="https://drive.google.com/open?id=1V8Up7-TWGbTXpMzhUdDk_aQd41twlTAw&usp=drive_copy" class="season-link" target="_blank">Season 13</a>
+                        <a href="https://drive.google.com/open?id=1eejhZfaxU7okkFl7eR5d6SKJ0Ot5e3hC&usp=drive_copy" class="season-link" target="_blank">Season 14</a>
+                        <a href="https://drive.google.com/open?id=1lJiVP7qS7eoWCt61pYLhypdn2q0Lfhu7&usp=drive_copy" class="season-link" target="_blank">Season 15</a>
+                        <a href="https://drive.google.com/open?id=1oSpb_M8KTp3ri9-Jsiuei47w4kVhfjGj&usp=drive_copy" class="season-link" target="_blank">Season 16</a>
+                        <a href="https://drive.google.com/open?id=1QMeRSqcZOnuunG_1MbNA3o85vD_HKie0&usp=drive_copy" class="season-link" target="_blank">Season 17</a>
+                        <a href="https://drive.google.com/open?id=1fX59O9ZGhg_pZMwwn2hEYiRYSYzHOorN&usp=drive_copy" class="season-link" target="_blank">Season 18</a>
+                        <a href="https://drive.google.com/open?id=1X6_9AZnuchDnQh6xEshWx_7mY_J_YzmI&usp=drive_copy" class="season-link" target="_blank">Season 19</a>
+                        <a href="https://drive.google.com/open?id=1Gy9YQHd--dOCxPPbdvr3JF7DNZCBWyyd&usp=drive_copy" class="season-link" target="_blank">Season 20</a>
+                        <a href="https://drive.google.com/open?id=1PNdqqXLSKlm1NDUhe5y9PXGaIafOaD4o&usp=drive_copy" class="season-link" target="_blank">Season 21</a>
+                        <a href="https://drive.google.com/open?id=114GjhIiNX4E_FDTnS-hl9eSbHABM3gAm&usp=drive_copy" class="season-link" target="_blank">Season 22</a>
+                        <a href="https://drive.google.com/open?id=1NtWJLk3kyzAI7HpVieh9ARhf3gycm2BV&usp=drive_copy" class="season-link" target="_blank">Season 23</a>
+                        <a href="https://drive.google.com/open?id=1xsm4O4k1IPh2j5RC0mZ88uC97IhGC2yt&usp=drive_copy" class="season-link" target="_blank">Season 24</a>
+                        <a href="https://drive.google.com/open?id=1R8_5uDmuNFCXtoJ14p2YXEcvAmFn74QL&usp=drive_copy" class="season-link" target="_blank">Season 25</a>
+                        <a href="https://drive.google.com/open?id=1DieIk5axopu2BfHbg_GMIHZlvVIa-X7c&usp=drive_copy" class="season-link" target="_blank">Season 26</a>
+                        <a href="https://drive.google.com/open?id=1qujbNl6HiE0SKMMsoJQGErqzGyeNelo4&usp=drive_copy" class="season-link" target="_blank">Season 27</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Boys -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(35).jpg');"></div>
+                <div class="show-info">
+                    <div class="wip-badge">WORK IN PROGRESS</div>
+                    <h3 class="show-title">The Boys</h3>
+                    <div class="show-meta">2019 • Action • Superhero</div>
+                    <p class="show-description">
+                        A group of vigilantes set out to take down corrupt superheroes who abuse their superpowers. Dark, violent, and satirical superhero series.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/drive/folders/1q3FC26LoPMxdL_X0t4zdXNYEfdG8YGF0" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Breaking Bad -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(36).jpg');"></div>
+                <div class="show-info">
+                    <div class="wip-badge">WORK IN PROGRESS</div>
+                    <h3 class="show-title">Breaking Bad</h3>
+                    <div class="show-meta">2008 • Crime • Drama</div>
+                    <p class="show-description">
+                        A high school chemistry teacher diagnosed with cancer turns to producing meth to secure his family's future. Widely regarded as one of the greatest TV series ever made.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/drive/folders/1ZGPUs3433E9KdIAjRnOH3gfEXaq1rmcw" class="season-link" target="_blank">Season 1</a>
+                        <a href="https://drive.google.com/drive/folders/1d-avXeY75iQxHwoSynRVAAwOJlH6Fges" class="season-link" target="_blank">Season 2</a>
+                        <a href="https://drive.google.com/drive/folders/1t-qHNW6TiU9eDG5XYnLewyj6hMvs" class="season-link" target="_blank">Season 3</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Gravity Falls -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Gravity%20Falls.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Gravity Falls</h3>
+                    <div class="show-meta">2012 • 2 Seasons • Adventure • Mystery • Animation</div>
+                    <p class="show-description">
+                        Twin siblings Dipper and Mabel travel to the mysterious town of Gravity Falls for the summer — and uncover weird creatures, hidden journals and conspiracies that turn their vacation into a wild ride.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/open?id=1rwLVdLs5KZKtCtyftqx-UXHHueNHo8nW&usp=drive_copy" class="season-link" target="_blank">Season 1</a>
+                        <a href="https://drive.google.com/open?id=1BzXrs_cSkKNJYtWO4CFzXGJLLVKcN1vC&usp=drive_copy" class="season-link" target="_blank">Season 2</a>
+                    </div>
+                </div>
+            </div>
+       <!-- DO NOT REPLACE ANYTHING UNDER THIS -->
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Movies</h2>
+        <div class="show-grid">
+            
+            <!-- 65 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(37).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">65</h3>
+                    <div class="show-meta">2023 • Sci-Fi • Thriller</div>
+                    <p class="show-description">
+                        After a catastrophic crash on an unknown planet, pilot Mills discovers he's stranded on Earth 65 million years ago.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1Mva-frIx-PjwLfoV08BxlwQ44glMzBnZ/view" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10 Things I Hate About You -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(38).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">10 Things I Hate About You</h3>
+                    <div class="show-meta">1999 • Romance • Comedy</div>
+                    <p class="show-description">
+                        A high school senior can't date until her antisocial older sister does, leading to an elaborate scheme involving the school's bad boy.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/u/0/d/1EEyGPpiw7dMua-8I3NtrPFcUWHlqgu-a/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ant-Man and the Wasp: Quantumania -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(39).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Ant-Man and the Wasp: Quantumania</h3>
+                    <div class="show-meta">2023 • Action • Superhero</div>
+                    <p class="show-description">
+                        Scott Lang and Hope Van Dyne are dragged into the Quantum Realm where they encounter strange creatures and Kang the Conqueror.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1AW3Zm8256tzZ-37lmgYmIGse4knu8IdA/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- A Bug's Life -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(40).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">A Bug's Life</h3>
+                    <div class="show-meta">1998 • Animation • Family</div>
+                    <p class="show-description">
+                        A misfit ant recruits warrior bugs to help his colony defend against grasshoppers in this classic Pixar adventure.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1AIq4OqiMWiY9zZSayF5VID7pfTwSH6BM/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- A Charlie Brown Christmas -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(41).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">A Charlie Brown Christmas</h3>
+                    <div class="show-meta">1965 • Animation • Holiday</div>
+                    <p class="show-description">
+                        Charlie Brown discovers the true meaning of Christmas in this beloved holiday special.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1e2UIrJdsz_0k5tp2v0EnPZiPv2ZQSTzg/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- A Goofy Movie -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(42).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">A Goofy Movie</h3>
+                    <div class="show-meta">1995 • Animation • Family</div>
+                    <p class="show-description">
+                        Goofy takes his teenage son Max on a cross-country road trip to bond before college.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1ify_EMaQW-ZAn2F0STztn2AGU-jE7aHL/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avengers Endgame -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Avengers%20Endgame.webp');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Avengers Endgame</h3>
+                    <div class="show-meta">2019 • Action • Superhero</div>
+                    <p class="show-description">
+                        The Avengers assemble one final time to undo Thanos' actions and restore balance to the universe.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1ehi9tidOYHb1RMldxtBw6-L3UhyEKVm9/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alvin And The Chipmunks -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(44).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Alvin And The Chipmunks</h3>
+                    <div class="show-meta">2007 • Comedy • Family</div>
+                    <p class="show-description">
+                        Three musical chipmunks find a new home and become pop sensations.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1uCRRJZj1GAaweX996uHbF2zxPoessmGW/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Squekuel -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(45).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Squekuel: Alvin And The Chipmunks</h3>
+                    <div class="show-meta">2009 • Comedy • Family</div>
+                    <p class="show-description">
+                        The Chipmunks compete with their female counterparts, The Chipettes.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1em55qHTtdrWD4Dox9CXs9r1042TLu_cu/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chipwrecked -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(46).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Alvin And The Chipmunks: Chipwrecked</h3>
+                    <div class="show-meta">2011 • Comedy • Family</div>
+                    <p class="show-description">
+                        The Chipmunks become shipwrecked on a tropical island during a cruise vacation.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1LTKy48IbusfXsl5nSNDTd0M3A8B3aPke/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amistad -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(47).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Amistad</h3>
+                    <div class="show-meta">1997 • Drama • History</div>
+                    <p class="show-description">
+                        Based on the true story of a 1839 slave ship mutiny and the legal battle that followed.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1yLnn08WMfw_Gans9jmOGoDVHwOkf-LFD/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batman 1989 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(48).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Batman 1989</h3>
+                    <div class="show-meta">1989 • Action • Superhero</div>
+                    <p class="show-description">
+                        The Dark Knight battles the Joker in Tim Burton's gothic take on the caped crusader.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1P8z8U0j5UHxqTq0taTj18TgG6nZwSKYd/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batman Begins -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(49).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Batman Begins 2005</h3>
+                    <div class="show-meta">2005 • Action • Superhero</div>
+                    <p class="show-description">
+                        Bruce Wayne trains to become Batman and returns to Gotham to fight crime.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1ZegfkrD50sGDUVJ-4d9IiBpR0MTmdphx/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batman Returns -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(50).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Batman Returns</h3>
+                    <div class="show-meta">1992 • Action • Superhero</div>
+                    <p class="show-description">
+                        Batman faces off against the Penguin and Catwoman in this dark sequel.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1aeYtz38ljtxCCtuVs4x0zuUh2TWKf-K6/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batman Forever -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(51).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Batman Forever</h3>
+                    <div class="show-meta">1995 • Action • Superhero</div>
+                    <p class="show-description">
+                        Batman battles Two-Face and the Riddler while partnering with Robin.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1YFYuZeG8EXxNkPdB7jIIGOFm7ULi349r/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batman And Robin -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(52).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Batman And Robin</h3>
+                    <div class="show-meta">1997 • Action • Superhero</div>
+                    <p class="show-description">
+                        Batman and Robin fight Mr. Freeze and Poison Ivy to save Gotham.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1uMzsWkDLeiE0X7M0rm5EUUx3y26yzhc2/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Black Panther -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/download%20(53).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Black Panther</h3>
+                    <div class="show-meta">2018 • Action • Superhero</div>
+                    <p class="show-description">
+                        T'Challa returns to Wakanda to take his place as king and face a challenger.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1wdUOiz7tI3R5vTz779h7CesAW5h0kUh1/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Dark Knight -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(54).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">The Dark Knight</h3>
+                    <div class="show-meta">2008 • Action • Superhero</div>
+                    <p class="show-description">
+                        Batman faces his greatest challenge yet as the Joker unleashes chaos on Gotham.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1CZvw1MgSLVQR9Z9L8qpl8j1oI7DnMDWr/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Batman 2022 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(55).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">The Batman 2022</h3>
+                    <div class="show-meta">2022 • Action • Superhero</div>
+                    <p class="show-description">
+                        A young Batman uncovers corruption in Gotham while pursuing the Riddler.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/16si_yvGyZn5mgvNIHil5xXOR3I8RaTKb/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Black Panther Wakanda Forever -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(56).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Black Panther: Wakanda Forever</h3>
+                    <div class="show-meta">2022 • Action • Superhero</div>
+                    <p class="show-description">
+                        Wakanda fights to protect their nation after the loss of King T'Challa.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/198qUcefIK54KnZzxAx6_L8u7l37oCfhK/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blue Beetle -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(57).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Blue Beetle</h3>
+                    <div class="show-meta">2023 • Action • Superhero</div>
+                    <p class="show-description">
+                        A teenager gains superpowers when an alien scarab chooses him as its host.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1T2XMXtDAlohPcGdi-u2p9zXF9Os9zkY1/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barbie -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(58).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Barbie</h3>
+                    <div class="show-meta">2023 • Comedy • Fantasy</div>
+                    <p class="show-description">
+                        Barbie leaves Barbie Land for the real world and discovers what it means to be human.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1K88LvZ6q9KRwsdiVQ72Wrh5DQqWVLkd3/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- American Psycho -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(59).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">American Psycho</h3>
+                    <div class="show-meta">2000 • Thriller • Horror</div>
+                    <p class="show-description">
+                        A wealthy New York investment banker hides his psychopathic ego from his friends.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1D7A1jATb2B8Ml-y0mAQQ98ML2nKebyhJ/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Bad Guys -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(60).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">The Bad Guys</h3>
+                    <div class="show-meta">2022 • Animation • Comedy</div>
+                    <p class="show-description">
+                        A crew of criminal animals attempt to pull off their most challenging con yet.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1Ep4I8JdvH8NlbcqxiNMA8c7U_UAOpewT/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coat Of Many Colors -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(61).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Coat Of Many Colors</h3>
+                    <div class="show-meta">2015 • Drama • Family</div>
+                    <p class="show-description">
+                        Based on Dolly Parton's childhood, a young girl's life in rural Tennessee.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1TNihEVsEiUIzxYV_6KHQKXC5pDR_nWW9/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Circle Of Love -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(62).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Circle Of Love</h3>
+                    <div class="show-meta">2016 • Drama • Family</div>
+                    <p class="show-description">
+                        Continuation of Dolly Parton's inspiring childhood story.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1TFiL16cNmQmG5pSi-s6od4xgymFqK1kJ/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Captain America: Civil War -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Captain America: Civil War</h3>
+                    <div class="show-meta">2016 • Action • Superhero</div>
+                    <p class="show-description">
+                        Political pressure mounts to install a system of accountability after the Avengers cause collateral damage, dividing the team.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1zcOWY_OTVctnY1sHg1KRjhDVls_3ebWs/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Creed -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(1).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Creed</h3>
+                    <div class="show-meta">2015 • Drama • Sports</div>
+                    <p class="show-description">
+                        The son of Apollo Creed seeks out Rocky Balboa to train him in this inspiring boxing drama.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1w9nVBGOKDax-xCr-caqekW4hcjRUQWZA/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Creed 2 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(2).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Creed 2</h3>
+                    <div class="show-meta">2018 • Drama • Sports</div>
+                    <p class="show-description">
+                        Adonis Creed faces off against the son of Ivan Drago in a fight that goes beyond the ring.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1KnW-KW6LV-fH0S0R_2sbsEKkKhSFK-OP/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Creed 3 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(3).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Creed 3</h3>
+                    <div class="show-meta">2023 • Drama • Sports</div>
+                    <p class="show-description">
+                        Adonis faces his toughest opponent yet: a childhood friend with a score to settle.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1j8pGyNx9PHk_Gicns9JlDaX82qBIi1_m/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coco -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(4).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Coco</h3>
+                    <div class="show-meta">2017 • Animation • Family</div>
+                    <p class="show-description">
+                        A young boy dreams of becoming a musician and journeys to the Land of the Dead to discover his family's history.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/194M4dGCwh1hTxVM1-_axnLSdt4trnbK2/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Captain Underpants -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(5).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Captain Underpants</h3>
+                    <div class="show-meta">2017 • Animation • Comedy</div>
+                    <p class="show-description">
+                        Two pranksters hypnotize their principal into thinking he's a superhero named Captain Underpants.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1BW7yv_y4uk99Nsjbc--z1beQ_bYYmUXk/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Child's Play -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(6).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Child's Play</h3>
+                    <div class="show-meta">1988 • Horror • Thriller</div>
+                    <p class="show-description">
+                        A killer doll possessed by a serial killer's soul terrorizes a young boy and his mother.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1FPO2K8Oqb1O3qm1qb57NhZHhaGCvQjAz/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Child's Play 2 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(7).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Child's Play 2</h3>
+                    <div class="show-meta">1990 • Horror • Thriller</div>
+                    <p class="show-description">
+                        Chucky returns to continue his deadly pursuit of young Andy.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1NXrR22Ja1iaa3PcidheWe6dKmK80A2em/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Child's Play 3 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(8).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Child's Play 3</h3>
+                    <div class="show-meta">1991 • Horror • Thriller</div>
+                    <p class="show-description">
+                        Chucky tracks Andy to a military academy for another terrifying showdown.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1gEP2FcL30yLVaUw_J9As7Jum_rJPZlDt/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bride of Chucky -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(9).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Bride of Chucky</h3>
+                    <div class="show-meta">1998 • Horror • Comedy</div>
+                    <p class="show-description">
+                        Chucky gets a bride as two possessed dolls go on a killing spree.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1bdeH-TLFYRBpC0sp3eIWNGocKlqPp5mw/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seed of Chucky -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(10).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Seed of Chucky</h3>
+                    <div class="show-meta">2004 • Horror • Comedy</div>
+                    <p class="show-description">
+                        Chucky and Tiffany's offspring joins the family business of terror.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1ibotaqumpENLsX67ZGbKzZcAStYmezqs/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Curse of Chucky -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(11).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Curse of Chucky</h3>
+                    <div class="show-meta">2013 • Horror • Thriller</div>
+                    <p class="show-description">
+                        Chucky returns to terrorize a new family in this frightening continuation.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1iREiS873cIR4Wq3nKV-uBwaJVWbqIZe0/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cult of Chucky -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(12).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Cult of Chucky</h3>
+                    <div class="show-meta">2017 • Horror • Thriller</div>
+                    <p class="show-description">
+                        Confined to an asylum, Nica faces a new nightmare when Chucky arrives.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1JHK4oNMMg_RLU-IfCRkIA6L-1T9BJEVd/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chucky (2019) -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(13).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Child's Play (2019)</h3>
+                    <div class="show-meta">2019 • Horror • Sci-Fi</div>
+                    <p class="show-description">
+                        A high-tech doll becomes self-aware and turns deadly in this modern reimagining.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1D-j3sPp4-DQmHs_Ce9Nxya0GnyAmEAQM/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Terrifier 1 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/terrifier.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Terrifier 1</h3>
+        <div class="show-meta">2016 • Horror • Slasher</div>
+        <p class="show-description">
+            Art the Clown stalks three women on Halloween night in a blood-soaked rampage that defines cult horror.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1_pQ3kbz_a8l3B7SKfdP9dYQwKax0WHUD/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Terrifier 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/T2.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Terrifier 2</h3>
+        <div class="show-meta">2022 • Horror • Slasher</div>
+        <p class="show-description">
+            Art the Clown rises from the grave to unleash unrelenting carnage, testing the limits of horror endurance.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1_Jjo7rOcCkYt3UryVkV2XvTfrL4QvHTE/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Terrifier 3 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/T3.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Terrifier 3</h3>
+        <div class="show-meta">2024 • Horror • Holiday Slasher</div>
+        <p class="show-description">
+            Art returns for Christmas in the bloodiest holiday massacre yet — cheerful lights meet pure terror.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1sAj4FqfEIzHPIW7ZUPGGSOFTTaJr5AGI/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- All Hallows Eve -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/All%20hallows%20Eve.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">All Hallows Eve</h3>
+        <div class="show-meta">2013 • Horror • Anthology</div>
+        <p class="show-description">
+            On Halloween night, a mysterious VHS tape introduces Art the Clown and a descent into pure evil.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/15zZLBZQmlEhQHMzERxIyb1sCWi6S71zE/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- A Minecraft Movie -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/A%20minecraft%20movie.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">A Minecraft Movie</h3>
+        <div class="show-meta">2025 • Adventure • Animation</div>
+        <p class="show-description">
+            A creative journey through blocky worlds where imagination builds the impossible — one cube at a time.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1MAaR6vGifjMCr7A5afVP7hW2B3rndLhv/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+            <!-- Corpse Bride -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(14).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Corpse Bride</h3>
+                    <div class="show-meta">2005 • Animation • Fantasy</div>
+                    <p class="show-description">
+                        A groom accidentally marries a deceased bride in the underworld in this Tim Burton classic.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1AHqrYm4cItyiEquPHJV5z3H81Cc0cCfI/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diary of a Wimpy Kid -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(15).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Diary of a Wimpy Kid</h3>
+                    <div class="show-meta">2010 • Comedy • Family</div>
+                    <p class="show-description">
+                        A middle schooler navigates the challenges of adolescence in this beloved adaptation.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1rKRsgdNioFs3rtkZai7Gz97FtAX0jdJ_/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dungeons & Dragons: Honor Among Thieves -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(16).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Dungeons & Dragons: Honor Among Thieves</h3>
+                    <div class="show-meta">2023 • Fantasy • Adventure</div>
+                    <p class="show-description">
+                        A charming thief and a band of unlikely adventurers embark on an epic quest to retrieve a lost relic.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1iX6QbaV3Oi_yGDvqRcFvrJ4_gzIOisnT/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Despicable Me -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(17).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Despicable Me</h3>
+                    <div class="show-meta">2010 • Animation • Comedy</div>
+                    <p class="show-description">
+                        A supervillain adopts three girls who change his life forever.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1upRWBqPKcQjviBjAgYkzkWZuVjQ1SAWF/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Despicable Me 2 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(18).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Despicable Me 2</h3>
+                    <div class="show-meta">2013 • Animation • Comedy</div>
+                    <p class="show-description">
+                        Gru is recruited by the Anti-Villain League to help deal with a powerful new super criminal.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1qWNcu7uPAUqh0SaBlL4rEhcH1QaKIfgf/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Despicable Me 3 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(19).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Despicable Me 3</h3>
+                    <div class="show-meta">2017 • Animation • Comedy</div>
+                    <p class="show-description">
+                        Gru meets his long-lost twin brother and faces off against a former child star turned villain.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1mT5BU-DLMI0kDVjEIk7kBNL55ETuNyGN/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Despicable Me 4 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(20).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Despicable Me 4</h3>
+                    <div class="show-meta">2024 • Animation • Comedy</div>
+                    <p class="show-description">
+                        Gru and his family face their biggest threat yet in the latest adventure.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1ggXkdigLOzQQgelB8exwzjVFb8bbef7d/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dune: Part Two -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(21).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Dune: Part Two</h3>
+                    <div class="show-meta">2024 • Sci-Fi • Adventure</div>
+                    <p class="show-description">
+                        Paul Atreides unites with the Fremen to wage war against those who destroyed his family.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/14VeNSqVtt5gcibZOfjPcjkBoasPrpiEG/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deadpool -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(22).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Deadpool</h3>
+                    <div class="show-meta">2016 • Action • Comedy</div>
+                    <p class="show-description">
+                        A former Special Forces operative turned mercenary undergoes an experiment that gives him accelerated healing powers.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1XUjU4fhDH7qpPEg_me8vlMba1uelRIwj/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deadpool 2 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(23).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Deadpool 2</h3>
+                    <div class="show-meta">2018 • Action • Comedy</div>
+                    <p class="show-description">
+                        Deadpool forms a team called X-Force to protect a young mutant from Cable, a time-traveling cyborg.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1wcE3D19t54BnWtLNl5cruklfPVPh92nY/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deadpool & Wolverine -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(24).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Deadpool & Wolverine</h3>
+                    <div class="show-meta">2024 • Action • Comedy</div>
+                    <p class="show-description">
+                        Deadpool teams up with Wolverine in an epic multiverse adventure.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1B_eiKUt7N5OxyUN9c37LG0pxcErP4yJ6/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Fast and the Furious -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(25).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">The Fast and the Furious</h3>
+                    <div class="show-meta">2001 • Action • Crime</div>
+                    <p class="show-description">
+                        An undercover cop infiltrates an underground street racing crew suspected of truck hijackings.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1GzovJHzUxtS6XQQiPLVXj92hWZ7PTABa/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2 Fast 2 Furious -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(26).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">2 Fast 2 Furious</h3>
+                    <div class="show-meta">2003 • Action • Crime</div>
+                    <p class="show-description">
+                        Brian O'Conner teams up with his childhood friend to bring down a Miami drug lord.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1mNS4IqcwoeUs-JpEr55RsiEdF5HP6mS9/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Fast and the Furious: Tokyo Drift -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(27).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">The Fast and the Furious: Tokyo Drift</h3>
+                    <div class="show-meta">2006 • Action • Crime</div>
+                    <p class="show-description">
+                        A teenager becomes a drift racing champion while navigating the dangerous Tokyo underground scene.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1DQDZewf_sT9QM0J0qalqpIu0thdXAJlX/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fast & Furious -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(28).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Fast & Furious</h3>
+                    <div class="show-meta">2009 • Action • Crime</div>
+                    <p class="show-description">
+                        Dom and Brian reunite to avenge a murder and bring down a heroin importer.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1tVld16POKQ8cInYwhozvWXg_nMtf7jC4/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fast Five -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(29).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Fast Five</h3>
+                    <div class="show-meta">2011 • Action • Heist</div>
+                    <p class="show-description">
+                        Dom and Brian assemble a team in Rio to pull off one last job worth $100 million.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1BKfeAMDunmjoWRTXBuWPUjzoK-mdjByX/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fast & Furious 6 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(30).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Fast & Furious 6</h3>
+                    <div class="show-meta">2013 • Action • Thriller</div>
+                    <p class="show-description">
+                        The crew is recruited to take down a skilled mercenary organization across Europe.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1aXXnv2TmInk1KKGXs_z83XsMfuDtEIMm/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Furious 7 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(31).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Furious 7</h3>
+                    <div class="show-meta">2015 • Action • Thriller</div>
+                    <p class="show-description">
+                        The team faces a deadly assassin seeking revenge while mourning the loss of a family member.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1nlxg7cAV08cklGpX-Lx1OUFDT990Eye4/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Fate of the Furious -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(32).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">The Fate of the Furious</h3>
+                    <div class="show-meta">2017 • Action • Thriller</div>
+                    <p class="show-description">
+                        Dom is seduced into the world of terrorism, forcing the crew to face their greatest threat yet.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1qBkRTrEwk_6cUJGkcoRc2uSSU4jVl34F/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+           <!-- Friday -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday</h3>
+        <div class="show-meta">1995 • Comedy • Drama</div>
+        <p class="show-description">
+            Craig and Smokey spend a lazy Friday in South Central L.A., but their day takes a wild turn over $200.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1SKE9sQ-DnHRRVGxU10Qk2QJ1Ws2jvv5M/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Finding Nemo -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Finding%20Nemo.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Finding Nemo</h3>
+        <div class="show-meta">2003 • Animation • Adventure</div>
+        <p class="show-description">
+            A clownfish named Marlin crosses the ocean to find his missing son in Pixar’s heartwarming underwater epic.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1jP7PoHapLf_S_n75Afdc0RvzSwRqPcwm/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Friday the 13th (Part 1) -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday%20The%2013th%201.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday the 13th</h3>
+        <div class="show-meta">1980 • Horror • Slasher</div>
+        <p class="show-description">
+            Camp Crystal Lake reopens, but a killer lurks in the woods in this genre-defining slasher classic.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1Tu0WxRUC-gADzYFEnSvudZ3MZ7Y735jH/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Friday the 13th Part 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday%20The%2013th%202.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday the 13th Part 2</h3>
+        <div class="show-meta">1981 • Horror • Slasher</div>
+        <p class="show-description">
+            A new camp opens near Crystal Lake, and Jason Voorhees begins his reign of terror.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1ROenMVwRyMGW0EIsf4Xg67EvRAAT5kcX/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Friday the 13th Part 3 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday%20The%2013th%203.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday the 13th Part 3</h3>
+        <div class="show-meta">1982 • Horror • Slasher</div>
+        <p class="show-description">
+            Jason dons his iconic hockey mask for the first time in this blood-soaked 3D horror experience.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1Ak82TmSBG3_lpbUgsDq22AcZ5gzGvTTB/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Friday the 13th Part 4 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday%20The%2013th%204.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday the 13th Part 4: The Final Chapter</h3>
+        <div class="show-meta">1984 • Horror • Slasher</div>
+        <p class="show-description">
+            Jason’s supposed final massacre pits him against Tommy Jarvis in a brutal, unforgettable showdown.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1M2OD-EPO3AjkzwYNvJLXCNe4B7y6bmM6/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Friday the 13th Part 5 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday%20The%2013th%205.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday the 13th Part 5: A New Beginning</h3>
+        <div class="show-meta">1985 • Horror • Mystery</div>
+        <p class="show-description">
+            Tommy Jarvis struggles with trauma while a copycat killer emerges to terrorize a halfway house.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1cB43qNpCCf90tHch87EC4hBywV0Ao5-V/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Friday the 13th Part 6 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday%20The%2013th%206.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday the 13th Part 6: Jason Lives</h3>
+        <div class="show-meta">1986 • Horror • Slasher</div>
+        <p class="show-description">
+            Tommy accidentally resurrects Jason, unleashing a supernatural killing spree with undead vengeance.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1Yug3RMr7f8z5P7TjxWgRN0geoWL7UnU4/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Friday the 13th Part 7 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday%20The%2013th%207.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday the 13th Part 7: The New Blood</h3>
+        <div class="show-meta">1988 • Horror • Supernatural</div>
+        <p class="show-description">
+            A telekinetic girl accidentally frees Jason from his watery grave, leading to a psychic showdown.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1CG5Te-vXcvPrEuJtQsN3HZigm6bz33Os/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Friday the 13th Part 8 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday%20The%2013th%208.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday the 13th Part 8: Jason Takes Manhattan</h3>
+        <div class="show-meta">1989 • Horror • Thriller</div>
+        <p class="show-description">
+            Jason boards a cruise ship and brings his brand of horror to the streets of New York City.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1oRePBRxnrhk8feVEE3OtTNnE0Y70a4ZN/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Friday the 13th Part 9 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday%20The%2013th%209.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday the 13th Part 9: Jason Goes to Hell</h3>
+        <div class="show-meta">1993 • Horror • Fantasy</div>
+        <p class="show-description">
+            Jason’s spirit survives through possession, and only one person can end his evil legacy forever.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1mvOr1kr0lX3XzbYIVJps-Mkz7UxjLUhP/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Friday the 13th Part 10 (Jason X) -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Friday%20The%2013th%2010%2Cjpg.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Friday the 13th Part 10: Jason X</h3>
+        <div class="show-meta">2001 • Horror • Sci-Fi</div>
+        <p class="show-description">
+            Frozen for centuries, Jason awakens aboard a spaceship in the 25th century for a futuristic bloodbath.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1f_m_NTsYbbVFh1FBqXC1TOuS_4Yp6uSd/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Guardians of the Galaxy Vol. 3 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Guardians%20Of%20The%20Galaxy%20Vol.%203.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Guardians of the Galaxy Vol. 3</h3>
+        <div class="show-meta">2023 • Action • Sci-Fi</div>
+        <p class="show-description">
+            The Guardians face their most personal challenge yet as Rocket’s past threatens to tear the team apart.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1pFavPs7Mi9rx_BrAjxbeHNWg7ClAB2_K/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+<!-- Smile 2 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Smile%202.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Smile 2</h3>
+                    <div class="show-meta">2024 • Horror • Thriller</div>
+                    <p class="show-description">
+                        A pop star begins experiencing terrifying and inexplicable events as she prepares for a world tour.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1PeOUtsdJfWRqJvGwBhRmeBc2fLiQyTJY/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Home Alone -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Home%20Alone%201.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Home Alone</h3>
+                    <div class="show-meta">1990 • Comedy • Family</div>
+                    <p class="show-description">
+                        An eight-year-old boy defends his home against burglars after being accidentally left behind when his family goes on Christmas vacation.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/18YKNCTokG3B7ZWzCE3thunyDJMktLxnm/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Home Alone 2: Lost in New York -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Home%20Alone%202.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Home Alone 2: Lost in New York</h3>
+                    <div class="show-meta">1992 • Comedy • Family</div>
+                    <p class="show-description">
+                        Kevin accidentally boards a flight to New York City and gets separated from his family, encountering the same burglars once again.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1Aj4Ys3ofogKhxEAMh6PUncpYF_OHZ_ZK/view" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Red One -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Red%20One.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">Red One</h3>
+                    <div class="show-meta">2024 • Action • Adventure</div>
+                    <p class="show-description">
+                        After Santa Claus is kidnapped, the North Pole's Head of Security must team up with the world's most infamous bounty hunter to save Christmas.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1QQx9ogqUJzS3G8GIZXLBAhgx2s2Ol2zZ/view" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- F9: The Fast Saga -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/temp@main/download%20(33).jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">F9: The Fast Saga</h3>
+                    <div class="show-meta">2021 • Action • Adventure</div>
+                    <p class="show-description">
+                        Dom confronts his forsaken brother in a plot that could destroy everything and everyone he loves.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1ce3-ogetLMUWm40CUPIOu4R4Ofdg7u0h/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+<!-- King Kong -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/King%20kong.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">King Kong</h3>
+        <div class="show-meta">2005 • Action • Adventure</div>
+        <p class="show-description">
+            A greedy film producer assembles a team of moviemakers and sets out for the infamous Skull Island, where they find more than just cannibalistic natives.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/0B4puC3vPIb6YZmMxbk9DOURnVnM/view?resourcekey=0-GeuoDzgmOi-O97KfEGZKUA" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Men In Black -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Men%20In%20Black.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Men In Black</h3>
+        <div class="show-meta">1997 • Action • Comedy • Sci-Fi</div>
+        <p class="show-description">
+            A police officer joins a secret organization that monitors and polices alien activity on Earth.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1lKwqLzxgLyJi0BhN9Lc8HdHMM7LMVb5V/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scary Movie -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Scary%20Movie%201.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Scary Movie</h3>
+        <div class="show-meta">2000 • Comedy • Horror</div>
+        <p class="show-description">
+            A year after disposing of the body of a man they accidentally killed, a group of dumb teenagers are stalked by a bumbling serial killer.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1-61Fls8_MDTVq3r5dHP58joVRiUloxZQ/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scary Movie 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Scary%20Movie%202.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Scary Movie 2</h3>
+        <div class="show-meta">2001 • Comedy • Horror</div>
+        <p class="show-description">
+            Four teens are tricked by a professor into visiting a haunted house for a school project.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1bulXT5QuTL10cpvdN_13rUW-sXXjrp_V/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scary Movie 3 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Scary%20Movie%203.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Scary Movie 3</h3>
+        <div class="show-meta">2003 • Comedy • Horror</div>
+        <p class="show-description">
+            Cindy must investigate mysterious crop circles and video tapes, and help the President in preventing an alien invasion.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1KN1dzjj-d6MhY47MIgWdT2Au10Ft7Bf1/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scary Movie 4 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Scary%20Movie%204.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Scary Movie 4</h3>
+        <div class="show-meta">2006 • Comedy • Horror</div>
+        <p class="show-description">
+            Cindy finds out the house she lives in is haunted by a little boy and goes on a quest to find out who killed him and why.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1pgH5VfJEi5NRVEtp2y_vZMSOk_rh3Har/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scream -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Scream%201.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Scream</h3>
+        <div class="show-meta">1996 • Horror • Mystery</div>
+        <p class="show-description">
+            A year after the murder of her mother, a teenage girl is terrorized by a new killer, who targets the girl and her friends using horror films as part of a deadly game.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1K0v8NXcyS-ShrwaNpyvQ-1X-RbgUBihO/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scream 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Scream%202.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Scream 2</h3>
+        <div class="show-meta">1997 • Horror • Mystery</div>
+        <p class="show-description">
+            Two years after the first series of murders, a new psychopath dons the Ghostface costume and a new string of killings begins.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1i8w5FlmSFp3hixLRHeodPPtQq5r5VDQh/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scream 3 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Scream%203.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Scream 3</h3>
+        <div class="show-meta">2000 • Horror • Mystery</div>
+        <p class="show-description">
+            While Sidney and her friends visit the Hollywood set of Stab 3, the third film based on the Woodsboro murders, another Ghostface killer rises to terrorize them.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1IzaFo-PmeI3AiQ_qoDdjCbUdiu8Ohs-w/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scream 4 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Scream%204.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Scream 4</h3>
+        <div class="show-meta">2011 • Horror • Mystery</div>
+        <p class="show-description">
+            Ten years have passed, and Sidney Prescott returns to Woodsboro with self-help book tour. But Ghostface returns, putting Sidney and those closest to her once again in danger.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1HfyVEE2oFq1X8dHMWr5xJmMyHo79l7iG/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scream 5 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Scream%205.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Scream 5</h3>
+        <div class="show-meta">2022 • Horror • Mystery</div>
+        <p class="show-description">
+            25 years after a streak of brutal murders shocked the quiet town of Woodsboro, a new killer dons the Ghostface mask and targets a group of teenagers.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1dUxJw1LdOKB4RxNkQLuxas9JJbaJPGlz/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scream 6 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Scream%206.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Scream 6</h3>
+        <div class="show-meta">2023 • Horror • Mystery</div>
+        <p class="show-description">
+            The survivors of the Ghostface killings leave Woodsboro behind and start a fresh chapter in New York City. But danger follows them.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1zLFZE5jEzvjRSAawv9gOk-E5FYhsYblJ/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Shazam! -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Shazam!.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Shazam!</h3>
+        <div class="show-meta">2019 • Action • Comedy • Fantasy</div>
+        <p class="show-description">
+            A newly fostered young boy in search of his mother instead finds unexpected super powers and soon gains a powerful enemy.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1u5u_-G0KReiP4Q4eHvx7qwb4jv6ZARdh/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Spirited Away -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Spritied%20Away.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Spirited Away</h3>
+        <div class="show-meta">2001 • Animation • Adventure • Fantasy</div>
+        <p class="show-description">
+            During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits where humans are changed into beasts.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1sFvzAbum2UGqazkhrSmbtSMO9NjSV968/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- The Conjuring 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/The%20Conjuring%202.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">The Conjuring 2</h3>
+        <div class="show-meta">2016 • Horror • Mystery • Thriller</div>
+        <p class="show-description">
+            Ed and Lorraine Warren travel to North London to help a single mother raising four children alone in a house plagued by a supernatural spirit.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1zECVNreFAl8LNGcOrlPqtMzw_Su1S3AC/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- The Conjuring 3 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/The%20Conjuring%203.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">The Conjuring: The Devil Made Me Do It</h3>
+        <div class="show-meta">2021 • Horror • Mystery • Thriller</div>
+        <p class="show-description">
+            The Warrens investigate a murder that may be linked to a demonic possession, marking the first time a U.S. murder suspect has claimed demonic possession as a defense.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1k0tAH--aSS2Ik_xCwr9nJSr1XAS0cFH6/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- The Princess Bride -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/The%20Princess%20Bride.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">The Princess Bride</h3>
+        <div class="show-meta">1987 • Adventure • Comedy • Fantasy</div>
+        <p class="show-description">
+            A bedridden boy's grandfather reads him the story of a farmboy-turned-pirate who encounters numerous obstacles, enemies and allies in his quest to be reunited with his true love.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1YnPym55TCYUgdEe65MHELL13ygweFutT/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- The Wild Robot -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/The%20Wild%20Robot.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">The Wild Robot</h3>
+        <div class="show-meta">2024 • Animation • Adventure • Family</div>
+        <p class="show-description">
+            A robot stranded on an uninhabited island must learn to adapt to its harsh surroundings while building relationships with the island's animal inhabitants.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1_N9iHDAM3RbU2a0GTfgcNXDGuZDT_yZ-/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Top Gun -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Top%20Gun%201.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Top Gun</h3>
+        <div class="show-meta">1986 • Action • Drama</div>
+        <p class="show-description">
+            As students at the United States Navy's elite fighter weapons school compete to be best in the class, one daring young pilot learns a few things from a civilian instructor that are not taught in the classroom.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1YPdexiO1cHulGguqGvHKq0Grsnpdlbs1/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Top Gun: Maverick -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Top%20Gun%202.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Top Gun: Maverick</h3>
+        <div class="show-meta">2022 • Action • Drama</div>
+        <p class="show-description">
+            After thirty years, Maverick is still pushing the envelope as a top naval aviator, but must confront ghosts of his past when he leads TOP GUN's elite graduates on a mission that demands the ultimate sacrifice.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1nmGDHktR96jkaYl2lf-d-XTtNtFh4PTv/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Toy Story -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Toy%20Story%201.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Toy Story</h3>
+        <div class="show-meta">1995 • Animation • Adventure • Comedy</div>
+        <p class="show-description">
+            A cowboy doll is profoundly threatened and jealous when a new spaceman action figure supplants him as top toy in a boy's bedroom.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1k0tAH--aSS2Ik_xCwr9nJSr1XAS0cFH6/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Toy Story 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Toy%20Story%202.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Toy Story 2</h3>
+        <div class="show-meta">1999 • Animation • Adventure • Comedy</div>
+        <p class="show-description">
+            When Woody is stolen by a toy collector, Buzz and his friends set out on a rescue mission to save Woody before he becomes a museum toy property.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1k3RVDc_Vah1H9lFsXQZJ6mE3KqdDcK_T/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Toy Story 3 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Toy%20Story%203.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Toy Story 3</h3>
+        <div class="show-meta">2010 • Animation • Adventure • Comedy</div>
+        <p class="show-description">
+            The toys are mistakenly delivered to a day-care center instead of the attic right before Andy leaves for college, and it's up to Woody to convince the other toys that they weren't abandoned.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/13msxxmyEco7CRBkO_Ju1SMx5KK4r4Su8/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Toy Story 4 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Toy%20Sotry%204.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Toy Story 4</h3>
+        <div class="show-meta">2019 • Animation • Adventure • Comedy</div>
+        <p class="show-description">
+            When a new toy called "Forky" joins Woody and the gang, a road trip alongside old and new friends reveals how big the world can be for a toy.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1bFUbsQ9VEazeCt5l_VBVDtjCsbJmZ_Vr/preview" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Avengers: Infinity War -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Avengers%20Infinity%20War.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Avengers: Infinity War</h3>
+        <div class="show-meta">2018 • Action • Adventure • Sci-Fi</div>
+        <p class="show-description">
+            The Avengers and their allies must be willing to sacrifice all in an attempt to defeat the powerful Thanos before his blitz of devastation and ruin puts an end to the universe.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1VWLpj4G4CEgHnjpxfc67MrlEWu5pD75Y/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+<!-- Good Burger -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Good%20Burger.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Good Burger</h3>
+        <div class="show-meta">1997 • Comedy • Family</div>
+        <p class="show-description">
+            A dim-witted teenager and his new coworker try to save the fast food restaurant they work at from going out of business.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1vZqAIXXdJqtxt5bFcr821Q8m6B_1GZF_/view?t=118" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Good Burger 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Good%20Burger%202.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Good Burger 2</h3>
+        <div class="show-meta">2023 • Comedy • Family</div>
+        <p class="show-description">
+            After Good Burger is bought out, Ed and Dexter must reunite to save their beloved restaurant from a corporate takeover.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1wxA1ULvNUde3-w14GwNpNdb45ukoMPYc/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Pokémon Detective Pikachu -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Detective%20Pikachu.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Pokémon Detective Pikachu</h3>
+        <div class="show-meta">2019 • Action • Adventure • Comedy</div>
+        <p class="show-description">
+            In a world where people collect Pokémon to do battle, a boy comes across an intelligent talking Pikachu who seeks to be a detective.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1RlG7WoRJroqlcibAgLUMQp4S3h82hY2X/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Ghost Rider -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Ghost%20Rider.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Ghost Rider</h3>
+        <div class="show-meta">2007 • Action • Fantasy • Thriller</div>
+        <p class="show-description">
+            When motorcycle rider Johnny Blaze sells his soul to the Devil to save his father's life, he is transformed into the Ghost Rider, the Devil's own bounty hunter, and is sent to hunt down sinners.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1-QiYxJYgk4gw8fRHez7gUWMS6zE7vG-u/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Harry Potter and the Sorcerer's Stone -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Harry%20Potter%201.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Harry Potter and the Sorcerer's Stone</h3>
+        <div class="show-meta">2001 • Adventure • Family • Fantasy</div>
+        <p class="show-description">
+            An orphaned boy enrolls in a school of wizardry, where he learns the truth about himself, his family and the terrible evil that haunts the magical world.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1uVloSmfcKGSjB8xTFGAdDIziXUK-80KO/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Harry Potter and the Chamber of Secrets -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Harry%20Potter%202.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Harry Potter and the Chamber of Secrets</h3>
+        <div class="show-meta">2002 • Adventure • Family • Fantasy</div>
+        <p class="show-description">
+            An ancient prophecy seems to be coming true when a mysterious presence begins stalking the corridors of a school of magic and leaving its victims paralyzed.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1NSY9Ij-PcPhN4ODmmNTSvUhD5osQ_SCo/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- A Dog's Purpose -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/A%20Dog%27s%20Purpose.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">A Dog's Purpose</h3>
+        <div class="show-meta">2017 • Adventure • Comedy • Drama</div>
+        <p class="show-description">
+            A dog discovers the meaning of its own existence through the lives of the humans it teaches to laugh and love. Reincarnated as multiple canines over the course of five decades.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/0B-uFeCO4yCFISTFmNlE3akNDbU0/view?resourcekey=0-RNIEk2RiGAR76Qv_ACNU8g" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Ghostbusters -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Ghostbusters.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Ghostbusters</h3>
+        <div class="show-meta">1984 • Action • Comedy • Fantasy</div>
+        <p class="show-description">
+            Three parapsychologists forced out of their university funding set up shop as a unique ghost removal service in New York City, attracting frightened yet skeptical customers.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1OY7HZkep77B12l4wRYCN_D23gR9M2G9m/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Ghostbusters 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Ghostbusters%202.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Ghostbusters 2</h3>
+        <div class="show-meta">1989 • Action • Comedy • Fantasy</div>
+        <p class="show-description">
+            The discovery of a massive river of ectoplasm and a resurgence of spectral activity allows the staff of Ghostbusters to revive the business.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1VPN-P5xWjbEHv-VtlzjryjyV-nx7Z_w_/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Hamilton -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Hamiton.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Hamilton</h3>
+        <div class="show-meta">2020 • Biography • Drama • History • Musical</div>
+        <p class="show-description">
+            The real life of one of America's foremost founding fathers and first Secretary of the Treasury, Alexander Hamilton. Captured live on Broadway from the Richard Rodgers Theater.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1jpWAfIdmbUzywTcCoa5UKuJukunVhg9F/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Inside Out -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Inside%20Out.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Inside Out</h3>
+        <div class="show-meta">2015 • Animation • Adventure • Comedy</div>
+        <p class="show-description">
+            After young Riley is uprooted from her Midwest life and moved to San Francisco, her emotions - Joy, Fear, Anger, Disgust and Sadness - conflict on how best to navigate a new city, house, and school.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1mDan3YLOKzkgfJQ1JCD3T6jXSY_Xu6wd/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- It -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/It%201.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">It</h3>
+        <div class="show-meta">2017 • Horror • Thriller</div>
+        <p class="show-description">
+            In the summer of 1989, a group of bullied kids band together to destroy a shape-shifting monster, which disguises itself as a clown and preys on the children of Derry, their small Maine town.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1BhQDbp8lXDwS-Q-pq4axufeZI-5TklpR/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- It Chapter Two -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/It%202.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">It Chapter Two</h3>
+        <div class="show-meta">2019 • Horror • Thriller</div>
+        <p class="show-description">
+            Twenty-seven years after their first encounter with the terrifying Pennywise, the Losers Club have grown up and moved away, until a devastating phone call brings them back.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1vLFTFzlvu9TJXbcL40gnag9Xart3pKQI/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Oppenheimer -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Oppenheimer.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Oppenheimer</h3>
+        <div class="show-meta">2023 • Biography • Drama • History</div>
+        <p class="show-description">
+            The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb during World War II.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1GLqywDPqfZSLmLAiKC8j2l0o52cAGP8S/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+<!-- Iron Man -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Iron%20Man%201.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Iron Man</h3>
+        <div class="show-meta">2008 • Action • Adventure • Sci-Fi</div>
+        <p class="show-description">
+            After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1QOIBXMPZk86AVo0jI-zXYAuJGiWRUnNg/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Iron Man 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Iron%20Man%202.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Iron Man 2</h3>
+        <div class="show-meta">2010 • Action • Adventure • Sci-Fi</div>
+        <p class="show-description">
+            With the world now aware of his identity as Iron Man, Tony Stark must contend with both his declining health and a vengeful mad man with ties to his father's legacy.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1tESCAvTcUvbjyGB_x4bPahm9ZsBCs33u/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Iron Man 3 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Iron%20Man%203.webp');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Iron Man 3</h3>
+        <div class="show-meta">2013 • Action • Adventure • Sci-Fi</div>
+        <p class="show-description">
+            When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1H0nZ4WOP6B8iWU8YoMjbnbzrlDJ1YSan/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+
+            <!-- John Wick -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/John%20Wick%201.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">John Wick</h3>
+                    <div class="show-meta">2014 • Action • Thriller</div>
+                    <p class="show-description">
+                        An ex-hitman comes out of retirement to track down the gangsters that killed his dog and took everything from him.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1X9Kflcg0LuRjceV6JghCzs49px8cRTIk/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- John Wick: Chapter 2 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/John%20Wick%202.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">John Wick: Chapter 2</h3>
+                    <div class="show-meta">2017 • Action • Thriller</div>
+                    <p class="show-description">
+                        After returning to the criminal underworld to repay a debt, John Wick discovers that a large bounty has been put on his life.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1gzsZEVTNEb93tSa0nuzlpR2n20D4Dyx9/view" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- John Wick: Chapter 3 - Parabellum -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/John%20Wick%203.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">John Wick: Chapter 3 - Parabellum</h3>
+                    <div class="show-meta">2019 • Action • Thriller</div>
+                    <p class="show-description">
+                        John Wick is on the run after killing a member of the international assassins' guild, with a $14 million price tag on his head.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1CsIZrKGXn557DdOJrdz5ty7nkg0i4CWR/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- John Wick: Chapter 4 -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/John%20Wick%204.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">John Wick: Chapter 4</h3>
+                    <div class="show-meta">2023 • Action • Thriller</div>
+                    <p class="show-description">
+                        John Wick uncovers a path to defeating The High Table, but must face off against a new enemy with powerful alliances across the globe.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/10LUlcX6Hu9pn3c3xmPlfJOf20Qjwgxq_/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+<!-- The Shawshank Redemption -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Shawshank%20Redemption.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">The Shawshank Redemption</h3>
+        <div class="show-meta">1994 • Drama</div>
+        <p class="show-description">
+            Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1uRjDmGGcRvvlaVfI0BN9TqVQVQk__-Td/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Drive -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Drive.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Drive</h3>
+        <div class="show-meta">2011 • Action • Crime • Drama</div>
+        <p class="show-description">
+            A mysterious Hollywood stuntman and mechanic moonlights as a getaway driver and finds himself in trouble when he helps out his neighbor.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1crhaSnrrdVJyqp26pTUp28J6tgJ4hqOv/view?usp=sharing" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+<!-- Grease -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Grease.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Grease</h3>
+        <div class="show-meta">1978 • Musical • Romance • Comedy</div>
+        <p class="show-description">
+            Good girl Sandy and greaser Danny fell in love over the summer. When they unexpectedly discover they're now in the same high school, will they be able to rekindle their romance?
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1W77S931ShuhZ2RVeiNrfdQQUcR4pKsD0/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden Figures -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Hidden%20Figures.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Hidden Figures</h3>
+        <div class="show-meta">2016 • Biography • Drama • History</div>
+        <p class="show-description">
+            The story of a team of female African-American mathematicians who served a vital role in NASA during the early years of the U.S. space program.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1sfjv_SEQZQ4QPgPAeS8xckKHORr3gLiG/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Dungeons & Dragons: Honor Among Thieves -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Dungeness%20And%20Dragons%20Honor%20Of%20Thieves.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Dungeons & Dragons: Honor Among Thieves</h3>
+        <div class="show-meta">2023 • Action • Adventure • Fantasy</div>
+        <p class="show-description">
+            A charming thief and a band of unlikely adventurers embark on an epic quest to retrieve a lost relic, but things go dangerously awry when they run afoul of the wrong people.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1iX6QbaV3Oi_yGDvqRcFvrJ4_gzIOisnT/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Halloween (1978) -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Halloween%201.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Halloween</h3>
+        <div class="show-meta">1978 • Horror • Thriller</div>
+        <p class="show-description">
+            Fifteen years after murdering his sister on Halloween night, Michael Myers escapes from a mental hospital and returns to the small town to kill again.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1yVnAsKg54Azo88VHYiKf4lDjtZ2ppVRr/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Halloween II -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Halloween%202.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Halloween II</h3>
+        <div class="show-meta">1981 • Horror • Thriller</div>
+        <p class="show-description">
+            While Sheriff Brackett and Dr. Loomis hunt for Michael Myers, a traumatized Laurie is rushed to hospital, and the serial killer is not far behind her.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1XnD--5UU_jD39fcTz0s3Wv1NCsO6In3r/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Halloween III: Season of the Witch -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Halloween%20III.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Halloween III: Season of the Witch</h3>
+        <div class="show-meta">1982 • Horror • Thriller • Mystery</div>
+        <p class="show-description">
+            A doctor and a young woman uncover a sinister plot by a mask maker to trigger a Halloween apocalypse through his popular Halloween masks.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1GoVr9RTnGTf9CXHHUUbbInxYcY9kmmrw/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Halloween 4: The Return of Michael Myers -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Halloween%204.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Halloween 4: The Return of Michael Myers</h3>
+        <div class="show-meta">1988 • Horror • Thriller</div>
+        <p class="show-description">
+            Ten years after his original massacre, the invalid Michael Myers awakens on Halloween Eve and returns to Haddonfield to kill his seven-year-old niece.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/17ZJ5MBDP0jHzVd6roUI6zHkQzyYi_yY7/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Halloween 5: The Revenge of Michael Myers -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Halloween%205.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Halloween 5: The Revenge of Michael Myers</h3>
+        <div class="show-meta">1989 • Horror • Thriller</div>
+        <p class="show-description">
+            One year after the events of Halloween 4, Michael Myers returns to Haddonfield to kill his niece Jamie, who is now mute and committed to a psychiatric hospital.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1Wz87fusvhrIyuHY3fdsBYY5Ytup-_ab4/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Halloween H20: 20 Years Later -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Halloween%207.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Halloween H20: 20 Years Later</h3>
+        <div class="show-meta">1998 • Horror • Thriller</div>
+        <p class="show-description">
+            Twenty years after the original Halloween, Laurie Strode faked her death and is living under an assumed identity as the headmistress of a private school. But Michael Myers finds her.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1DHw9eGrjlTXogscCDZFCfOfab951KL0Q/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Halloween (Rob Zombie 2007) -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Halloween%209.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Halloween (Rob Zombie)</h3>
+        <div class="show-meta">2007 • Horror • Thriller</div>
+        <p class="show-description">
+            After being committed for 17 years, Michael Myers, now a grown man and still very dangerous, escapes from the mental institution and immediately returns to Haddonfield to find his baby sister.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1RTbD5uzFxZIcfrX5nkGRIq0biquf40bz/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Halloween II (Rob Zombie 2009) -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Halloween%2010%20(II)%20Rob%20Zombie.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Halloween II (Rob Zombie)</h3>
+        <div class="show-meta">2009 • Horror • Thriller</div>
+        <p class="show-description">
+            Laurie Strode struggles to come to terms with her brother Michael's deadly return to Haddonfield, while the town prepares for another Halloween massacre.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1UQWZPTAEVeiDBtY-lxG9RF6v5B_mizcp/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Harry Potter and the Prisoner of Azkaban -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Harry%20Potter%203.png');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Harry Potter and the Prisoner of Azkaban</h3>
+        <div class="show-meta">2004 • Fantasy • Adventure • Family</div>
+        <p class="show-description">
+            Harry Potter's third year at Hogwarts is threatened by the escape of Sirius Black from Azkaban prison. As the truth about Harry's past emerges, he must confront his fears and learn powerful magic.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1Zu15ykGtc1xxKIKfAeUV_L1vAbCt--zO/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Harry Potter and the Goblet of Fire -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Harry%20Potter%204.png');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Harry Potter and the Goblet of Fire</h3>
+        <div class="show-meta">2005 • Fantasy • Adventure • Family</div>
+        <p class="show-description">
+            Harry finds himself competing in a dangerous tournament between rival schools of magic, but he is distracted by recurring nightmares as the Dark Lord's power grows stronger.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1yYxqmSv99zFBsJkT0cZYd4C4PTNC9bUU/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Harry Potter and the Order of the Phoenix -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Harry%20Potter%205.png');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Harry Potter and the Order of the Phoenix</h3>
+        <div class="show-meta">2007 • Fantasy • Adventure • Family</div>
+        <p class="show-description">
+            With the Ministry of Magic denying Voldemort's return, Harry must take matters into his own hands, forming a secret student army to prepare for the battle ahead.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1eVK_s8Sp-Gvv1J65ocyLbwyqC7vkuoFK/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Harry Potter and the Half-Blood Prince -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Harry%20Potter%206.png');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Harry Potter and the Half-Blood Prince</h3>
+        <div class="show-meta">2009 • Fantasy • Adventure • Family</div>
+        <p class="show-description">
+            As Harry begins his sixth year at Hogwarts, he discovers an old book marked as the property of the Half-Blood Prince, and begins to learn more about Lord Voldemort's dark past.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1QfAnvJtU3oR7IV2CrN2qRx4vFThjbbe1/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Harry Potter and the Deathly Hallows: Part 1 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Harry%20Potter%207.png');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Harry Potter and the Deathly Hallows: Part 1</h3>
+        <div class="show-meta">2010 • Fantasy • Adventure • Family</div>
+        <p class="show-description">
+            As Harry, Ron, and Hermione race against time to destroy the Horcruxes, they uncover the existence of the three most powerful objects in the wizarding world: the Deathly Hallows.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/17UlhT2qVX10O8AksEEdWuaUqoVF78-oH/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Harry Potter and the Deathly Hallows: Part 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Harry%20Potter%208.png');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Harry Potter and the Deathly Hallows: Part 2</h3>
+        <div class="show-meta">2011 • Fantasy • Adventure • Family</div>
+        <p class="show-description">
+            Harry, Ron, and Hermione search for Voldemort's remaining Horcruxes in their effort to destroy the Dark Lord as the final battle rages on at Hogwarts.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/16jXkeJny6L8MrC_7issz4AtANAzNDJqw/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Head Over Heels -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Head%20Over%20Heals.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Head Over Heels</h3>
+        <div class="show-meta">2001 • Comedy • Romance</div>
+        <p class="show-description">
+            A woman falls for a charming neighbor, but when she witnesses what she thinks is a murder through his apartment window, she becomes caught in a web of mystery and danger.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/10N4s7Roujs0L7wRWNKltdWOPcoC29hiv/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Hercules -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Hercules.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Hercules</h3>
+        <div class="show-meta">1997 • Animation • Adventure • Comedy</div>
+        <p class="show-description">
+            The son of Zeus and Hera is stripped of his immortality as an infant and must become a true hero in order to reclaim it and take his rightful place among the gods on Mount Olympus.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1sXad7VvXVn7qIilwdspq5RtjmInpa7mQ/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Inside Out 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Inside%20Out%202.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Inside Out 2</h3>
+        <div class="show-meta">2024 • Animation • Adventure • Comedy</div>
+        <p class="show-description">
+            Riley enters puberty and her emotions must navigate new feelings and challenges as she faces the complexities of growing up, with new emotions joining the team at headquarters.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/148ae2JtLzIZwy-AKjtRgLZPNf3vEmQOE/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Indiana Jones and the Raiders of the Lost Ark -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Indiana%20Jones%20and%20the%20Raiders%20of%20The%20Lost%20Ark.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Indiana Jones and the Raiders of the Lost Ark</h3>
+        <div class="show-meta">1981 • Action • Adventure</div>
+        <p class="show-description">
+            Archaeologist Indiana Jones races against time and Nazis to find the legendary Ark of the Covenant before it falls into the wrong hands and its power is unleashed upon the world.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1C2iryPKn6P5Kyl0zH3XCceIS5em1sP0i/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Indiana Jones and the Temple of Doom -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Indiana%20Jones%20and%20the%20Temple%20of%20Doom.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Indiana Jones and the Temple of Doom</h3>
+        <div class="show-meta">1984 • Action • Adventure</div>
+        <p class="show-description">
+            In 1935, Indiana Jones arrives in India, still part of the British Empire, and is asked to find a mystical stone. He then stumbles upon a secret cult committing enslavement and human sacrifices.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1OBWysvLap85UVNwRCOAuxGzo4HcKTq04/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Indiana Jones and the Kingdom of the Crystal Skull -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Indiana%20Jones%20and%20the%20Kingdom%20of%20the%20Crystal%20Skull.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Indiana Jones and the Kingdom of the Crystal Skull</h3>
+        <div class="show-meta">2008 • Action • Adventure</div>
+        <p class="show-description">
+            In 1957, archaeologist and adventurer Dr. Henry "Indiana" Jones, Jr. is called back into action and becomes entangled in a Soviet plot to uncover the secret behind mysterious artifacts known as the Crystal Skulls.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/12hye3P63ckfSsEU3GJf3_Xm4__b75bj_/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Indiana Jones and the Dial of Destiny -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Indiana%20Jones%20and%20the%20Dial%20of%20Destiny.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Indiana Jones and the Dial of Destiny</h3>
+        <div class="show-meta">2023 • Action • Adventure</div>
+        <p class="show-description">
+            Archaeologist Indiana Jones races against time to retrieve a legendary artifact that can change the course of history before it falls into the wrong hands.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1BuNmXFmhFBoSKvcnbi5W1_hQkVLTrzwu/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- The Incredibles -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Incredibles%201.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">The Incredibles</h3>
+        <div class="show-meta">2004 • Animation • Action • Adventure</div>
+        <p class="show-description">
+            A family of undercover superheroes, while trying to live the quiet suburban life, are forced into action to save the world when a dangerous villain emerges.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1XZrELbZbBqHShrCiPr4I4_pmOeT_gvwY/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Incredibles 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Incredibles%202.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Incredibles 2</h3>
+        <div class="show-meta">2018 • Animation • Action • Adventure</div>
+        <p class="show-description">
+            The Incredibles hero family takes on a new mission, which involves a change in family roles: Bob must manage the house while Helen is out saving the world.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1XZ0pSe4bccOpJeF_VkXhkOhxQ3Tzp8RB/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- I Know What You Did Last Summer -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/I%20Know%20What%20You%20Did%20Last%20Summer.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">I Know What You Did Last Summer</h3>
+        <div class="show-meta">1997 • Horror • Mystery • Thriller</div>
+        <p class="show-description">
+            Four young friends bound by a tragic accident are reunited when they find themselves being stalked by a hook-wielding maniac in their small seaside town.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1sSPtR3lcvTcjtDHvv3sOHw8qHbuaeQY1/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- How to Train Your Dragon -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/How%20To%20Train%20Your%20Dragon.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">How to Train Your Dragon</h3>
+        <div class="show-meta">2010 • Animation • Action • Adventure</div>
+        <p class="show-description">
+            A hapless young Viking who aspires to hunt dragons becomes the unlikely friend of a young dragon himself, and learns there may be more to the creatures than he assumed.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1_1kjmaNVAhaccTH3mCV5FfcML3MTiT0E/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Hotel Transylvania -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Hotel%20Transylvania.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Hotel Transylvania</h3>
+        <div class="show-meta">2012 • Animation • Comedy • Family</div>
+        <p class="show-description">
+            Dracula, who operates a high-end resort away from the human world, goes into overprotective mode when a boy discovers the resort and falls for the count's teen-aged daughter.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1gZ4FVX5GLCSv2-i_sabXWhgl9u_3FeOB/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Hotel Transylvania 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Hotel%20Transylvania%202.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Hotel Transylvania 2</h3>
+        <div class="show-meta">2015 • Animation • Comedy • Family</div>
+        <p class="show-description">
+            Dracula and his friends try to bring out the monster in his half human, half vampire grandson in order to keep Mavis from leaving the hotel.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1LZI5E52J_R_Cx6f3EXLl-BAn6vuhUduD/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Hotel Transylvania 3 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Hotel%20Transylvania%203.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Hotel Transylvania 3: Summer Vacation</h3>
+        <div class="show-meta">2018 • Animation • Comedy • Family</div>
+        <p class="show-description">
+            Count Dracula and company participate in a cruise for sea-loving monsters, unaware that their boat is being commandeered by the monster-hating Van Helsing family.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1aS3rHee1w5zNTGGmSFM57DSVlC1hSvIs/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Hotel Transylvania 4 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Hotel%20Transylvania%204.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Hotel Transylvania: Transformania</h3>
+        <div class="show-meta">2022 • Animation • Comedy • Family</div>
+        <p class="show-description">
+            After one experiment, Johnny turns into a monster and everyone else becomes human. Now it's up to them to find the way to turn themselves back before the change becomes permanent.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1_Ujbv8ONdcmV8TrYw8WzTwdD93deiiZp/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- High School Musical -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Highschool%20Musical.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">High School Musical</h3>
+        <div class="show-meta">2006 • Musical • Romance • Drama</div>
+        <p class="show-description">
+            A popular basketball player and an academically gifted girl break out of their respective cliques when they secretly audition for the leads in their high school musical.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1tg84YPuUqFUMlVpGzjkhoEehBHV8W9ZF/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Kung Fu Panda -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Kung%20Fu%20Panda%201.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Kung Fu Panda</h3>
+        <div class="show-meta">2008 • Animation • Action • Comedy</div>
+        <p class="show-description">
+            To everyone's surprise, including his own, Po, an overweight, clumsy panda, is chosen as protector of the Valley of Peace. His foibles become his biggest asset as he trains to become the Dragon Warrior.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1cPYsXfP2YqdtUNnqXg3ycANRQQOuVOmR/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Kung Fu Panda 2 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Kung%20Fu%20Panda%202.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Kung Fu Panda 2</h3>
+        <div class="show-meta">2011 • Animation • Action • Comedy</div>
+        <p class="show-description">
+            Po and his friends fight to stop a peacock villain from conquering China with a deadly new weapon, but first the Dragon Warrior must come to terms with his past.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/19Iz7pU-A9RUMHe6q1I9faYi02ht5MwbT/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Kung Fu Panda 3 -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Kung%20Fu%20Panda%203.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Kung Fu Panda 3</h3>
+        <div class="show-meta">2016 • Animation • Action • Comedy</div>
+        <p class="show-description">
+            Continuing his legendary adventures, Po must face two hugely epic but different threats: one supernatural and the other a little closer to home.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1lfSnf9FQoB1xyeDJxEEh5JSG4ocnmqgx/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Jurassic Park -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Jurassic%20Park.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Jurassic Park</h3>
+        <div class="show-meta">1993 • Action • Adventure • Sci-Fi</div>
+        <p class="show-description">
+            A wealthy entrepreneur secretly creates a theme park featuring living dinosaurs drawn from prehistoric DNA. Before opening day, he invites a team of experts to experience the park and help calm anxious investors.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1QGXy2lJU4B0z4s7zPSOLizN8jMHfnZQm/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- Jingle All The Way -->
+<div class="show-card">
+    <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/Jingle%20All%20The%20Way.jpg');"></div>
+    <div class="show-info">
+        <h3 class="show-title">Jingle All The Way</h3>
+        <div class="show-meta">1996 • Comedy • Family</div>
+        <p class="show-description">
+            A father vows to get his son a Turbo Man action figure for Christmas. However, every store is sold out and he must travel all over town and compete with everybody else in order to find one.
+        </p>
+        <div class="season-links">
+            <a href="https://drive.google.com/file/d/1gdQba6i5IcBe7_a4eyU75cuAkbyJEpt4/view" class="season-link" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</div>
+            <!-- The Grinch -->
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krpdtnimages@main/images/The%20Grinch.jpg');"></div>
+                <div class="show-info">
+                    <h3 class="show-title">The Grinch</h3>
+                    <div class="show-meta">2018 • Animation • Comedy • Family</div>
+                    <p class="show-description">
+                        A grumpy Grinch plots to ruin Christmas for the village of Whoville, but his heart grows three sizes when he encounters the generous spirit of young Cindy Lou Who.
+                    </p>
+                    <div class="season-links">
+                        <a href="https://drive.google.com/file/d/1_z5TUQlNH-IWdeFo_jDZDKsuVi32VdRs/view" class="season-link" target="_blank">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADD MORE MOVIES HERE -->
+
+        </div>
+    </div>
+
+    <script>
+        function sortShows(mode = 'alphabetical') {
+            const sections = document.querySelectorAll('.section');
+            
+            sections.forEach(section => {
+                const grid = section.querySelector('.show-grid');
+                if (!grid) return;
+
+                const cards = Array.from(grid.querySelectorAll('.show-card'));
+
+                cards.sort((a, b) => {
+                    const titleA = a.querySelector('.show-title')?.textContent.trim().toLowerCase() || '';
+                    const titleB = b.querySelector('.show-title')?.textContent.trim().toLowerCase() || '';
+                    const metaA = a.querySelector('.show-meta')?.textContent.trim() || '';
+                    const metaB = b.querySelector('.show-meta')?.textContent.trim() || '';
+
+                    const yearA = parseInt(metaA.match(/\b\d{4}\b/)?.[0]) || 0;
+                    const yearB = parseInt(metaB.match(/\b\d{4}\b/)?.[0]) || 0;
+
+                    const genreA = metaA.split('•')[1]?.trim().toLowerCase() || '';
+                    const genreB = metaB.split('•')[1]?.trim().toLowerCase() || '';
+
+                    if (mode === 'alphabetical') {
+                        return titleA.localeCompare(titleB);
+                    } 
+                    else if (mode === 'year') {
+                        return yearB - yearA;
+                    } 
+                    else if (mode === 'genre') {
+                        return genreA.localeCompare(genreB);
+                    } 
+                    else {
+                        return 0;
+                    }
+                });
+
+                grid.innerHTML = '';
+                cards.forEach(card => grid.appendChild(card));
+            });
+        }
+
+        function updateMovieCount() {
+            const cards = document.querySelectorAll('.show-card');
+            const visibleCards = Array.from(cards).filter(card => card.style.display !== 'none');
+            document.getElementById('movieCount').textContent = visibleCards.length;
+        }
+
+        function filterShows() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.show-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.show-title').textContent.toLowerCase();
+                const description = card.querySelector('.show-description').textContent.toLowerCase();
+                if (title.includes(input) || description.includes(input)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            updateMovieCount();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            sortShows('alphabetical');
+            updateMovieCount();
+
+            const selector = document.getElementById('sortSelect');
+            if (selector) {
+                selector.addEventListener('change', e => sortShows(e.target.value));
+            }
+        });
+    </script>
+</body>
+</html>
