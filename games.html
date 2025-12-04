@@ -328,7 +328,7 @@
                 <div class="game-info">
                     <h3 class="game-title">Hollow Knight</h3>
                     <p class="game-description">Epic action-adventure platformer set in a mysterious underground kingdom.</p>
-                    <button class="play-btn" onclick="launchGame('https://cdn.jsdelivr.net/gh/web-ports/hollow-knight@main/index.html')">Play Now</button>
+                    <button class="play-btn" onclick="launchGame('PASTE_YOUR_GAME_URL_HERE')">Play Now</button>
                 </div>
             </div>
 
@@ -338,7 +338,7 @@
                 <div class="game-info">
                     <h3 class="game-title">Bad Time Simulator</h3>
                     <p class="game-description">Can you survive the hardest boss fight? Dodge attacks and prove your skills!</p>
-                    <button class="play-btn" onclick="launchGame('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Games/Sans%20Fight')">Play Now</button>
+                    <button class="play-btn" onclick="launchGame('PASTE_YOUR_GAME_URL_HERE')">Play Now</button>
                 </div>
             </div>
 
@@ -373,7 +373,66 @@
     </div>
 
     <script>
-        // Create starfield
+        // ===== ANTI-INSPECT ELEMENT PROTECTION =====
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Disable common developer shortcuts
+        document.addEventListener('keydown', function(e) {
+            // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
+            if (e.keyCode === 123 || // F12
+                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+                (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+                (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl+Shift+C
+                (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Detect DevTools opening
+        let devtoolsOpen = false;
+        const element = new Image();
+        Object.defineProperty(element, 'id', {
+            get: function() {
+                devtoolsOpen = true;
+                window.location.reload();
+            }
+        });
+
+        setInterval(function() {
+            devtoolsOpen = false;
+            console.log(element);
+            console.clear();
+        }, 1000);
+
+        // Detect window resize (DevTools opening)
+        (function() {
+            const threshold = 160;
+            const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+            const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+            
+            if (widthThreshold || heightThreshold) {
+                document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:50vh;">Developer tools detected!</h1>';
+            }
+        })();
+
+        // Disable text selection
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Disable copy
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // ===== STARFIELD =====
         function createStarfield() {
             const starfield = document.getElementById('starfield');
             const starCount = 100;
@@ -394,15 +453,57 @@
             }
         }
 
-        // Launch game in new window
-        function launchGame(url) {
-            const gameWindow = window.open(url, '_blank', 'width=1280,height=720');
-            if (!gameWindow) {
-                alert('Please allow popups for this site to launch games!');
+        // ===== GAME LAUNCHER =====
+        async function launchGame(url) {
+            try {
+                // Fetch the game HTML
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Failed to load game');
+                
+                const gameHTML = await response.text();
+                
+                // Open new window
+                const gameWindow = window.open('', '_blank', 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no');
+                
+                if (!gameWindow) {
+                    alert('Please allow popups for this site to launch games!');
+                    return;
+                }
+
+                // Write the game HTML to the new window
+                gameWindow.document.open();
+                gameWindow.document.write(gameHTML);
+                gameWindow.document.close();
+
+                // Add anti-inspect protection to game window
+                gameWindow.document.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+
+                gameWindow.document.addEventListener('keydown', function(e) {
+                    if (e.keyCode === 123 || 
+                        (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+                        (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
+                        (e.ctrlKey && e.shiftKey && e.keyCode === 67) ||
+                        (e.ctrlKey && e.keyCode === 85)) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+
+                gameWindow.document.addEventListener('selectstart', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+
+            } catch (error) {
+                console.error('Error launching game:', error);
+                alert('Failed to load game. Please check the URL or try again later.');
             }
         }
 
-        // Search functionality
+        // ===== SEARCH & SORT =====
         const searchBox = document.getElementById('searchBox');
         const sortSelect = document.getElementById('sortSelect');
         const gamesGrid = document.getElementById('gamesGrid');
@@ -443,7 +544,7 @@
         searchBox.addEventListener('input', filterAndSortGames);
         sortSelect.addEventListener('change', filterAndSortGames);
 
-        // Initialize
+        // ===== INITIALIZE =====
         createStarfield();
         filterAndSortGames();
     </script>
