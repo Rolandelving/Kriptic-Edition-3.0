@@ -648,6 +648,16 @@
             color: black;
         }
 
+        .poll-option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .poll-option.disabled:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
         .poll-actions {
             display: flex;
             justify-content: space-between;
@@ -1166,7 +1176,7 @@
             console.error('Firebase initialization error:', firebaseError);
         }
 
-        // ===== POLL SYSTEM =====
+        // ===== POLL SYSTEM V2 (SIMPLIFIED) =====
         const SUPABASE_URL = 'https://zkrdbvjmessktzlxommr.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcmRidmptZXNza3R6bHhvbW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI4ODMzNzUsImV4cCI6MjA2ODQ1OTM3NX0.XDNQGD7Jl-2zmjFyfGVFRjdq-9rVFfhCyExfO8Fzb7Q';
 
@@ -1175,89 +1185,113 @@
         let selectedOptions = {};
         let votingInProgress = new Set();
 
+        // ===== COOKIE FUNCTIONS (for anti-spam) =====
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=Strict";
+            console.log(`🍪 Cookie set: ${name} = ${value} (expires in ${days} days)`);
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function hasVoted(pollId) {
+            return getCookie(`pollVoted_${pollId}`) === 'true';
+        }
+
+        function markAsVoted(pollId) {
+            // Cookie expires in 365 days (1 year)
+            setCookie(`pollVoted_${pollId}`, 'true', 365);
+        }
+
         function initializePollSupabase() {
             try {
                 if (window.supabase && typeof window.supabase.createClient === 'function') {
                     pollSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    console.log('Supabase initialized successfully');
+                    console.log('✅ Supabase initialized successfully');
                 } else {
-                    console.error('Supabase library not loaded');
-                    setTimeout(initializePollSupabase, 500); // Retry after 500ms
+                    console.error('❌ Supabase library not loaded, retrying...');
+                    setTimeout(initializePollSupabase, 500);
                 }
             } catch (error) {
-                console.error('Error initializing Supabase:', error);
-                setTimeout(initializePollSupabase, 500); // Retry after 500ms
+                console.error('❌ Error initializing Supabase:', error);
+                setTimeout(initializePollSupabase, 500);
             }
         }
 
         async function fetchPolls() {
             try {
+                console.log('📥 Fetching polls from Supabase...');
+                
                 const { data, error } = await pollSupabase
                     .from('polls')
                     .select('*')
+                    .eq('active', true)
                     .order('created_at', { ascending: false });
 
-                if (error) throw error;
+                if (error) {
+                    console.error('❌ Supabase error:', error);
+                    throw error;
+                }
                 
-                console.log('Raw poll data:', data); // Debug log
+                console.log('📊 Raw poll data from database:', data);
                 
-                // Ensure polls have proper structure and parse JSON strings
-                polls = (data || []).map(poll => {
-                    // Parse options if it's a string
-                    let parsedOptions = poll.options;
-                    if (typeof poll.options === 'string') {
-                        try {
-                            parsedOptions = JSON.parse(poll.options);
-                        } catch (e) {
-                            console.error('Failed to parse options:', e);
-                            parsedOptions = [];
+                if (!data || data.length === 0) {
+                    console.warn('⚠️ No polls found in database');
+                    polls = [];
+                    renderPolls();
+                    return;
+                }
+                
+                // Convert database format to simple array format
+                polls = data.map(poll => {
+                    // Build options array from option1, option2, etc.
+                    const options = [];
+                    const votes = [];
+                    
+                    for (let i = 1; i <= 5; i++) {
+                        const optionKey = `option${i}`;
+                        const voteKey = `votes${i}`;
+                        
+                        if (poll[optionKey]) {
+                            options.push(poll[optionKey]);
+                            votes.push(poll[voteKey] || 0);
                         }
                     }
                     
-                    // Parse votes if it's a string
-                    let parsedVotes = poll.votes;
-                    if (typeof poll.votes === 'string') {
-                        try {
-                            parsedVotes = JSON.parse(poll.votes);
-                        } catch (e) {
-                            console.error('Failed to parse votes:', e);
-                            parsedVotes = parsedOptions.map(() => 0);
-                        }
-                    }
-                    
-                    // Ensure arrays are valid
-                    if (!Array.isArray(parsedOptions)) parsedOptions = [];
-                    if (!Array.isArray(parsedVotes)) parsedVotes = parsedOptions.map(() => 0);
-                    
-                    // Make sure votes array matches options length
-                    if (parsedVotes.length !== parsedOptions.length) {
-                        parsedVotes = parsedOptions.map(() => 0);
-                    }
-                    
-                    console.log('Parsed poll:', {
-                        id: poll.id,
-                        question: poll.question,
-                        options: parsedOptions,
-                        votes: parsedVotes
-                    });
+                    console.log(`✅ Poll parsed: "${poll.question}" - ${options.length} options`);
                     
                     return {
-                        ...poll,
-                        options: parsedOptions,
-                        votes: parsedVotes
+                        id: poll.id,
+                        question: poll.question,
+                        options: options,
+                        votes: votes,
+                        created_at: poll.created_at
                     };
                 });
                 
-                console.log('Processed polls:', polls); // Debug log
+                console.log(`✅ ${polls.length} polls ready to display`);
                 renderPolls();
             } catch (error) {
-                showPollMessage('error', 'Failed to load polls: ' + error.message);
-                console.error('Poll fetch error:', error);
+                console.error('❌ Failed to fetch polls:', error);
+                showPollMessage('error', 'Failed to load polls. Check console for details.');
             }
         }
 
         function showPollMessage(type, message) {
             const container = document.getElementById('pollContainer');
+            if (!container) return;
+            
             const messageDiv = document.createElement('div');
             messageDiv.className = `poll-message ${type}`;
             messageDiv.textContent = message;
@@ -1269,6 +1303,8 @@
 
         function selectPollOption(pollId, optionIndex) {
             if (votingInProgress.has(pollId)) return;
+            
+            console.log(`👆 Selected option ${optionIndex} for poll ${pollId}`);
             selectedOptions[pollId] = optionIndex;
             renderPolls();
         }
@@ -1276,68 +1312,62 @@
         async function submitPollVote(pollId) {
             const optionIndex = selectedOptions[pollId];
 
-            if (localStorage.getItem(`pollVoted_${pollId}`)) {
-                showPollMessage('error', 'You already voted on this poll.');
+            // Check if already voted (using cookie)
+            if (hasVoted(pollId)) {
+                showPollMessage('error', '🚫 You already voted on this poll. One vote per person!');
                 return;
             }
             
+            // Check if option selected
             if (optionIndex === undefined) {
-                showPollMessage('error', 'Please select an option before voting');
+                showPollMessage('error', '⚠️ Please select an option before voting');
                 return;
             }
 
+            // Prevent double-clicking
             if (votingInProgress.has(pollId)) return;
-
             votingInProgress.add(pollId);
             
             try {
                 const poll = polls.find(p => p.id === pollId);
+                if (!poll) throw new Error('Poll not found');
                 
-                console.log('Current poll:', poll);
-                console.log('Voting for option index:', optionIndex);
+                console.log(`🗳️ Submitting vote for option ${optionIndex + 1}...`);
                 
-                // Create updated votes array
-                const updatedVotes = [...poll.votes];
-                updatedVotes[optionIndex] = (updatedVotes[optionIndex] || 0) + 1;
+                // Build update object with the correct vote column
+                const voteColumn = `votes${optionIndex + 1}`;
+                const currentVoteCount = poll.votes[optionIndex];
+                const updateData = {};
+                updateData[voteColumn] = currentVoteCount + 1;
                 
-                console.log('Updated votes array:', updatedVotes);
+                console.log('📤 Updating database:', updateData);
 
-                // Update in Supabase - ensure it's sent as proper JSONB
+                // Update in Supabase
                 const { data, error } = await pollSupabase
                     .from('polls')
-                    .update({ votes: updatedVotes })
+                    .update(updateData)
                     .eq('id', pollId)
                     .select();
 
                 if (error) {
-                    console.error('Supabase update error:', error);
+                    console.error('❌ Vote update failed:', error);
                     throw error;
                 }
                 
-                console.log('Update response:', data);
+                console.log('✅ Vote recorded successfully!', data);
 
-                // Update local poll data
-                const pollIndex = polls.findIndex(p => p.id === pollId);
-                if (pollIndex !== -1 && data && data[0]) {
-                    // Parse the response in case it comes back as string
-                    let responseVotes = data[0].votes;
-                    if (typeof responseVotes === 'string') {
-                        responseVotes = JSON.parse(responseVotes);
-                    }
-                    polls[pollIndex] = {
-                        ...data[0],
-                        votes: responseVotes,
-                        options: poll.options // Keep parsed options
-                    };
-                }
-                
+                // Mark as voted using cookie (expires in 1 year)
+                markAsVoted(pollId);
                 delete selectedOptions[pollId];
-                localStorage.setItem(`pollVoted_${pollId}`, 'true');
-                showPollMessage('success', 'Vote submitted successfully!');
-                renderPolls();
+                
+                showPollMessage('success', '✅ Vote submitted successfully! Thanks for participating!');
+                
+                // Refresh polls to show updated results
+                await fetchPolls();
+                
             } catch (error) {
-                showPollMessage('error', 'Vote failed: ' + error.message);
-                console.error('Vote error:', error);
+                console.error('❌ Vote submission error:', error);
+                showPollMessage('error', '❌ Vote failed: ' + error.message);
             } finally {
                 votingInProgress.delete(pollId);
             }
@@ -1345,13 +1375,14 @@
 
         function renderPolls() {
             const container = document.getElementById('pollContainer');
+            if (!container) return;
             
-            console.log('Rendering polls, count:', polls.length);
+            console.log(`🎨 Rendering ${polls.length} polls...`);
             
             if (polls.length === 0) {
                 container.innerHTML = `
                     <div class="poll-loading">
-                        <p>No polls available at this time</p>
+                        <p>📊 No polls available</p>
                         <p style="font-size: 0.9rem; margin-top: 1rem; color: rgba(255,255,255,0.5);">
                             Polls will appear here once added to the database
                         </p>
@@ -1364,7 +1395,7 @@
                 const totalVotes = poll.votes.reduce((sum, count) => sum + count, 0);
                 const selectedIndex = selectedOptions[poll.id];
                 const isVoting = votingInProgress.has(poll.id);
-                const hasVoted = localStorage.getItem(`pollVoted_${poll.id}`);
+                const hasVotedOnPoll = hasVoted(poll.id); // Check cookie
 
                 const optionsHTML = poll.options.map((option, index) => {
                     const voteCount = poll.votes[index];
@@ -1372,14 +1403,14 @@
                     const isSelected = selectedIndex === index;
 
                     return `
-                        <div class="poll-option ${isSelected ? 'selected' : ''}" 
+                        <div class="poll-option ${isSelected ? 'selected' : ''} ${hasVotedOnPoll ? 'disabled' : ''}" 
                              style="--vote-percent: ${percentage}%"
-                             onclick="selectPollOption('${poll.id}', ${index})"
+                             onclick="${hasVotedOnPoll ? '' : `selectPollOption('${poll.id}', ${index})`}"
                              role="button"
                              tabindex="0">
                             <span class="poll-option-text">${escapeHtml(option)}</span>
                             <div class="poll-option-stats">
-                                <span class="poll-vote-count">${voteCount} votes</span>
+                                <span class="poll-vote-count">${voteCount} vote${voteCount !== 1 ? 's' : ''}</span>
                                 <span>${percentage}%</span>
                             </div>
                         </div>
@@ -1388,17 +1419,17 @@
 
                 return `
                     <div class="poll-card">
-                        ${hasVoted ? '<div class="poll-message success">✓ You have already voted on this poll</div>' : ''}
+                        ${hasVotedOnPoll ? '<div class="poll-message success">✅ You already voted on this poll</div>' : ''}
                         <h3 class="poll-question">${escapeHtml(poll.question)}</h3>
                         <div class="poll-options">${optionsHTML}</div>
                         <div class="poll-actions">
                             <div class="poll-meta">
-                                Total: ${totalVotes} votes
+                                Total: ${totalVotes} vote${totalVotes !== 1 ? 's' : ''}
                             </div>
                             <button class="poll-submit-btn" 
                                     onclick="submitPollVote('${poll.id}')"
-                                    ${isVoting || selectedIndex === undefined || hasVoted ? 'disabled' : ''}>
-                                ${isVoting ? 'Submitting...' : hasVoted ? 'Already Voted' : 'Submit Vote'}
+                                    ${isVoting || selectedIndex === undefined || hasVotedOnPoll ? 'disabled' : ''}>
+                                ${isVoting ? '⏳ Submitting...' : hasVotedOnPoll ? '🔒 Already Voted' : '🗳️ Submit Vote'}
                             </button>
                         </div>
                     </div>
@@ -1406,6 +1437,7 @@
             }).join('');
 
             container.innerHTML = pollsHTML;
+            console.log('✅ Polls rendered successfully');
         }
 
         function escapeHtml(text) {
