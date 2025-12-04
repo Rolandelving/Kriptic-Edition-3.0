@@ -983,22 +983,6 @@
             }
         });
 
-        // Detect DevTools
-        let devtoolsOpen = false;
-        const element = new Image();
-        Object.defineProperty(element, 'id', {
-            get: function() {
-                devtoolsOpen = true;
-                window.location.reload();
-            }
-        });
-
-        setInterval(function() {
-            devtoolsOpen = false;
-            console.log(element);
-            console.clear();
-        }, 1000);
-
         // Disable text selection
         document.addEventListener('selectstart', function(e) {
             e.preventDefault();
@@ -1010,6 +994,17 @@
             e.preventDefault();
             return false;
         });
+
+        // DevTools detection (safe version)
+        setInterval(function() {
+            try {
+                if (window.console && typeof console.clear === 'function') {
+                    console.clear();
+                }
+            } catch (e) {
+                // Silently ignore errors
+            }
+        }, 2000);
 
         // ===== STARFIELD =====
         function createStarfield() {
@@ -1119,34 +1114,43 @@
             appId: "1:639987847762:web:4985fd9e5fb887f4a59d3a"
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const visitorsRef = database.ref('visitors');
+        // ===== FIREBASE VISITOR COUNTER =====
+        try {
+            if (typeof firebase !== 'undefined' && firebase.initializeApp) {
+                firebase.initializeApp(firebaseConfig);
+                const database = firebase.database();
+                const visitorsRef = database.ref('visitors');
 
-        const sessionId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                const sessionId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
 
-        visitorsRef.child(sessionId).set({
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-        });
-
-        window.addEventListener('beforeunload', () => {
-            visitorsRef.child(sessionId).remove();
-        });
-
-        visitorsRef.on('value', (snapshot) => {
-            document.getElementById('visitorCount').textContent = snapshot.numChildren();
-        });
-
-        setInterval(() => {
-            const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
-            visitorsRef.once('value', (snapshot) => {
-                snapshot.forEach((child) => {
-                    if (child.val().timestamp < fiveMinutesAgo) {
-                        child.ref.remove();
-                    }
+                visitorsRef.child(sessionId).set({
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
                 });
-            });
-        }, 60000);
+
+                window.addEventListener('beforeunload', () => {
+                    visitorsRef.child(sessionId).remove();
+                });
+
+                visitorsRef.on('value', (snapshot) => {
+                    document.getElementById('visitorCount').textContent = snapshot.numChildren();
+                });
+
+                setInterval(() => {
+                    const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+                    visitorsRef.once('value', (snapshot) => {
+                        snapshot.forEach((child) => {
+                            if (child.val().timestamp < fiveMinutesAgo) {
+                                child.ref.remove();
+                            }
+                        });
+                    });
+                }, 60000);
+            } else {
+                console.error('Firebase not loaded properly');
+            }
+        } catch (firebaseError) {
+            console.error('Firebase initialization error:', firebaseError);
+        }
 
         // ===== POLL SYSTEM =====
         const SUPABASE_URL = 'https://zkrdbvjmessktzlxommr.supabase.co';
@@ -1158,7 +1162,18 @@
         let votingInProgress = new Set();
 
         function initializePollSupabase() {
-            pollSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            try {
+                if (window.supabase && typeof window.supabase.createClient === 'function') {
+                    pollSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    console.log('Supabase initialized successfully');
+                } else {
+                    console.error('Supabase library not loaded');
+                    setTimeout(initializePollSupabase, 500); // Retry after 500ms
+                }
+            } catch (error) {
+                console.error('Error initializing Supabase:', error);
+                setTimeout(initializePollSupabase, 500); // Retry after 500ms
+            }
         }
 
         async function fetchPolls() {
