@@ -1338,6 +1338,20 @@
         </div>
 
         <div class="debug-section">
+            <div class="debug-section-title">🌍 Visitor Geolocation</div>
+            <div style="margin-bottom: 0.5rem;">
+                <button class="debug-button" onclick="loadVisitorGeolocation()">📊 Load Recent Visitors</button>
+                <button class="debug-button" onclick="exportGeolocationData()">💾 Export All Data</button>
+            </div>
+            <div id="geolocationData" style="max-height: 200px; overflow-y: auto; font-size: 0.85rem;">
+                <div class="debug-log">Click "Load Recent Visitors" to view data</div>
+            </div>
+            <div style="margin-top: 0.5rem; font-size: 0.75rem; color: rgba(255,255,255,0.5);">
+                💡 Export data as JSON for visualization tools
+            </div>
+        </div>
+
+        <div class="debug-section">
             <div class="debug-section-title">Test Tools</div>
             <button class="debug-button" onclick="clearAllPollCookies()">🗑️ Clear All Poll Cookies</button>
             <button class="debug-button" onclick="refreshPollStatus()">🔄 Refresh Status</button>
@@ -1361,33 +1375,45 @@
 
         // ===== ANTI-INSPECT ELEMENT PROTECTION =====
         // Disable right-click
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
+        // Debug mode flag - when true, protections are disabled
+        let isDebugAuthenticated = false;
 
-        // Disable common developer shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.keyCode === 123 || // F12
-                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
-                (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
-                (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl+Shift+C
-                (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
+        // Disable right-click (unless debug mode is active)
+        document.addEventListener('contextmenu', function(e) {
+            if (!isDebugAuthenticated) {
                 e.preventDefault();
                 return false;
             }
         });
 
-        // Disable text selection
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-            return false;
+        // Disable common developer shortcuts (unless debug mode is active)
+        document.addEventListener('keydown', function(e) {
+            if (!isDebugAuthenticated) {
+                if (e.keyCode === 123 || // F12
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl+Shift+C
+                    (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
+                    e.preventDefault();
+                    return false;
+                }
+            }
         });
 
-        // Disable copy
+        // Disable text selection (unless debug mode is active)
+        document.addEventListener('selectstart', function(e) {
+            if (!isDebugAuthenticated) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Disable copy (unless debug mode is active)
         document.addEventListener('copy', function(e) {
-            e.preventDefault();
-            return false;
+            if (!isDebugAuthenticated) {
+                e.preventDefault();
+                return false;
+            }
         });
 
         // DevTools detection (safe version)
@@ -2769,6 +2795,74 @@
             document.getElementById('visitorCount').textContent = '?';
         }
 
+        // ===== IP GEOLOCATION TRACKING =====
+        async function trackVisitorGeolocation() {
+            try {
+                console.log('🌍 Fetching IP and geolocation data...');
+                
+                // Fetch IP and geolocation data from ipapi.co (free, no API key needed)
+                const response = await fetch('https://ipapi.co/json/');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch geolocation data');
+                }
+                
+                const geoData = await response.json();
+                
+                console.log('✅ Geolocation data received:', {
+                    ip: geoData.ip,
+                    country: geoData.country_name,
+                    city: geoData.city
+                });
+                
+                // Prepare data for Supabase
+                const visitorData = {
+                    ip_address: geoData.ip || 'Unknown',
+                    country: geoData.country_name || 'Unknown',
+                    country_code: geoData.country_code || 'XX',
+                    region: geoData.region || 'Unknown',
+                    city: geoData.city || 'Unknown',
+                    latitude: geoData.latitude || 0,
+                    longitude: geoData.longitude || 0,
+                    timezone: geoData.timezone || 'Unknown',
+                    isp: geoData.org || 'Unknown',
+                    user_agent: navigator.userAgent,
+                    screen_resolution: `${screen.width}x${screen.height}`,
+                    language: navigator.language || 'Unknown',
+                    visited_at: new Date().toISOString()
+                };
+                
+                // Store in Supabase
+                if (pollSupabase) {
+                    const { data, error } = await pollSupabase
+                        .from('visitor_geolocation')
+                        .insert([visitorData]);
+                    
+                    if (error) {
+                        console.error('❌ Failed to store geolocation in Supabase:', error);
+                        addActivityLog(`❌ Geolocation storage failed: ${error.message}`);
+                    } else {
+                        console.log('✅ Visitor geolocation stored in Supabase');
+                        addActivityLog(`🌍 Visitor from ${geoData.city}, ${geoData.country_name} tracked`);
+                    }
+                } else {
+                    console.warn('⚠️ Supabase not initialized, skipping geolocation storage');
+                }
+                
+                return geoData;
+                
+            } catch (error) {
+                console.error('❌ Geolocation tracking error:', error);
+                addActivityLog(`❌ Geolocation tracking failed: ${error.message}`);
+                return null;
+            }
+        }
+
+        // Track visitor geolocation on page load (with delay to not block other initializations)
+        setTimeout(() => {
+            trackVisitorGeolocation();
+        }, 2000);
+
         // ===== POLL SYSTEM V2 (SIMPLIFIED) =====
         const SUPABASE_URL = 'https://zkrdbvjmessktzlxommr.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcmRidmptZXNza3R6bHhvbW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI4ODMzNzUsImV4cCI6MjA2ODQ1OTM3NX0.XDNQGD7Jl-2zmjFyfGVFRjdq-9rVFfhCyExfO8Fzb7Q';
@@ -3050,7 +3144,6 @@
         // ===== DEBUG PANEL FUNCTIONS =====
         let activityLogs = [];
         let debugPassword = null;
-        let isDebugAuthenticated = false;
 
         // Fetch debug password from Supabase on page load
         async function fetchDebugPassword() {
@@ -3148,11 +3241,20 @@
             
             // Check password
             if (enteredPassword === debugPassword) {
-                feedback.innerHTML = '<div class="password-loading">✅ Access granted!</div>';
+                feedback.innerHTML = '<div class="password-loading">✅ Access granted! Protections disabled.</div>';
                 
                 // Store authentication in sessionStorage (lasts until browser tab closes)
                 sessionStorage.setItem('debugAuthenticated', 'true');
                 isDebugAuthenticated = true;
+                
+                // Log to console
+                console.log('🔓 DEBUG MODE ACTIVATED');
+                console.log('✅ Right-click enabled');
+                console.log('✅ Inspect element shortcuts enabled (F12, Ctrl+Shift+I, etc.)');
+                console.log('✅ Text selection enabled');
+                console.log('✅ Copy/paste enabled');
+                
+                addActivityLog('🔓 Debug mode activated - All protections disabled');
                 
                 // Close modal and open debug panel
                 setTimeout(() => {
@@ -3299,10 +3401,150 @@
             addActivityLog('🔄 Status refreshed');
         }
 
+        // ===== GEOLOCATION VIEWER FUNCTIONS =====
+        async function loadVisitorGeolocation() {
+            const container = document.getElementById('geolocationData');
+            container.innerHTML = '<div class="debug-log">⏳ Loading visitor data...</div>';
+            
+            try {
+                if (!pollSupabase) {
+                    container.innerHTML = '<div class="debug-log" style="color: #ff6b6b;">❌ Supabase not connected</div>';
+                    return;
+                }
+                
+                // Fetch last 50 visitors
+                const { data, error } = await pollSupabase
+                    .from('visitor_geolocation')
+                    .select('*')
+                    .order('visited_at', { ascending: false })
+                    .limit(50);
+                
+                if (error) {
+                    container.innerHTML = `<div class="debug-log" style="color: #ff6b6b;">❌ Error: ${error.message}</div>`;
+                    console.error('Geolocation fetch error:', error);
+                    return;
+                }
+                
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="debug-log">📭 No visitor data yet. Data appears after first visit is tracked.</div>';
+                    return;
+                }
+                
+                // Display visitor data
+                let html = `<div style="margin-bottom: 0.5rem; font-weight: bold; color: #4ade80;">📊 ${data.length} Recent Visitors</div>`;
+                
+                // Group by country
+                const countryStats = {};
+                data.forEach(visitor => {
+                    const country = visitor.country || 'Unknown';
+                    countryStats[country] = (countryStats[country] || 0) + 1;
+                });
+                
+                html += '<div style="margin-bottom: 0.5rem; padding: 0.5rem; background: rgba(74, 222, 128, 0.1); border-radius: 4px;">';
+                html += '<strong>By Country:</strong><br>';
+                Object.entries(countryStats)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 5)
+                    .forEach(([country, count]) => {
+                        html += `${country}: ${count} | `;
+                    });
+                html = html.slice(0, -3) + '</div>';
+                
+                // List recent visitors
+                data.slice(0, 20).forEach((visitor, index) => {
+                    const date = new Date(visitor.visited_at);
+                    const timeAgo = getTimeAgo(date);
+                    
+                    html += `
+                        <div style="padding: 0.4rem; margin-bottom: 0.3rem; background: rgba(255,255,255,0.05); border-radius: 4px; border-left: 3px solid #4ade80;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <span style="font-weight: bold; color: #4ade80;">${visitor.city || 'Unknown'}, ${visitor.country || 'Unknown'}</span>
+                                    <span style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-left: 0.5rem;">${visitor.country_code || ''}</span>
+                                </div>
+                                <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5);">${timeAgo}</div>
+                            </div>
+                            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem;">
+                                IP: ${visitor.ip_address || 'Unknown'} | ISP: ${(visitor.isp || 'Unknown').substring(0, 30)}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+                addActivityLog(`📊 Loaded ${data.length} visitor records`);
+                
+            } catch (err) {
+                container.innerHTML = `<div class="debug-log" style="color: #ff6b6b;">❌ Error: ${err.message}</div>`;
+                console.error('Error loading geolocation:', err);
+            }
+        }
+        
+        async function exportGeolocationData() {
+            try {
+                if (!pollSupabase) {
+                    alert('❌ Supabase not connected');
+                    return;
+                }
+                
+                addActivityLog('💾 Exporting geolocation data...');
+                
+                // Fetch ALL visitor data
+                const { data, error } = await pollSupabase
+                    .from('visitor_geolocation')
+                    .select('*')
+                    .order('visited_at', { ascending: false });
+                
+                if (error) {
+                    alert(`❌ Export failed: ${error.message}`);
+                    console.error('Export error:', error);
+                    return;
+                }
+                
+                if (!data || data.length === 0) {
+                    alert('📭 No data to export yet');
+                    return;
+                }
+                
+                // Create JSON file
+                const json = JSON.stringify(data, null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                // Download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `visitor-geolocation-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                addActivityLog(`✅ Exported ${data.length} visitor records`);
+                alert(`✅ Exported ${data.length} visitor records!\n\nFile saved as: ${a.download}`);
+                
+            } catch (err) {
+                alert(`❌ Export failed: ${err.message}`);
+                console.error('Export error:', err);
+            }
+        }
+        
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+            if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+            return date.toLocaleDateString();
+        }
+
         // Make functions globally accessible
         window.toggleDebugPanel = toggleDebugPanel;
         window.clearAllPollCookies = clearAllPollCookies;
         window.refreshPollStatus = refreshPollStatus;
+        window.loadVisitorGeolocation = loadVisitorGeolocation;
+        window.exportGeolocationData = exportGeolocationData;
 
         // Update debug panel when polls are fetched
         const originalFetchPolls = fetchPolls;
@@ -3329,6 +3571,12 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM loaded, initializing...');
+            
+            // Check if user was previously authenticated in this session
+            if (sessionStorage.getItem('debugAuthenticated') === 'true') {
+                isDebugAuthenticated = true;
+                console.log('✅ Debug mode active - Protections disabled');
+            }
             
             createStarfield();
             
