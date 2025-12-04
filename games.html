@@ -10,6 +10,23 @@
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/DripOctober-vm0JA%5B1%5D.ttf') format('truetype');
         }
 
+        /* Theme Variables */
+        :root {
+            --primary: #6495ff;
+            --secondary: #9d7dff;
+            --accent: #00d9ff;
+        }
+        body.theme-nebula { --primary: #6495ff; --secondary: #9d7dff; --accent: #00d9ff; }
+        body.theme-aurora { --primary: #00ff88; --secondary: #00ffff; --accent: #88ff00; }
+        body.theme-supernova { --primary: #ff6b35; --secondary: #ff0055; --accent: #ffaa00; }
+        body.theme-galaxy { --primary: #667eea; --secondary: #764ba2; --accent: #f093fb; }
+        body.theme-creme { --primary: #d4a574; --secondary: #c9a581; --accent: #f9f5f0; }
+        body.theme-void { --primary: #1a1a1a; --secondary: #4a4a4a; --accent: #ffffff; }
+        body.theme-plasma { --primary: #ff00ff; --secondary: #00ffff; --accent: #ffff00; }
+        body.theme-solar { --primary: #ffaa00; --secondary: #ff6600; --accent: #ffdd00; }
+        body.theme-lunar { --primary: #c0c0c0; --secondary: #e0e0e0; --accent: #ffffff; }
+        body.theme-cosmic { --primary: #ff1493; --secondary: #00bfff; --accent: #7fff00; }
+
         * {
             margin: 0;
             padding: 0;
@@ -53,7 +70,7 @@
             padding: 2rem 4rem;
             background: rgba(10, 14, 39, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(100, 150, 255, 0.2);
+            border-bottom: 1px solid var(--primary);
         }
 
         .header-content {
@@ -69,7 +86,7 @@
         .logo {
             font-size: 2rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #6495ff, #9d7dff);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 2px;
@@ -77,8 +94,8 @@
 
         .back-btn {
             padding: 0.75rem 1.5rem;
-            background: rgba(100, 149, 237, 0.2);
-            border: 2px solid #6495ff;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--primary);
             color: white;
             text-decoration: none;
             border-radius: 50px;
@@ -87,9 +104,9 @@
         }
 
         .back-btn:hover {
-            background: #6495ff;
+            background: var(--primary);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(100, 149, 237, 0.4);
+            box-shadow: 0 8px 20px var(--primary);
         }
 
         /* Hero Section */
@@ -103,7 +120,7 @@
         .hero-title {
             font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 700;
-            background: linear-gradient(135deg, #ffffff, #6495ff, #9d7dff);
+            background: linear-gradient(135deg, #ffffff, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 1rem;
@@ -146,7 +163,7 @@
 
         .search-box:focus {
             outline: none;
-            border-color: #6495ff;
+            border-color: var(--primary);
             background: rgba(255, 255, 255, 0.08);
         }
 
@@ -193,7 +210,7 @@
 
         .game-card {
             background: rgba(10, 14, 39, 0.6);
-            border: 1px solid rgba(100, 150, 255, 0.2);
+            border: 1px solid var(--primary);
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.3s;
@@ -203,15 +220,15 @@
 
         .game-card:hover {
             transform: translateY(-8px);
-            border-color: #6495ff;
-            box-shadow: 0 12px 40px rgba(100, 149, 237, 0.3);
+            border-color: var(--accent);
+            box-shadow: 0 12px 40px var(--primary);
         }
 
         .game-thumbnail {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            background: linear-gradient(135deg, #6495ff, #9d7dff);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
         }
 
         .game-info {
@@ -220,7 +237,7 @@
 
         .game-title {
             font-size: 1.4rem;
-            color: #6495ff;
+            color: var(--primary);
             margin-bottom: 0.5rem;
             font-weight: 600;
         }
@@ -235,7 +252,7 @@
         .play-btn {
             width: 100%;
             padding: 0.75rem;
-            background: linear-gradient(135deg, #6495ff, #9d7dff);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border: none;
             color: white;
             font-size: 1rem;
@@ -250,7 +267,7 @@
 
         .play-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(100, 149, 237, 0.5);
+            box-shadow: 0 8px 20px var(--primary);
         }
 
         /* Mobile Responsive */
@@ -373,6 +390,12 @@
     </div>
 
     <script>
+        // Load saved theme and font
+        const savedTheme = localStorage.getItem('kripticTheme') || 'theme-nebula';
+        document.body.className = savedTheme;
+        const savedFont = localStorage.getItem('kripticFont') || 'DripOctober';
+        document.body.style.fontFamily = `'${savedFont}', 'Segoe UI', sans-serif`;
+
         // ===== ANTI-INSPECT ELEMENT PROTECTION =====
         // Disable right-click
         document.addEventListener('contextmenu', function(e) {
@@ -393,33 +416,6 @@
             }
         });
 
-        // Detect DevTools opening
-        let devtoolsOpen = false;
-        const element = new Image();
-        Object.defineProperty(element, 'id', {
-            get: function() {
-                devtoolsOpen = true;
-                window.location.reload();
-            }
-        });
-
-        setInterval(function() {
-            devtoolsOpen = false;
-            console.log(element);
-            console.clear();
-        }, 1000);
-
-        // Detect window resize (DevTools opening)
-        (function() {
-            const threshold = 160;
-            const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-            const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-            
-            if (widthThreshold || heightThreshold) {
-                document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:50vh;">Developer tools detected!</h1>';
-            }
-        })();
-
         // Disable text selection
         document.addEventListener('selectstart', function(e) {
             e.preventDefault();
@@ -431,6 +427,17 @@
             e.preventDefault();
             return false;
         });
+
+        // Safe DevTools detection
+        setInterval(function() {
+            try {
+                if (window.console && typeof console.clear === 'function') {
+                    console.clear();
+                }
+            } catch (e) {
+                // Silently ignore
+            }
+        }, 2000);
 
         // ===== STARFIELD =====
         function createStarfield() {
@@ -475,27 +482,31 @@
                 gameWindow.document.write(gameHTML);
                 gameWindow.document.close();
 
-                // Add anti-inspect protection to game window
-                gameWindow.document.addEventListener('contextmenu', function(e) {
-                    e.preventDefault();
-                    return false;
-                });
-
-                gameWindow.document.addEventListener('keydown', function(e) {
-                    if (e.keyCode === 123 || 
-                        (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
-                        (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
-                        (e.ctrlKey && e.shiftKey && e.keyCode === 67) ||
-                        (e.ctrlKey && e.keyCode === 85)) {
+                // Add safer anti-inspect protection to game window
+                try {
+                    gameWindow.document.addEventListener('contextmenu', function(e) {
                         e.preventDefault();
                         return false;
-                    }
-                });
+                    });
 
-                gameWindow.document.addEventListener('selectstart', function(e) {
-                    e.preventDefault();
-                    return false;
-                });
+                    gameWindow.document.addEventListener('keydown', function(e) {
+                        if (e.keyCode === 123 || 
+                            (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+                            (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
+                            (e.ctrlKey && e.shiftKey && e.keyCode === 67) ||
+                            (e.ctrlKey && e.keyCode === 85)) {
+                            e.preventDefault();
+                            return false;
+                        }
+                    });
+
+                    gameWindow.document.addEventListener('selectstart', function(e) {
+                        e.preventDefault();
+                        return false;
+                    });
+                } catch (protectionError) {
+                    // Silently ignore if protection can't be applied
+                }
 
             } catch (error) {
                 console.error('Error launching game:', error);
