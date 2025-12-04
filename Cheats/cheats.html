@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kriptic Edition - Tools Hub</title>
+    <title>Cheats & Tools | Kriptic Edition 3.0</title>
     <style>
+        @font-face {
+            font-family: 'DripOctober';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/DripOctober-vm0JA%5B1%5D.ttf') format('truetype');
+        }
+
+        /* Theme Variables */
+        :root {
+            --primary: #6495ff;
+            --secondary: #9d7dff;
+            --accent: #00d9ff;
+        }
+        body.theme-nebula { --primary: #6495ff; --secondary: #9d7dff; --accent: #00d9ff; }
+        body.theme-aurora { --primary: #00ff88; --secondary: #00ffff; --accent: #88ff00; }
+        body.theme-supernova { --primary: #ff6b35; --secondary: #ff0055; --accent: #ffaa00; }
+        body.theme-galaxy { --primary: #667eea; --secondary: #764ba2; --accent: #f093fb; }
+        body.theme-creme { --primary: #d4a574; --secondary: #c9a581; --accent: #f9f5f0; }
+        body.theme-void { --primary: #1a1a1a; --secondary: #4a4a4a; --accent: #ffffff; }
+        body.theme-plasma { --primary: #ff00ff; --secondary: #00ffff; --accent: #ffff00; }
+        body.theme-solar { --primary: #ffaa00; --secondary: #ff6600; --accent: #ffdd00; }
+        body.theme-lunar { --primary: #c0c0c0; --secondary: #e0e0e0; --accent: #ffffff; }
+        body.theme-cosmic { --primary: #ff1493; --secondary: #00bfff; --accent: #7fff00; }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,191 +34,134 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #000000;
-            color: #ffffff;
-            overflow-x: hidden;
+            font-family: 'DripOctober', sans-serif;
+            background: radial-gradient(ellipse at top, #0a0e27, #000000);
+            color: #e0e7ff;
             min-height: 100vh;
-        }
-
-        :root {
-            --primary: #4169e1;
-            --secondary: #9d4edd;
-            --accent: #00d9ff;
-        }
-
-        #starfield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .nebula-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse 1000px 800px at 15% 30%, rgba(65, 105, 225, 0.15) 0%, transparent 60%),
-                radial-gradient(ellipse 800px 1000px at 85% 70%, rgba(157, 78, 221, 0.12) 0%, transparent 60%),
-                radial-gradient(ellipse 900px 900px at 50% 50%, rgba(0, 217, 255, 0.08) 0%, transparent 70%);
-            z-index: 2;
-            pointer-events: none;
-            animation: nebulaPulse 20s ease-in-out infinite;
-        }
-
-        @keyframes nebulaPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .content {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem 2rem;
-        }
-
-        .header-section {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .logo {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-            animation: cosmicShift 8s ease infinite, logoFloat 4s ease-in-out infinite;
-            filter: drop-shadow(0 0 20px var(--primary));
-        }
-
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-15px) scale(1.02); }
-        }
-
-        @keyframes cosmicShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .tagline {
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 300;
-            letter-spacing: 0.3em;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-        }
-
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2.5rem;
-            max-width: 1200px;
-            width: 100%;
-            margin-bottom: 3rem;
-        }
-
-        .nav-card {
-            position: relative;
-            padding: 3rem 2.5rem;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-            animation: cardFloat 6s ease-in-out infinite;
-            text-decoration: none;
-            color: white;
-            display: block;
-        }
-
-        @keyframes cardFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .nav-card:nth-child(1) { animation-delay: 0s; }
-        .nav-card:nth-child(2) { animation-delay: 0.5s; }
-        .nav-card:nth-child(3) { animation-delay: 1s; }
-
-        .nav-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            padding: 2px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-
-        .nav-card:hover::before {
-            opacity: 1;
-        }
-
-        .nav-card:hover {
-            transform: translateY(-12px);
-            background: rgba(0, 0, 0, 0.9);
-            box-shadow: 0 25px 70px rgba(65, 105, 225, 0.3);
-        }
-
-        .nav-icon {
-            font-size: 4rem;
-            margin-bottom: 2rem;
-            filter: drop-shadow(0 0 15px var(--primary));
-        }
-
-        .nav-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #ffffff;
-        }
-
-        .nav-desc {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.6);
             line-height: 1.6;
         }
 
+        .header {
+            padding: 2rem 4rem;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .title {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ffffff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .tool-card {
+            background: var(--primary);
+            background-opacity: 0.05;
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .tool-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            color: #00ff88;
+            overflow-x: auto;
+        }
+
         @media (max-width: 768px) {
-            .nav-grid {
-                grid-template-columns: 1fr;
+            .header {
+                padding: 1.5rem 2rem;
+            }
+
+            .content {
+                margin: 2rem auto;
             }
         }
     </style>
 </head>
 <body>
-    <canvas id="starfield"></canvas>
-    <div class="nebula-overlay"></div>
+    <div class="header">
+        <div class="logo">KRIPTIC EDITION</div>
+    </div>
 
     <div class="content">
-        <div class="header-section">
-            <h1 class="logo">KRIPTIC EDITION</h1>
-            <p class="tagline">Educational Tools Hub</p>
+        <h1 class="title">Cheats & Tools</h1>
+
+        <div class="section">
+            <h2 class="section-title">Available Tools</h2>
+            <p>
+                Enhance your experience with these cheats and utilities. Copy and paste code into your browser's developer console (F12 → Console tab).
+            </p>
         </div>
 
-        <div class="nav-grid">
+        <div class="section">
+            <div class="tool-card">
+                <div class="tool-title">🎮 Game Speed Controller</div>
+                <div class="tool-description">
+                    Control the speed of web-based games. Useful for slowing down or speeding up gameplay.
+                </div>
+                <div class="code-block">
+// Slow down (0.5 = half speed)
+document.querySelector('iframe').contentWindow.document.defaultView.playbackRate = 0.5;
+
+// Speed up (2.0 = double speed)
+document.querySelector('iframe').contentWindow.document.defaultView.playbackRate = 2.0;
+                </div>
+            </div>
+<div class="nav-grid">
             <a href="https://sites.google.com/view/kriptic-edition-2/edpuzzle-cheat" class="nav-card">
                 <div class="nav-icon">🎬</div>
                 <h3 class="nav-title">Edpuzzle Tool</h3>
@@ -226,45 +191,109 @@
                 <p class="nav-desc">Additional educational tools in development</p>
             </a>
         </div>
+            <div class="tool-card">
+                <div class="tool-title">🎬 Video Controls</div>
+                <div class="tool-description">
+                    Enhanced controls for video players.
+                </div>
+                <div class="code-block">
+// Skip ahead 10 seconds
+document.querySelector('video').currentTime += 10;
+
+// Rewind 10 seconds
+document.querySelector('video').currentTime -= 10;
+
+// Set playback speed
+document.querySelector('video').playbackRate = 1.5;
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-title">🔍 Advanced Search</div>
+                <div class="tool-description">
+                    Search across all content with advanced filters.
+                </div>
+                <div class="code-block">
+// Search all titles
+const titles = [...document.querySelectorAll('.show-title')]
+  .map(el => el.textContent)
+  .filter(title => title.toLowerCase().includes('your search'));
+console.log(titles);
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-title">🎨 Theme Customizer</div>
+                <div class="tool-description">
+                    Customize colors and appearance beyond default themes.
+                </div>
+                <div class="code-block">
+// Change primary color
+document.body.style.setProperty('--primary', '#ff6b35');
+
+// Change background
+document.body.style.background = 'linear-gradient(to bottom, #1a1a1a, #000000)';
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Disclaimer</h2>
+            <p>
+                These tools are provided for educational and enhancement purposes. Use responsibly and at your own risk. Some features may not work with all games or content.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Coming Soon</h2>
+            <p>
+                • Game save state manager<br>
+                • Custom keybind configurator<br>
+                • Performance optimizer<br>
+                • Content recommendation engine<br>
+                • More cheats and tools
+            </p>
+        </div>
+    </div>
+
+    <!-- Philosophical Quote Footer -->
+    <div style="position: relative; z-index: 10; text-align: center; padding: 4rem 2rem 2rem; background: rgba(10, 14, 39, 0.95); border-top: 1px solid var(--primary); margin-top: 2rem;">
+        <div style="max-width: 900px; margin: 0 auto; font-style: italic; color: rgba(255, 255, 255, 0.7); font-size: 1.1rem; line-height: 1.8; text-shadow: 0 0 10px var(--primary);">
+            "He who walketh 'mongst the filth of swine, where rot is sacred and madness ferments, knoweth well their plague born secrets. For only in wading through corruption can one hear the truths that clean men fear to speak."
+        </div>
+        <div style="margin-top: 1rem; color: var(--primary); font-size: 0.9rem;">— Roland</div>
     </div>
 
     <script>
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
+        // Load saved theme and font
+        const savedTheme = localStorage.getItem('kripticTheme') || 'theme-nebula';
+        document.body.className = savedTheme;
+        const savedFont = localStorage.getItem('kripticFont') || 'DripOctober';
+        document.body.style.fontFamily = `'${savedFont}', 'Segoe UI', sans-serif`;
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        // Anti-inspect element protection
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
+                (e.ctrlKey && e.shiftKey && e.keyCode === 74) || (e.ctrlKey && e.shiftKey && e.keyCode === 67) || 
+                (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
 
-        const stars = Array.from({ length: 200 }, () => ({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 2,
-            speed: Math.random() * 0.5
-        }));
-
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'white';
-            
-            stars.forEach(star => {
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-                
-                star.y += star.speed;
-                if (star.y > canvas.height) {
-                    star.y = 0;
-                    star.x = Math.random() * canvas.width;
+        // Safe DevTools detection
+        setInterval(function() {
+            try {
+                if (window.console && typeof console.clear === 'function') {
+                    console.clear();
                 }
-            });
-            
-            requestAnimationFrame(drawStars);
-        }
-        drawStars();
+            } catch (e) {
+                // Silently ignore
+            }
+        }, 2000);
     </script>
 </body>
 </html>
