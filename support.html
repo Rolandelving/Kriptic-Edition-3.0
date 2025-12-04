@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support - Kriptic Edition</title>
+    <title>Support | Kriptic Edition 3.0</title>
     <style>
+        @font-face {
+            font-family: 'DripOctober';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/DripOctober-vm0JA%5B1%5D.ttf') format('truetype');
+        }
+
+        /* Theme Variables */
+        :root {
+            --primary: #6495ff;
+            --secondary: #9d7dff;
+            --accent: #00d9ff;
+        }
+        body.theme-nebula { --primary: #6495ff; --secondary: #9d7dff; --accent: #00d9ff; }
+        body.theme-aurora { --primary: #00ff88; --secondary: #00ffff; --accent: #88ff00; }
+        body.theme-supernova { --primary: #ff6b35; --secondary: #ff0055; --accent: #ffaa00; }
+        body.theme-galaxy { --primary: #667eea; --secondary: #764ba2; --accent: #f093fb; }
+        body.theme-creme { --primary: #d4a574; --secondary: #c9a581; --accent: #f9f5f0; }
+        body.theme-void { --primary: #1a1a1a; --secondary: #4a4a4a; --accent: #ffffff; }
+        body.theme-plasma { --primary: #ff00ff; --secondary: #00ffff; --accent: #ffff00; }
+        body.theme-solar { --primary: #ffaa00; --secondary: #ff6600; --accent: #ffdd00; }
+        body.theme-lunar { --primary: #c0c0c0; --secondary: #e0e0e0; --accent: #ffffff; }
+        body.theme-cosmic { --primary: #ff1493; --secondary: #00bfff; --accent: #7fff00; }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,187 +34,100 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #000000;
-            color: #ffffff;
-            overflow-x: hidden;
+            font-family: 'DripOctober', sans-serif;
+            background: radial-gradient(ellipse at top, #0a0e27, #000000);
+            color: #e0e7ff;
             min-height: 100vh;
-        }
-
-        :root {
-            --primary: #4169e1;
-            --secondary: #9d4edd;
-            --accent: #00d9ff;
-        }
-
-        #starfield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .nebula-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse 1000px 800px at 15% 30%, rgba(65, 105, 225, 0.15) 0%, transparent 60%),
-                radial-gradient(ellipse 800px 1000px at 85% 70%, rgba(157, 78, 221, 0.12) 0%, transparent 60%),
-                radial-gradient(ellipse 900px 900px at 50% 50%, rgba(0, 217, 255, 0.08) 0%, transparent 70%);
-            z-index: 2;
-            pointer-events: none;
-            animation: nebulaPulse 20s ease-in-out infinite;
-        }
-
-        @keyframes nebulaPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .content {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem 2rem;
+            line-height: 1.6;
         }
 
         .header {
-            text-align: center;
-            margin-bottom: 3rem;
+            padding: 2rem 4rem;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 0 2rem;
         }
 
         .title {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            background-size: 200% 200%;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ffffff, var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
             margin-bottom: 1rem;
-            animation: cosmicShift 8s ease infinite;
         }
 
-        @keyframes cosmicShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .section p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
         }
 
-        .subtitle {
-            font-size: clamp(1rem, 2vw, 1.3rem);
+        .faq-item {
+            background: var(--primary);
+            background-opacity: 0.05;
+            border-left: 3px solid var(--primary);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .faq-answer {
             color: rgba(255, 255, 255, 0.7);
         }
 
-        .support-container {
-            max-width: 800px;
-            width: 100%;
-        }
-
-        .support-card {
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 3rem 2.5rem;
-            margin-bottom: 2rem;
-            transition: all 0.4s;
-        }
-
-        .support-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(65, 105, 225, 0.3);
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .card-icon {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            filter: drop-shadow(0 0 15px var(--primary));
-        }
-
-        .card-title {
-            font-size: 1.8rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .card-description {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .support-link {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: 2px solid var(--accent);
-            border-radius: 12px;
-            color: white;
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .support-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(65, 105, 225, 0.5);
-        }
-
-        .divider {
-            text-align: center;
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.5);
-            margin: 2rem 0;
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin-top: 2rem;
-            padding: 1rem 2.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: white;
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--accent);
-            transform: translateY(-3px);
-        }
-
         @media (max-width: 768px) {
-            .support-card {
-                padding: 2rem 1.5rem;
+            .header {
+                padding: 1.5rem 2rem;
+            }
+
+            .content {
+                margin: 2rem auto;
             }
         }
     </style>
 </head>
 <body>
-    <canvas id="starfield"></canvas>
-    <div class="nebula-overlay"></div>
+    <div class="header">
+        <div class="logo">KRIPTIC EDITION</div>
+    </div>
 
     <div class="content">
-        <div class="header">
-            <h1 class="title">Support & Contact</h1>
-            <p class="subtitle">Get help or request new features</p>
-        </div>
+        <h1 class="title">Support Center</h1>
 
         <div class="support-container">
             <div class="support-card">
@@ -225,43 +160,110 @@
         </div>
     </div>
 
+        <div class="section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Why won't a movie play?</div>
+                <div class="faq-answer">
+                    Movies are hosted on Google Drive. Make sure you're signed into a Google account and have permission to view the file. Some content may be temporarily unavailable.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Why won't a game launch?</div>
+                <div class="faq-answer">
+                    Games launch in popup windows. Make sure your browser allows popups from this site. Some games require a modern browser with JavaScript enabled.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I download movies or games?</div>
+                <div class="faq-answer">
+                    All content is streamed directly. Downloads are not available to maintain content integrity and platform performance.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How do I vote on polls?</div>
+                <div class="faq-answer">
+                    Navigate to the polls section on the homepage, select your choice, and click "Submit Vote". You can only vote once per poll (tracked via browser storage).
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Is the platform mobile-friendly?</div>
+                <div class="faq-answer">
+                    Yes! Kriptic Edition 3.0 is fully responsive and works on phones, tablets, and desktops. Some games may perform better on desktop browsers.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How often is new content added?</div>
+                <div class="faq-answer">
+                    Content is added regularly based on availability and quality standards. Check back frequently for updates!
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Browser Compatibility</h2>
+            <p>
+                <strong>Recommended:</strong> Chrome, Firefox, Edge (latest versions)<br>
+                <strong>Supported:</strong> Safari, Opera, Brave<br>
+                <strong>Features Required:</strong> JavaScript, Cookies, Local Storage, Popup Windows
+            </p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Known Issues</h2>
+            <p>
+                • Some games may not work on iOS Safari due to browser limitations<br>
+                • Popup blockers may prevent game launches<br>
+                • Google Drive links require Google account sign-in<br>
+                • First-time visitors may experience longer loading times
+            </p>
+        </div>
+    </div>
+
+    <!-- Philosophical Quote Footer -->
+    <div style="position: relative; z-index: 10; text-align: center; padding: 4rem 2rem 2rem; background: rgba(10, 14, 39, 0.95); border-top: 1px solid var(--primary); margin-top: 2rem;">
+        <div style="max-width: 900px; margin: 0 auto; font-style: italic; color: rgba(255, 255, 255, 0.7); font-size: 1.1rem; line-height: 1.8; text-shadow: 0 0 10px var(--primary);">
+            "He who walketh 'mongst the filth of swine, where rot is sacred and madness ferments, knoweth well their plague born secrets. For only in wading through corruption can one hear the truths that clean men fear to speak."
+        </div>
+        <div style="margin-top: 1rem; color: var(--primary); font-size: 0.9rem;">— Roland</div>
+    </div>
+
     <script>
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
+        // Load saved theme and font
+        const savedTheme = localStorage.getItem('kripticTheme') || 'theme-nebula';
+        document.body.className = savedTheme;
+        const savedFont = localStorage.getItem('kripticFont') || 'DripOctober';
+        document.body.style.fontFamily = `'${savedFont}', 'Segoe UI', sans-serif`;
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        // Anti-inspect element protection
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
+                (e.ctrlKey && e.shiftKey && e.keyCode === 74) || (e.ctrlKey && e.shiftKey && e.keyCode === 67) || 
+                (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
 
-        const stars = Array.from({ length: 200 }, () => ({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 2,
-            speed: Math.random() * 0.5
-        }));
-
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'white';
-            
-            stars.forEach(star => {
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-                
-                star.y += star.speed;
-                if (star.y > canvas.height) {
-                    star.y = 0;
-                    star.x = Math.random() * canvas.width;
+        // Safe DevTools detection
+        setInterval(function() {
+            try {
+                if (window.console && typeof console.clear === 'function') {
+                    console.clear();
                 }
-            });
-            
-            requestAnimationFrame(drawStars);
-        }
-        drawStars();
+            } catch (e) {
+                // Silently ignore
+            }
+        }, 2000);
     </script>
 </body>
 </html>
