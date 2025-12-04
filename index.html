@@ -715,8 +715,14 @@
         .poll-loading {
             text-align: center;
             padding: 3rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--primary);
             font-size: 1.2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
         /* Footer */
@@ -916,7 +922,7 @@
             </a>
 
             <!-- Cheats -->
-            <a href="cheats.html" class="nav-card" target="_blank">
+            <a href="Cheats/cheats.html" class="nav-card" target="_blank">
                 <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
@@ -1193,13 +1199,56 @@
 
                 if (error) throw error;
                 
-                // Ensure polls have proper structure
-                polls = (data || []).map(poll => ({
-                    ...poll,
-                    options: Array.isArray(poll.options) ? poll.options : [],
-                    votes: Array.isArray(poll.votes) ? poll.votes : poll.options.map(() => 0)
-                }));
+                console.log('Raw poll data:', data); // Debug log
                 
+                // Ensure polls have proper structure and parse JSON strings
+                polls = (data || []).map(poll => {
+                    // Parse options if it's a string
+                    let parsedOptions = poll.options;
+                    if (typeof poll.options === 'string') {
+                        try {
+                            parsedOptions = JSON.parse(poll.options);
+                        } catch (e) {
+                            console.error('Failed to parse options:', e);
+                            parsedOptions = [];
+                        }
+                    }
+                    
+                    // Parse votes if it's a string
+                    let parsedVotes = poll.votes;
+                    if (typeof poll.votes === 'string') {
+                        try {
+                            parsedVotes = JSON.parse(poll.votes);
+                        } catch (e) {
+                            console.error('Failed to parse votes:', e);
+                            parsedVotes = parsedOptions.map(() => 0);
+                        }
+                    }
+                    
+                    // Ensure arrays are valid
+                    if (!Array.isArray(parsedOptions)) parsedOptions = [];
+                    if (!Array.isArray(parsedVotes)) parsedVotes = parsedOptions.map(() => 0);
+                    
+                    // Make sure votes array matches options length
+                    if (parsedVotes.length !== parsedOptions.length) {
+                        parsedVotes = parsedOptions.map(() => 0);
+                    }
+                    
+                    console.log('Parsed poll:', {
+                        id: poll.id,
+                        question: poll.question,
+                        options: parsedOptions,
+                        votes: parsedVotes
+                    });
+                    
+                    return {
+                        ...poll,
+                        options: parsedOptions,
+                        votes: parsedVotes
+                    };
+                });
+                
+                console.log('Processed polls:', polls); // Debug log
                 renderPolls();
             } catch (error) {
                 showPollMessage('error', 'Failed to load polls: ' + error.message);
@@ -1243,19 +1292,45 @@
             
             try {
                 const poll = polls.find(p => p.id === pollId);
+                
+                console.log('Current poll:', poll);
+                console.log('Voting for option index:', optionIndex);
+                
+                // Create updated votes array
                 const updatedVotes = [...poll.votes];
-                updatedVotes[optionIndex] += 1;
+                updatedVotes[optionIndex] = (updatedVotes[optionIndex] || 0) + 1;
+                
+                console.log('Updated votes array:', updatedVotes);
 
+                // Update in Supabase - ensure it's sent as proper JSONB
                 const { data, error } = await pollSupabase
                     .from('polls')
                     .update({ votes: updatedVotes })
                     .eq('id', pollId)
                     .select();
 
-                if (error) throw error;
+                if (error) {
+                    console.error('Supabase update error:', error);
+                    throw error;
+                }
+                
+                console.log('Update response:', data);
 
+                // Update local poll data
                 const pollIndex = polls.findIndex(p => p.id === pollId);
-                polls[pollIndex] = data[0];
+                if (pollIndex !== -1 && data && data[0]) {
+                    // Parse the response in case it comes back as string
+                    let responseVotes = data[0].votes;
+                    if (typeof responseVotes === 'string') {
+                        responseVotes = JSON.parse(responseVotes);
+                    }
+                    polls[pollIndex] = {
+                        ...data[0],
+                        votes: responseVotes,
+                        options: poll.options // Keep parsed options
+                    };
+                }
+                
                 delete selectedOptions[pollId];
                 localStorage.setItem(`pollVoted_${pollId}`, 'true');
                 showPollMessage('success', 'Vote submitted successfully!');
@@ -1271,8 +1346,17 @@
         function renderPolls() {
             const container = document.getElementById('pollContainer');
             
+            console.log('Rendering polls, count:', polls.length);
+            
             if (polls.length === 0) {
-                container.innerHTML = '<div class="poll-loading">No polls available at this time</div>';
+                container.innerHTML = `
+                    <div class="poll-loading">
+                        <p>No polls available at this time</p>
+                        <p style="font-size: 0.9rem; margin-top: 1rem; color: rgba(255,255,255,0.5);">
+                            Polls will appear here once added to the database
+                        </p>
+                    </div>
+                `;
                 return;
             }
 
@@ -1334,12 +1418,29 @@
         window.submitPollVote = submitPollVote;
 
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing...');
+            
             createStarfield();
+            
+            // Check if Supabase is available
+            if (!window.supabase) {
+                console.error('Supabase library not loaded!');
+                showPollMessage('error', 'Failed to load polling system. Please refresh the page.');
+                return;
+            }
+            
+            console.log('Supabase available, initializing...');
             initializePollSupabase();
-            fetchPolls();
+            
+            // Give Supabase a moment to initialize, then fetch polls
+            setTimeout(() => {
+                console.log('Fetching polls...');
+                fetchPolls();
+            }, 500);
             
             setInterval(() => {
                 if (votingInProgress.size === 0) {
+                    console.log('Auto-refreshing polls...');
                     fetchPolls();
                 }
             }, 30000);
