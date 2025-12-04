@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kriptic Edition 3.0 | Astronomy Hub</title>
+    <title>Kriptic Edition 3.0 | Premium Entertainment Hub</title>
     <meta name="description" content="Professional astronomy-themed entertainment platform with movies, games, and community features.">
     
     <!-- Supabase Client -->
@@ -348,6 +348,39 @@
         }
 
         .font-dropdown option {
+            background: #1a1a1a;
+            color: white;
+            padding: 0.5rem;
+        }
+
+        .background-selector {
+            margin-top: 0.5rem;
+        }
+
+        .background-dropdown {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .background-dropdown:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .background-dropdown:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(var(--accent), 0.3);
+        }
+
+        .background-dropdown option {
             background: #1a1a1a;
             color: white;
             padding: 0.5rem;
@@ -1138,11 +1171,30 @@
                 <option value="BlackDahlia">Black Dahlia</option>
             </select>
         </div>
+        <span class="control-label">Background Style</span>
+        <div class="background-selector">
+            <select class="background-dropdown" id="backgroundSelector" aria-label="Select Background">
+                <option value="stars">Starfield (Default)</option>
+                <option value="rain">Rainy Day</option>
+                <option value="rocket">Rocket Ship</option>
+                <option value="snow">Snowfall</option>
+                <option value="matrix">Matrix Code</option>
+                <option value="nebula">Nebula Cloud</option>
+                <option value="pixel">Pixel Art</option>
+                <option value="aurora">Aurora Waves</option>
+                <option value="meteor">Meteor Shower</option>
+                <option value="fireflies">Fireflies Night</option>
+                <option value="underwater">Underwater</option>
+                <option value="lightning">Lightning Storm</option>
+                <option value="cherry">Cherry Blossom</option>
+                <option value="vortex">Cosmic Vortex</option>
+            </select>
+        </div>
     </div>
 
     <!-- Header -->
     <header class="header">
-        <div class="logo">KRIPTIC EDITION</div>
+        <div class="logo">ASTRONOMY HUB</div>
         <div class="visitor-badge">
             <div>
                 <div class="visitor-count" id="visitorCount">0</div>
@@ -1153,7 +1205,7 @@
 
     <!-- Hero -->
     <section class="hero">
-        <h1 class="hero-title">ASTRONOMY HUB</h1>
+        <h1 class="hero-title">KRIPTIC EDITION 3.0</h1>
         <p class="hero-subtitle">VERSION 3.0</p>
         <p class="hero-description">
             Your professional gateway to entertainment, games, and community interaction. 
@@ -1352,6 +1404,8 @@
         // ===== STARFIELD =====
         function createStarfield() {
             const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = '';
             const starCount = 150;
 
             for (let i = 0; i < starCount; i++) {
@@ -1370,6 +1424,1091 @@
                 star.dataset.depth = depth;
                 
                 starfield.appendChild(star);
+            }
+            
+            // Show orbital planet for stars only
+            document.querySelector('.orbital-planet').style.display = 'block';
+        }
+
+        // ===== RAINY DAY BACKGROUND =====
+        function createRain() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add clouds
+            for (let i = 0; i < 8; i++) {
+                const cloud = document.createElement('div');
+                cloud.style.position = 'absolute';
+                cloud.style.width = Math.random() * 150 + 100 + 'px';
+                cloud.style.height = '60px';
+                cloud.style.background = 'rgba(40, 50, 70, 0.6)';
+                cloud.style.borderRadius = '50px';
+                cloud.style.left = Math.random() * 100 + '%';
+                cloud.style.top = Math.random() * 30 + '%';
+                cloud.style.filter = 'blur(15px)';
+                cloud.style.animation = `cloudDrift ${Math.random() * 20 + 30}s linear infinite`;
+                starfield.appendChild(cloud);
+            }
+
+            // Add rain drops
+            for (let i = 0; i < 150; i++) {
+                const drop = document.createElement('div');
+                drop.style.position = 'absolute';
+                drop.style.width = '2px';
+                drop.style.height = Math.random() * 30 + 15 + 'px';
+                drop.style.background = 'linear-gradient(180deg, rgba(150,180,255,0.8), rgba(100,150,255,0.2))';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.top = -Math.random() * 100 + '%';
+                drop.style.animation = `rainFall ${Math.random() * 0.8 + 0.4}s linear infinite`;
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                drop.style.opacity = Math.random() * 0.4 + 0.4;
+                starfield.appendChild(drop);
+            }
+
+            // Add splash effects
+            for (let i = 0; i < 20; i++) {
+                const splash = document.createElement('div');
+                splash.style.position = 'absolute';
+                splash.style.width = '4px';
+                splash.style.height = '4px';
+                splash.style.borderRadius = '50%';
+                splash.style.background = 'rgba(150,180,255,0.5)';
+                splash.style.left = Math.random() * 100 + '%';
+                splash.style.bottom = '0';
+                splash.style.animation = `splash ${Math.random() * 1 + 0.5}s ease-out infinite`;
+                splash.style.animationDelay = Math.random() * 2 + 's';
+                starfield.appendChild(splash);
+            }
+
+            if (!document.getElementById('rainAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'rainAnimation';
+                style.textContent = `
+                    @keyframes rainFall {
+                        0% { transform: translateY(-100px); opacity: 1; }
+                        100% { transform: translateY(100vh); opacity: 0.2; }
+                    }
+                    @keyframes cloudDrift {
+                        0% { transform: translateX(-150px); }
+                        100% { transform: translateX(calc(100vw + 150px)); }
+                    }
+                    @keyframes splash {
+                        0% { transform: translateY(0) scale(0); opacity: 1; }
+                        100% { transform: translateY(-20px) scale(1.5); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== ROCKET SHIP BACKGROUND =====
+        function createRocket() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'radial-gradient(circle at 50% 50%, #0a0e27 0%, #000000 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add twinkling stars
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.background = 'white';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+                star.style.animation = `twinkle ${Math.random() * 3 + 1}s ease-in-out infinite`;
+                star.style.boxShadow = '0 0 10px rgba(255,255,255,0.8)';
+                starfield.appendChild(star);
+            }
+
+            // Add planets
+            const planets = ['🪐', '🌍', '🌙'];
+            for (let i = 0; i < 3; i++) {
+                const planet = document.createElement('div');
+                planet.innerHTML = planets[i];
+                planet.style.position = 'absolute';
+                planet.style.fontSize = Math.random() * 40 + 30 + 'px';
+                planet.style.left = Math.random() * 80 + 10 + '%';
+                planet.style.top = Math.random() * 60 + 10 + '%';
+                planet.style.opacity = 0.6;
+                planet.style.animation = `floatPlanet ${Math.random() * 10 + 15}s ease-in-out infinite`;
+                starfield.appendChild(planet);
+            }
+
+            // Add main rocket
+            const rocket = document.createElement('div');
+            rocket.innerHTML = '🚀';
+            rocket.style.position = 'absolute';
+            rocket.style.fontSize = '100px';
+            rocket.style.left = '50%';
+            rocket.style.top = '50%';
+            rocket.style.transform = 'translate(-50%, -50%) rotate(-45deg)';
+            rocket.style.animation = 'rocketFloat 4s ease-in-out infinite';
+            rocket.style.filter = 'drop-shadow(0 0 30px rgba(255,150,100,0.8))';
+            rocket.style.zIndex = '5';
+            starfield.appendChild(rocket);
+
+            // Add rocket trail
+            for (let i = 0; i < 5; i++) {
+                const trail = document.createElement('div');
+                trail.style.position = 'absolute';
+                trail.style.width = Math.random() * 15 + 10 + 'px';
+                trail.style.height = Math.random() * 15 + 10 + 'px';
+                trail.style.borderRadius = '50%';
+                trail.style.background = `rgba(255, ${150 - i * 30}, 50, ${0.6 - i * 0.1})`;
+                trail.style.left = '50%';
+                trail.style.top = '50%';
+                trail.style.filter = 'blur(5px)';
+                trail.style.animation = `rocketTrail${i} 2s ease-out infinite`;
+                starfield.appendChild(trail);
+            }
+
+            if (!document.getElementById('rocketAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'rocketAnimation';
+                style.textContent = `
+                    @keyframes rocketFloat {
+                        0%, 100% { transform: translate(-50%, -50%) rotate(-45deg) translateY(0); }
+                        50% { transform: translate(-50%, -50%) rotate(-45deg) translateY(-30px); }
+                    }
+                    @keyframes floatPlanet {
+                        0%, 100% { transform: translateY(0) rotate(0deg); }
+                        50% { transform: translateY(-20px) rotate(10deg); }
+                    }
+                    @keyframes rocketTrail0 {
+                        0% { transform: translate(20px, 20px) scale(1); opacity: 0.6; }
+                        100% { transform: translate(80px, 80px) scale(0.3); opacity: 0; }
+                    }
+                    @keyframes rocketTrail1 {
+                        0% { transform: translate(20px, 20px) scale(1); opacity: 0.5; }
+                        100% { transform: translate(70px, 70px) scale(0.3); opacity: 0; }
+                    }
+                    @keyframes rocketTrail2 {
+                        0% { transform: translate(20px, 20px) scale(1); opacity: 0.4; }
+                        100% { transform: translate(60px, 60px) scale(0.3); opacity: 0; }
+                    }
+                    @keyframes rocketTrail3 {
+                        0% { transform: translate(20px, 20px) scale(1); opacity: 0.3; }
+                        100% { transform: translate(50px, 50px) scale(0.3); opacity: 0; }
+                    }
+                    @keyframes rocketTrail4 {
+                        0% { transform: translate(20px, 20px) scale(1); opacity: 0.2; }
+                        100% { transform: translate(40px, 40px) scale(0.3); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== SNOWFALL BACKGROUND =====
+        function createSnow() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #1a2a3a 0%, #2d3e50 50%, #34495e 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add snow layers for depth
+            for (let layer = 0; layer < 3; layer++) {
+                for (let i = 0; i < 40; i++) {
+                    const flake = document.createElement('div');
+                    flake.innerHTML = '❄';
+                    flake.style.position = 'absolute';
+                    flake.style.color = 'white';
+                    const size = Math.random() * 15 + 10 + (layer * 5);
+                    flake.style.fontSize = size + 'px';
+                    flake.style.left = Math.random() * 100 + '%';
+                    flake.style.top = -Math.random() * 100 + '%';
+                    flake.style.opacity = (Math.random() * 0.4 + 0.4) - (layer * 0.1);
+                    flake.style.animation = `snowFall ${Math.random() * 3 + 3 + layer}s linear infinite`;
+                    flake.style.animationDelay = Math.random() * 5 + 's';
+                    flake.style.textShadow = '0 0 5px rgba(255,255,255,0.5)';
+                    flake.style.zIndex = 3 - layer;
+                    starfield.appendChild(flake);
+                }
+            }
+
+            // Add ground snow
+            const ground = document.createElement('div');
+            ground.style.position = 'absolute';
+            ground.style.bottom = '0';
+            ground.style.left = '0';
+            ground.style.width = '100%';
+            ground.style.height = '100px';
+            ground.style.background = 'linear-gradient(180deg, transparent, rgba(255,255,255,0.3))';
+            ground.style.filter = 'blur(10px)';
+            starfield.appendChild(ground);
+
+            if (!document.getElementById('snowAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'snowAnimation';
+                style.textContent = `
+                    @keyframes snowFall {
+                        0% { 
+                            transform: translateY(-100px) translateX(0) rotate(0deg); 
+                            opacity: 1; 
+                        }
+                        100% { 
+                            transform: translateY(100vh) translateX(100px) rotate(360deg); 
+                            opacity: 0.8; 
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== MATRIX CODE BACKGROUND =====
+        function createMatrix() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = '#000000';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            const columns = 50;
+            const chars = 'ｦｱｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.style.position = 'absolute';
+                column.style.left = (i * (100 / columns)) + '%';
+                column.style.top = '0';
+                column.style.width = '20px';
+                column.style.fontSize = '16px';
+                column.style.fontFamily = 'monospace';
+                column.style.fontWeight = 'bold';
+                column.style.whiteSpace = 'pre';
+                column.style.lineHeight = '1.2';
+                column.style.animation = `matrixFall ${Math.random() * 4 + 3}s linear infinite`;
+                column.style.animationDelay = Math.random() * 5 + 's';
+                
+                // Create column text with gradient
+                let text = '';
+                const height = Math.floor(Math.random() * 20) + 10;
+                for (let j = 0; j < height; j++) {
+                    text += chars.charAt(Math.floor(Math.random() * chars.length)) + '\n';
+                }
+                column.textContent = text;
+                
+                // Gradient effect
+                column.style.background = 'linear-gradient(180deg, transparent, #0f0 20%, #0f0 80%, transparent)';
+                column.style.webkitBackgroundClip = 'text';
+                column.style.backgroundClip = 'text';
+                column.style.color = 'transparent';
+                column.style.textShadow = '0 0 8px #0f0';
+                
+                starfield.appendChild(column);
+            }
+
+            // Add glowing highlights
+            for (let i = 0; i < 10; i++) {
+                const glow = document.createElement('div');
+                glow.style.position = 'absolute';
+                glow.style.width = '2px';
+                glow.style.height = '100px';
+                glow.style.background = 'linear-gradient(180deg, transparent, #0f0, transparent)';
+                glow.style.left = Math.random() * 100 + '%';
+                glow.style.top = Math.random() * 100 + '%';
+                glow.style.filter = 'blur(2px)';
+                glow.style.opacity = '0.8';
+                glow.style.animation = `matrixGlow ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                starfield.appendChild(glow);
+            }
+
+            if (!document.getElementById('matrixAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'matrixAnimation';
+                style.textContent = `
+                    @keyframes matrixFall {
+                        0% { transform: translateY(-100%); opacity: 0; }
+                        10% { opacity: 1; }
+                        90% { opacity: 1; }
+                        100% { transform: translateY(100vh); opacity: 0; }
+                    }
+                    @keyframes matrixGlow {
+                        0%, 100% { opacity: 0.3; }
+                        50% { opacity: 0.8; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== NEBULA CLOUD BACKGROUND =====
+        function createNebula() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'radial-gradient(circle at 30% 50%, #1a0033 0%, #000000 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+
+            // Add large nebula clouds
+            const colors = [
+                'rgba(138, 43, 226, 0.4)', // Purple
+                'rgba(255, 20, 147, 0.3)', // Pink
+                'rgba(0, 191, 255, 0.35)', // Blue
+                'rgba(255, 140, 0, 0.25)'  // Orange
+            ];
+
+            for (let i = 0; i < 6; i++) {
+                const cloud = document.createElement('div');
+                cloud.style.position = 'absolute';
+                cloud.style.width = Math.random() * 400 + 300 + 'px';
+                cloud.style.height = Math.random() * 400 + 300 + 'px';
+                cloud.style.borderRadius = '50%';
+                cloud.style.background = `radial-gradient(circle, ${colors[i % colors.length]}, transparent 70%)`;
+                cloud.style.left = (Math.random() * 120 - 10) + '%';
+                cloud.style.top = (Math.random() * 120 - 10) + '%';
+                cloud.style.filter = 'blur(60px)';
+                cloud.style.animation = `nebulaFloat ${Math.random() * 15 + 15}s ease-in-out infinite`;
+                cloud.style.animationDelay = Math.random() * 5 + 's';
+                starfield.appendChild(cloud);
+            }
+
+            // Add bright stars
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.background = 'white';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+                star.style.boxShadow = `0 0 ${Math.random() * 10 + 5}px rgba(255,255,255,0.8)`;
+                star.style.animation = `twinkle ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                starfield.appendChild(star);
+            }
+
+            if (!document.getElementById('nebulaAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'nebulaAnimation';
+                style.textContent = `
+                    @keyframes nebulaFloat {
+                        0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+                        33% { transform: translate(30px, -20px) scale(1.1) rotate(5deg); }
+                        66% { transform: translate(-20px, 30px) scale(0.9) rotate(-5deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== PIXEL ART BACKGROUND =====
+        function createPixel() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            const pixelSize = 25;
+            const cols = Math.ceil(window.innerWidth / pixelSize);
+            const rows = Math.ceil(window.innerHeight / pixelSize);
+            const colors = ['#ff006e', '#8338ec', '#3a86ff', '#06ffa5', '#ffbe0b', '#fb5607'];
+
+            // Create grid pattern
+            for (let i = 0; i < 150; i++) {
+                const pixel = document.createElement('div');
+                pixel.style.position = 'absolute';
+                pixel.style.width = pixelSize + 'px';
+                pixel.style.height = pixelSize + 'px';
+                pixel.style.left = Math.floor(Math.random() * cols) * pixelSize + 'px';
+                pixel.style.top = Math.floor(Math.random() * rows) * pixelSize + 'px';
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                pixel.style.background = color;
+                pixel.style.opacity = Math.random() * 0.4 + 0.1;
+                pixel.style.boxShadow = `0 0 20px ${color}`;
+                pixel.style.animation = `pixelPulse ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                pixel.style.animationDelay = Math.random() * 3 + 's';
+                starfield.appendChild(pixel);
+            }
+
+            // Add pixel art shapes
+            const shapes = ['▪', '▫', '◼', '◻', '●', '○'];
+            for (let i = 0; i < 30; i++) {
+                const shape = document.createElement('div');
+                shape.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+                shape.style.position = 'absolute';
+                shape.style.fontSize = Math.random() * 40 + 20 + 'px';
+                shape.style.color = colors[Math.floor(Math.random() * colors.length)];
+                shape.style.left = Math.random() * 100 + '%';
+                shape.style.top = Math.random() * 100 + '%';
+                shape.style.opacity = Math.random() * 0.5 + 0.3;
+                shape.style.animation = `pixelFloat ${Math.random() * 5 + 5}s ease-in-out infinite`;
+                starfield.appendChild(shape);
+            }
+
+            if (!document.getElementById('pixelAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'pixelAnimation';
+                style.textContent = `
+                    @keyframes pixelPulse {
+                        0%, 100% { opacity: 0.1; transform: scale(1); }
+                        50% { opacity: 0.5; transform: scale(1.2); }
+                    }
+                    @keyframes pixelFloat {
+                        0%, 100% { transform: translateY(0); }
+                        50% { transform: translateY(-20px); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== AURORA WAVES BACKGROUND =====
+        function createAurora() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #0a1128 0%, #001f54 50%, #034078 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+
+            // Add stars first
+            for (let i = 0; i < 80; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 2 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.background = 'white';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 60 + '%';
+                star.style.opacity = Math.random() * 0.7 + 0.3;
+                star.style.animation = `twinkle ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                starfield.appendChild(star);
+            }
+
+            // Add multiple aurora layers
+            const auroraColors = [
+                'rgba(0, 255, 150, 0.3)',
+                'rgba(100, 255, 200, 0.25)',
+                'rgba(0, 200, 255, 0.2)',
+                'rgba(150, 100, 255, 0.25)',
+                'rgba(255, 100, 200, 0.2)'
+            ];
+
+            for (let i = 0; i < 5; i++) {
+                const wave = document.createElement('div');
+                wave.style.position = 'absolute';
+                wave.style.width = '200%';
+                wave.style.height = '400px';
+                wave.style.left = '-50%';
+                wave.style.top = (i * 15 + 10) + '%';
+                wave.style.background = `linear-gradient(90deg, 
+                    transparent 0%, 
+                    ${auroraColors[i]} 25%, 
+                    ${auroraColors[(i + 1) % auroraColors.length]} 50%, 
+                    ${auroraColors[(i + 2) % auroraColors.length]} 75%, 
+                    transparent 100%)`;
+                wave.style.filter = 'blur(40px)';
+                wave.style.animation = `auroraWave ${10 + i * 2}s ease-in-out infinite`;
+                wave.style.animationDelay = i * 1.5 + 's';
+                wave.style.opacity = '0.8';
+                starfield.appendChild(wave);
+            }
+
+            // Add shimmer particles
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 3 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.borderRadius = '50%';
+                particle.style.background = auroraColors[Math.floor(Math.random() * auroraColors.length)];
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 80 + '%';
+                particle.style.filter = 'blur(2px)';
+                particle.style.animation = `auroraShimmer ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                starfield.appendChild(particle);
+            }
+
+            if (!document.getElementById('auroraAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'auroraAnimation';
+                style.textContent = `
+                    @keyframes auroraWave {
+                        0% { transform: translateX(0) skewY(0deg); opacity: 0.8; }
+                        50% { transform: translateX(-25%) skewY(3deg); opacity: 0.6; }
+                        100% { transform: translateX(-50%) skewY(0deg); opacity: 0.8; }
+                    }
+                    @keyframes auroraShimmer {
+                        0%, 100% { opacity: 0.3; transform: scale(1); }
+                        50% { opacity: 0.8; transform: scale(1.5); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== METEOR SHOWER BACKGROUND =====
+        function createMeteor() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'radial-gradient(circle at 50% 50%, #0f1419 0%, #000000 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add background stars
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 2 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.background = 'white';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.opacity = Math.random() * 0.7 + 0.3;
+                star.style.animation = `twinkle ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                starfield.appendChild(star);
+            }
+            
+            // Add meteors
+            for (let i = 0; i < 8; i++) {
+                const meteor = document.createElement('div');
+                meteor.style.position = 'absolute';
+                meteor.style.width = Math.random() * 100 + 80 + 'px';
+                meteor.style.height = '3px';
+                meteor.style.background = 'linear-gradient(90deg, transparent, rgba(255,255,255,0.9), rgba(100,150,255,0.6))';
+                meteor.style.left = Math.random() * 100 + '%';
+                meteor.style.top = Math.random() * 80 + '%';
+                meteor.style.transform = 'rotate(-45deg)';
+                meteor.style.boxShadow = '0 0 20px rgba(100,150,255,0.8)';
+                meteor.style.animation = `meteorFall ${Math.random() * 2 + 1.5}s linear infinite`;
+                meteor.style.animationDelay = Math.random() * 5 + 's';
+                starfield.appendChild(meteor);
+            }
+            
+            // Add meteor trails
+            for (let i = 0; i < 15; i++) {
+                const trail = document.createElement('div');
+                trail.style.position = 'absolute';
+                trail.style.width = Math.random() * 60 + 40 + 'px';
+                trail.style.height = '2px';
+                trail.style.background = 'linear-gradient(90deg, transparent, rgba(255,200,150,0.5), transparent)';
+                trail.style.left = Math.random() * 100 + '%';
+                trail.style.top = Math.random() * 100 + '%';
+                trail.style.transform = 'rotate(-45deg)';
+                trail.style.filter = 'blur(1px)';
+                trail.style.animation = `meteorTrail ${Math.random() * 3 + 2}s ease-out infinite`;
+                trail.style.animationDelay = Math.random() * 6 + 's';
+                starfield.appendChild(trail);
+            }
+
+            if (!document.getElementById('meteorAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'meteorAnimation';
+                style.textContent = `
+                    @keyframes meteorFall {
+                        0% { transform: rotate(-45deg) translateX(-100px) translateY(-100px); opacity: 0; }
+                        10% { opacity: 1; }
+                        90% { opacity: 1; }
+                        100% { transform: rotate(-45deg) translateX(150vw) translateY(150vh); opacity: 0; }
+                    }
+                    @keyframes meteorTrail {
+                        0% { opacity: 0; transform: rotate(-45deg) scale(0); }
+                        50% { opacity: 0.6; transform: rotate(-45deg) scale(1); }
+                        100% { opacity: 0; transform: rotate(-45deg) scale(0.5); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== FIREFLIES BACKGROUND =====
+        function createFireflies() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #1a1a2e 0%, #0f1419 50%, #0a0e12 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add grass silhouettes
+            for (let i = 0; i < 20; i++) {
+                const grass = document.createElement('div');
+                grass.style.position = 'absolute';
+                grass.style.bottom = '0';
+                grass.style.left = i * 5 + '%';
+                grass.style.width = '2px';
+                grass.style.height = Math.random() * 80 + 40 + 'px';
+                grass.style.background = 'rgba(30, 50, 30, 0.6)';
+                grass.style.transform = 'rotate(' + (Math.random() * 10 - 5) + 'deg)';
+                starfield.appendChild(grass);
+            }
+            
+            // Add fireflies
+            for (let i = 0; i < 40; i++) {
+                const firefly = document.createElement('div');
+                firefly.style.position = 'absolute';
+                firefly.style.width = Math.random() * 4 + 3 + 'px';
+                firefly.style.height = firefly.style.width;
+                firefly.style.borderRadius = '50%';
+                firefly.style.background = 'rgba(255, 230, 100, 0.9)';
+                firefly.style.boxShadow = '0 0 20px rgba(255, 230, 100, 0.8), 0 0 40px rgba(255, 230, 100, 0.4)';
+                firefly.style.left = Math.random() * 100 + '%';
+                firefly.style.top = Math.random() * 80 + 10 + '%';
+                firefly.style.animation = `fireflyFloat${i % 3} ${Math.random() * 4 + 3}s ease-in-out infinite`;
+                firefly.style.animationDelay = Math.random() * 4 + 's';
+                starfield.appendChild(firefly);
+                
+                // Add glow pulse
+                const glow = document.createElement('div');
+                glow.style.position = 'absolute';
+                glow.style.width = '15px';
+                glow.style.height = '15px';
+                glow.style.borderRadius = '50%';
+                glow.style.background = 'radial-gradient(circle, rgba(255,230,100,0.4), transparent)';
+                glow.style.left = Math.random() * 100 + '%';
+                glow.style.top = Math.random() * 80 + 10 + '%';
+                glow.style.animation = `fireflyGlow ${Math.random() * 2 + 1}s ease-in-out infinite`;
+                glow.style.animationDelay = Math.random() * 3 + 's';
+                starfield.appendChild(glow);
+            }
+
+            if (!document.getElementById('fireflyAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'fireflyAnimation';
+                style.textContent = `
+                    @keyframes fireflyFloat0 {
+                        0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+                        25% { transform: translate(30px, -20px); opacity: 1; }
+                        50% { transform: translate(-20px, -40px); opacity: 0.4; }
+                        75% { transform: translate(20px, -10px); opacity: 0.9; }
+                    }
+                    @keyframes fireflyFloat1 {
+                        0%, 100% { transform: translate(0, 0); opacity: 0.4; }
+                        33% { transform: translate(-25px, -30px); opacity: 1; }
+                        66% { transform: translate(35px, -15px); opacity: 0.5; }
+                    }
+                    @keyframes fireflyFloat2 {
+                        0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+                        50% { transform: translate(-15px, -25px); opacity: 1; }
+                    }
+                    @keyframes fireflyGlow {
+                        0%, 100% { opacity: 0; transform: scale(0.5); }
+                        50% { opacity: 0.6; transform: scale(1.5); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== UNDERWATER BACKGROUND =====
+        function createUnderwater() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #001f3f 0%, #003d5c 50%, #00152a 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add light rays from surface
+            for (let i = 0; i < 6; i++) {
+                const ray = document.createElement('div');
+                ray.style.position = 'absolute';
+                ray.style.top = '-50%';
+                ray.style.left = i * 16 + '%';
+                ray.style.width = '80px';
+                ray.style.height = '200%';
+                ray.style.background = 'linear-gradient(180deg, rgba(100,180,255,0.15), transparent 70%)';
+                ray.style.transform = 'rotate(' + (Math.random() * 10 - 5) + 'deg)';
+                ray.style.animation = `waterRay ${Math.random() * 8 + 10}s ease-in-out infinite`;
+                ray.style.animationDelay = i * 1.5 + 's';
+                ray.style.filter = 'blur(10px)';
+                starfield.appendChild(ray);
+            }
+            
+            // Add bubbles
+            for (let i = 0; i < 30; i++) {
+                const bubble = document.createElement('div');
+                bubble.style.position = 'absolute';
+                bubble.style.width = Math.random() * 15 + 5 + 'px';
+                bubble.style.height = bubble.style.width;
+                bubble.style.borderRadius = '50%';
+                bubble.style.background = 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), rgba(100,180,255,0.1))';
+                bubble.style.border = '1px solid rgba(255,255,255,0.2)';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.bottom = -Math.random() * 100 + '%';
+                bubble.style.animation = `bubbleRise ${Math.random() * 4 + 4}s linear infinite`;
+                bubble.style.animationDelay = Math.random() * 5 + 's';
+                starfield.appendChild(bubble);
+            }
+            
+            // Add fish silhouettes
+            for (let i = 0; i < 8; i++) {
+                const fish = document.createElement('div');
+                fish.innerHTML = '🐟';
+                fish.style.position = 'absolute';
+                fish.style.fontSize = Math.random() * 30 + 20 + 'px';
+                fish.style.left = Math.random() * 100 + '%';
+                fish.style.top = Math.random() * 80 + 10 + '%';
+                fish.style.opacity = 0.4;
+                fish.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg)';
+                fish.style.animation = `fishSwim${i % 2} ${Math.random() * 10 + 8}s ease-in-out infinite`;
+                starfield.appendChild(fish);
+            }
+            
+            // Add floating particles
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 2 + 1 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.borderRadius = '50%';
+                particle.style.background = 'rgba(100,180,255,0.3)';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animation = `waterParticle ${Math.random() * 15 + 10}s linear infinite`;
+                starfield.appendChild(particle);
+            }
+
+            if (!document.getElementById('underwaterAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'underwaterAnimation';
+                style.textContent = `
+                    @keyframes waterRay {
+                        0%, 100% { opacity: 0.2; transform: rotate(2deg); }
+                        50% { opacity: 0.4; transform: rotate(-2deg); }
+                    }
+                    @keyframes bubbleRise {
+                        0% { transform: translateY(0) translateX(0); opacity: 0.4; }
+                        50% { transform: translateY(-50vh) translateX(20px); opacity: 0.7; }
+                        100% { transform: translateY(-100vh) translateX(-10px); opacity: 0; }
+                    }
+                    @keyframes fishSwim0 {
+                        0%, 100% { transform: translateX(0) scaleX(1); }
+                        50% { transform: translateX(30vw) scaleX(-1); }
+                    }
+                    @keyframes fishSwim1 {
+                        0%, 100% { transform: translateX(0) translateY(0) scaleX(-1); }
+                        50% { transform: translateX(-40vw) translateY(-20px) scaleX(1); }
+                    }
+                    @keyframes waterParticle {
+                        0% { transform: translateY(0) translateX(0); opacity: 0.2; }
+                        100% { transform: translateY(50px) translateX(30px); opacity: 0.5; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== LIGHTNING STORM BACKGROUND =====
+        function createLightning() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #0a0a0f 0%, #1a1a2e 50%, #2a2a3e 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add storm clouds
+            for (let i = 0; i < 12; i++) {
+                const cloud = document.createElement('div');
+                cloud.style.position = 'absolute';
+                cloud.style.width = Math.random() * 200 + 150 + 'px';
+                cloud.style.height = '80px';
+                cloud.style.background = 'rgba(20, 20, 30, 0.8)';
+                cloud.style.borderRadius = '50px';
+                cloud.style.left = Math.random() * 100 + '%';
+                cloud.style.top = Math.random() * 40 + '%';
+                cloud.style.filter = 'blur(20px)';
+                cloud.style.animation = `stormDrift ${Math.random() * 30 + 40}s linear infinite`;
+                starfield.appendChild(cloud);
+            }
+            
+            // Add lightning bolts
+            for (let i = 0; i < 5; i++) {
+                const lightning = document.createElement('div');
+                lightning.style.position = 'absolute';
+                lightning.style.width = '3px';
+                lightning.style.height = Math.random() * 200 + 150 + 'px';
+                lightning.style.background = 'linear-gradient(180deg, rgba(200,220,255,0.9), rgba(100,150,255,0.5), transparent)';
+                lightning.style.boxShadow = '0 0 10px rgba(200,220,255,0.8), 0 0 20px rgba(100,150,255,0.6)';
+                lightning.style.left = Math.random() * 100 + '%';
+                lightning.style.top = Math.random() * 30 + '%';
+                lightning.style.animation = `lightningStrike ${Math.random() * 2 + 1}s ease-out infinite`;
+                lightning.style.animationDelay = Math.random() * 8 + 's';
+                lightning.style.transformOrigin = 'top';
+                starfield.appendChild(lightning);
+                
+                // Add branching
+                const branch = document.createElement('div');
+                branch.style.position = 'absolute';
+                branch.style.width = '2px';
+                branch.style.height = Math.random() * 60 + 40 + 'px';
+                branch.style.background = 'linear-gradient(180deg, rgba(200,220,255,0.6), transparent)';
+                branch.style.boxShadow = '0 0 8px rgba(200,220,255,0.5)';
+                branch.style.left = Math.random() * 100 + '%';
+                branch.style.top = Math.random() * 40 + '%';
+                branch.style.transform = 'rotate(' + (Math.random() * 60 - 30) + 'deg)';
+                branch.style.animation = `lightningBranch ${Math.random() * 2 + 1}s ease-out infinite`;
+                branch.style.animationDelay = (Math.random() * 8 + 0.1) + 's';
+                starfield.appendChild(branch);
+            }
+            
+            // Add flash effect
+            for (let i = 0; i < 3; i++) {
+                const flash = document.createElement('div');
+                flash.style.position = 'absolute';
+                flash.style.width = '100%';
+                flash.style.height = '100%';
+                flash.style.background = 'rgba(200,220,255,0.1)';
+                flash.style.pointerEvents = 'none';
+                flash.style.animation = `lightningFlash ${Math.random() * 3 + 2}s ease-out infinite`;
+                flash.style.animationDelay = Math.random() * 10 + 's';
+                starfield.appendChild(flash);
+            }
+            
+            // Add rain
+            for (let i = 0; i < 100; i++) {
+                const drop = document.createElement('div');
+                drop.style.position = 'absolute';
+                drop.style.width = '1px';
+                drop.style.height = Math.random() * 20 + 10 + 'px';
+                drop.style.background = 'rgba(150,170,200,0.3)';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.top = -Math.random() * 100 + '%';
+                drop.style.animation = `rainFall ${Math.random() * 0.5 + 0.3}s linear infinite`;
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                starfield.appendChild(drop);
+            }
+
+            if (!document.getElementById('lightningAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'lightningAnimation';
+                style.textContent = `
+                    @keyframes lightningStrike {
+                        0%, 10%, 100% { opacity: 0; transform: scaleY(0); }
+                        5% { opacity: 1; transform: scaleY(1); }
+                        7% { opacity: 0.8; transform: scaleY(1); }
+                    }
+                    @keyframes lightningBranch {
+                        0%, 10%, 100% { opacity: 0; }
+                        5% { opacity: 0.6; }
+                    }
+                    @keyframes lightningFlash {
+                        0%, 90%, 100% { opacity: 0; }
+                        5% { opacity: 1; }
+                        7% { opacity: 0.3; }
+                    }
+                    @keyframes stormDrift {
+                        0% { transform: translateX(-100px); }
+                        100% { transform: translateX(calc(100vw + 100px)); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== CHERRY BLOSSOM BACKGROUND =====
+        function createCherryBlossom() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #ffe5ec 0%, #ffc2d1 50%, #ffb3c6 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add tree branches silhouette
+            for (let i = 0; i < 8; i++) {
+                const branch = document.createElement('div');
+                branch.style.position = 'absolute';
+                branch.style.width = Math.random() * 200 + 100 + 'px';
+                branch.style.height = '4px';
+                branch.style.background = 'rgba(60, 40, 30, 0.6)';
+                branch.style.left = Math.random() * 80 + '%';
+                branch.style.top = Math.random() * 40 + '%';
+                branch.style.transform = 'rotate(' + (Math.random() * 30 - 15) + 'deg)';
+                branch.style.borderRadius = '2px';
+                starfield.appendChild(branch);
+            }
+            
+            // Add falling petals
+            for (let i = 0; i < 50; i++) {
+                const petal = document.createElement('div');
+                petal.innerHTML = '🌸';
+                petal.style.position = 'absolute';
+                petal.style.fontSize = Math.random() * 20 + 15 + 'px';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.top = -Math.random() * 50 + '%';
+                petal.style.opacity = Math.random() * 0.5 + 0.4;
+                petal.style.animation = `petalFall ${Math.random() * 8 + 6}s linear infinite`;
+                petal.style.animationDelay = Math.random() * 8 + 's';
+                starfield.appendChild(petal);
+            }
+            
+            // Add wind swirls (light particles)
+            for (let i = 0; i < 30; i++) {
+                const swirl = document.createElement('div');
+                swirl.style.position = 'absolute';
+                swirl.style.width = Math.random() * 3 + 1 + 'px';
+                swirl.style.height = Math.random() * 30 + 20 + 'px';
+                swirl.style.background = 'rgba(255, 192, 203, 0.3)';
+                swirl.style.borderRadius = '50%';
+                swirl.style.left = Math.random() * 100 + '%';
+                swirl.style.top = Math.random() * 100 + '%';
+                swirl.style.filter = 'blur(2px)';
+                swirl.style.animation = `windSwirl ${Math.random() * 6 + 4}s ease-in-out infinite`;
+                swirl.style.animationDelay = Math.random() * 5 + 's';
+                starfield.appendChild(swirl);
+            }
+
+            if (!document.getElementById('cherryBlossomAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'cherryBlossomAnimation';
+                style.textContent = `
+                    @keyframes petalFall {
+                        0% { 
+                            transform: translateY(0) translateX(0) rotate(0deg); 
+                            opacity: 0.8; 
+                        }
+                        50% { 
+                            transform: translateY(50vh) translateX(30px) rotate(180deg); 
+                        }
+                        100% { 
+                            transform: translateY(100vh) translateX(-20px) rotate(360deg); 
+                            opacity: 0.3; 
+                        }
+                    }
+                    @keyframes windSwirl {
+                        0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 0.2; }
+                        50% { transform: translateX(50px) translateY(-30px) rotate(180deg); opacity: 0.5; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== COSMIC VORTEX BACKGROUND =====
+        function createVortex() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'radial-gradient(circle at 50% 50%, #1a0033 0%, #000000 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add spiral particles
+            for (let i = 0; i < 200; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 3 + 1 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.borderRadius = '50%';
+                
+                const colors = ['#ff006e', '#8338ec', '#3a86ff', '#06ffa5', '#ffbe0b'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.boxShadow = `0 0 10px ${particle.style.background}`;
+                
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.animation = `vortexSpiral ${Math.random() * 4 + 3}s linear infinite`;
+                particle.style.animationDelay = (i * 0.02) + 's';
+                starfield.appendChild(particle);
+            }
+            
+            // Add rotating rings
+            for (let i = 0; i < 5; i++) {
+                const ring = document.createElement('div');
+                ring.style.position = 'absolute';
+                ring.style.left = '50%';
+                ring.style.top = '50%';
+                ring.style.width = (i + 1) * 100 + 'px';
+                ring.style.height = (i + 1) * 100 + 'px';
+                ring.style.border = '2px solid rgba(100,150,255,0.2)';
+                ring.style.borderRadius = '50%';
+                ring.style.transform = 'translate(-50%, -50%)';
+                ring.style.animation = `vortexRing ${4 + i}s linear infinite`;
+                starfield.appendChild(ring);
+            }
+            
+            // Add energy bursts
+            for (let i = 0; i < 12; i++) {
+                const burst = document.createElement('div');
+                burst.style.position = 'absolute';
+                burst.style.left = '50%';
+                burst.style.top = '50%';
+                burst.style.width = '2px';
+                burst.style.height = '80px';
+                burst.style.background = 'linear-gradient(180deg, rgba(100,150,255,0.8), transparent)';
+                burst.style.transformOrigin = 'top';
+                burst.style.transform = `translate(-50%, -50%) rotate(${i * 30}deg)`;
+                burst.style.animation = `vortexBurst 3s ease-in-out infinite`;
+                burst.style.animationDelay = (i * 0.25) + 's';
+                starfield.appendChild(burst);
+            }
+
+            if (!document.getElementById('vortexAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'vortexAnimation';
+                style.textContent = `
+                    @keyframes vortexSpiral {
+                        0% { 
+                            transform: translate(-50%, -50%) rotate(0deg) translateX(0px) scale(0); 
+                            opacity: 0; 
+                        }
+                        10% { opacity: 1; }
+                        90% { opacity: 0.8; }
+                        100% { 
+                            transform: translate(-50%, -50%) rotate(720deg) translateX(400px) scale(1.5); 
+                            opacity: 0; 
+                        }
+                    }
+                    @keyframes vortexRing {
+                        0% { transform: translate(-50%, -50%) rotate(0deg) scale(0.5); opacity: 0; }
+                        50% { opacity: 0.5; }
+                        100% { transform: translate(-50%, -50%) rotate(360deg) scale(2); opacity: 0; }
+                    }
+                    @keyframes vortexBurst {
+                        0%, 100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scaleY(0); }
+                        50% { opacity: 0.6; transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scaleY(1); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== BACKGROUND MANAGER =====
+        const backgroundFunctions = {
+            'stars': createStarfield,
+            'rain': createRain,
+            'rocket': createRocket,
+            'snow': createSnow,
+            'matrix': createMatrix,
+            'nebula': createNebula,
+            'pixel': createPixel,
+            'aurora': createAurora,
+            'meteor': createMeteor,
+            'fireflies': createFireflies,
+            'underwater': createUnderwater,
+            'lightning': createLightning,
+            'cherry': createCherryBlossom,
+            'vortex': createVortex
+        };
+
+        function changeBackground(type) {
+            const bgFunction = backgroundFunctions[type];
+            if (bgFunction) {
+                // Reset starfield background before changing
+                const starfield = document.getElementById('starfield');
+                starfield.style.background = '';
+                
+                bgFunction();
+                setCookie('kripticBackground', type, 365);
             }
         }
 
@@ -1429,6 +2568,20 @@
             localStorage.setItem('kripticFont', selectedFont);
         });
 
+        // ===== BACKGROUND SELECTOR =====
+        const backgroundSelector = document.getElementById('backgroundSelector');
+        
+        // Load saved background
+        const savedBackground = getCookie('kripticBackground') || 'stars';
+        backgroundSelector.value = savedBackground;
+        changeBackground(savedBackground);
+
+        // Background change handler
+        backgroundSelector.addEventListener('change', (e) => {
+            const selectedBackground = e.target.value;
+            changeBackground(selectedBackground);
+        });
+
         // ===== CURSOR GRAVITY =====
         const cursorGravity = document.getElementById('cursorGravity');
         document.addEventListener('mousemove', (e) => {
@@ -1461,13 +2614,21 @@
         try {
             if (typeof firebase !== 'undefined' && firebase.initializeApp) {
                 firebase.initializeApp(firebaseConfig);
+                console.log('✅ Firebase initialized');
+                
                 const database = firebase.database();
                 const visitorsRef = database.ref('visitors');
 
                 const sessionId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                console.log('📝 Session ID:', sessionId);
 
                 visitorsRef.child(sessionId).set({
                     timestamp: firebase.database.ServerValue.TIMESTAMP
+                }).then(() => {
+                    console.log('✅ Visitor registered in Firebase');
+                }).catch((error) => {
+                    console.error('❌ Failed to register visitor:', error);
+                    console.error('Check Firebase Realtime Database Rules!');
                 });
 
                 window.addEventListener('beforeunload', () => {
@@ -1475,7 +2636,12 @@
                 });
 
                 visitorsRef.on('value', (snapshot) => {
-                    document.getElementById('visitorCount').textContent = snapshot.numChildren();
+                    const count = snapshot.numChildren();
+                    console.log('👥 Active visitors:', count);
+                    document.getElementById('visitorCount').textContent = count;
+                }, (error) => {
+                    console.error('❌ Firebase read error:', error);
+                    document.getElementById('visitorCount').textContent = '?';
                 });
 
                 setInterval(() => {
@@ -1489,10 +2655,12 @@
                     });
                 }, 60000);
             } else {
-                console.error('Firebase not loaded properly');
+                console.error('❌ Firebase not loaded properly');
+                document.getElementById('visitorCount').textContent = '?';
             }
         } catch (firebaseError) {
-            console.error('Firebase initialization error:', firebaseError);
+            console.error('❌ Firebase initialization error:', firebaseError);
+            document.getElementById('visitorCount').textContent = '?';
         }
 
         // ===== POLL SYSTEM V2 (SIMPLIFIED) =====
