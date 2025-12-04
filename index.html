@@ -735,6 +735,287 @@
             50% { opacity: 1; }
         }
 
+        /* ===== DEBUG PANEL (VISIBLE ON PAGE) ===== */
+        .debug-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background: rgba(10, 14, 39, 0.95);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 1.5rem;
+            z-index: 10000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .debug-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .debug-panel-title {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .debug-close-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .debug-close-btn:hover {
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .debug-section {
+            margin-bottom: 1rem;
+        }
+
+        .debug-section-title {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .debug-status {
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .debug-status.success {
+            border-left: 3px solid #00ff88;
+        }
+
+        .debug-status.error {
+            border-left: 3px solid #ff0055;
+        }
+
+        .debug-status.info {
+            border-left: 3px solid var(--primary);
+        }
+
+        .debug-log {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.25rem 0;
+        }
+
+        .debug-button {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            width: 100%;
+            margin-top: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .debug-button:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .debug-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            transition: all 0.3s;
+        }
+
+        .debug-toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .cookie-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            word-break: break-all;
+        }
+
+        @media (max-width: 768px) {
+            .debug-panel {
+                width: calc(100% - 40px);
+                bottom: 10px;
+                right: 10px;
+                max-height: 300px;
+            }
+
+            .debug-toggle-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ===== PASSWORD PROMPT MODAL ===== */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20000;
+            backdrop-filter: blur(5px);
+        }
+
+        .password-modal-content {
+            background: rgba(10, 14, 39, 0.98);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .password-modal-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .password-modal-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .password-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .password-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .password-btn-submit {
+            background: var(--primary);
+            color: white;
+        }
+
+        .password-btn-submit:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--accent);
+        }
+
+        .password-btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .password-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .password-error {
+            color: #ff0055;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 0.5rem;
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .password-loading {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
         /* Footer */
         .footer {
             position: relative;
@@ -973,6 +1254,44 @@
         <p>KRIPTIC EDITION 3.0 © 2024 | Built with dedication over 600+ days</p>
     </footer>
 
+    <!-- Debug Panel Toggle Button -->
+    <button id="debugToggle" class="debug-toggle-btn" onclick="toggleDebugPanel()">🔍</button>
+
+    <!-- Debug Panel -->
+    <div id="debugPanel" class="debug-panel" style="display: none;">
+        <div class="debug-panel-header">
+            <div class="debug-panel-title">📊 Poll System Status</div>
+            <button class="debug-close-btn" onclick="toggleDebugPanel()">×</button>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-section-title">System Status</div>
+            <div id="systemStatus" class="debug-status info">
+                <div class="debug-log">Initializing...</div>
+            </div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-section-title">Your Vote Cookies 🍪</div>
+            <div id="cookieList" style="max-height: 150px; overflow-y: auto;">
+                <div class="debug-log">Loading cookies...</div>
+            </div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-section-title">Recent Activity</div>
+            <div id="activityLog" style="max-height: 100px; overflow-y: auto;">
+                <div class="debug-log">No activity yet</div>
+            </div>
+        </div>
+
+        <div class="debug-section">
+            <div class="debug-section-title">Test Tools</div>
+            <button class="debug-button" onclick="clearAllPollCookies()">🗑️ Clear All Poll Cookies</button>
+            <button class="debug-button" onclick="refreshPollStatus()">🔄 Refresh Status</button>
+        </div>
+    </div>
+
     <!-- Philosophical Quote Footer -->
     <div style="position: relative; z-index: 10; text-align: center; padding: 4rem 2rem 2rem; background: rgba(10, 14, 39, 0.95); border-top: 1px solid var(--primary); margin-top: 2rem;">
         <div style="max-width: 900px; margin: 0 auto; font-style: italic; color: rgba(255, 255, 255, 0.7); font-size: 1.1rem; line-height: 1.8; text-shadow: 0 0 10px var(--primary);">
@@ -1192,6 +1511,11 @@
             const expires = "expires=" + date.toUTCString();
             document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=Strict";
             console.log(`🍪 Cookie set: ${name} = ${value} (expires in ${days} days)`);
+            
+            // Update debug panel
+            if (typeof updateCookieList === 'function') {
+                updateCookieList();
+            }
         }
 
         function getCookie(name) {
@@ -1449,30 +1773,330 @@
         window.selectPollOption = selectPollOption;
         window.submitPollVote = submitPollVote;
 
+        // ===== DEBUG PANEL FUNCTIONS =====
+        let activityLogs = [];
+        let debugPassword = null;
+        let isDebugAuthenticated = false;
+
+        // Fetch debug password from Supabase on page load
+        async function fetchDebugPassword() {
+            try {
+                const { data, error } = await pollSupabase
+                    .from('debug_config')
+                    .select('setting_value')
+                    .eq('setting_name', 'debug_password')
+                    .single();
+
+                if (error) {
+                    console.error('Failed to fetch debug password:', error);
+                    return null;
+                }
+
+                return data?.setting_value || null;
+            } catch (error) {
+                console.error('Error fetching debug password:', error);
+                return null;
+            }
+        }
+
+        function showPasswordPrompt() {
+            // Create modal
+            const modal = document.createElement('div');
+            modal.className = 'password-modal';
+            modal.id = 'passwordModal';
+            
+            modal.innerHTML = `
+                <div class="password-modal-content">
+                    <div class="password-modal-title">🔐 Debug Panel Access</div>
+                    <div class="password-modal-description">
+                        This panel is restricted. Please enter the password to continue.
+                    </div>
+                    <input 
+                        type="password" 
+                        id="passwordInput" 
+                        class="password-input" 
+                        placeholder="Enter password..."
+                        autocomplete="off"
+                    />
+                    <div id="passwordFeedback"></div>
+                    <div class="password-buttons">
+                        <button class="password-btn password-btn-cancel" onclick="closePasswordPrompt()">Cancel</button>
+                        <button class="password-btn password-btn-submit" onclick="checkDebugPassword()">Unlock</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Focus input
+            setTimeout(() => {
+                const input = document.getElementById('passwordInput');
+                if (input) {
+                    input.focus();
+                    
+                    // Allow Enter key to submit
+                    input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            checkDebugPassword();
+                        }
+                    });
+                }
+            }, 100);
+        }
+
+        function closePasswordPrompt() {
+            const modal = document.getElementById('passwordModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        async function checkDebugPassword() {
+            const input = document.getElementById('passwordInput');
+            const feedback = document.getElementById('passwordFeedback');
+            
+            if (!input || !feedback) return;
+            
+            const enteredPassword = input.value;
+            
+            // Show loading
+            feedback.innerHTML = '<div class="password-loading">🔄 Verifying...</div>';
+            
+            // Fetch password from Supabase if not already fetched
+            if (!debugPassword) {
+                debugPassword = await fetchDebugPassword();
+            }
+            
+            if (!debugPassword) {
+                feedback.innerHTML = '<div class="password-error">❌ Failed to load password from database</div>';
+                return;
+            }
+            
+            // Check password
+            if (enteredPassword === debugPassword) {
+                feedback.innerHTML = '<div class="password-loading">✅ Access granted!</div>';
+                
+                // Store authentication in sessionStorage (lasts until browser tab closes)
+                sessionStorage.setItem('debugAuthenticated', 'true');
+                isDebugAuthenticated = true;
+                
+                // Close modal and open debug panel
+                setTimeout(() => {
+                    closePasswordPrompt();
+                    openDebugPanel();
+                }, 500);
+            } else {
+                feedback.innerHTML = '<div class="password-error">❌ Incorrect password. Try again.</div>';
+                input.value = '';
+                input.focus();
+                
+                // Shake animation
+                input.style.animation = 'shake 0.3s';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 300);
+            }
+        }
+
+        function toggleDebugPanel() {
+            // Check if already authenticated (session-based)
+            const sessionAuth = sessionStorage.getItem('debugAuthenticated');
+            
+            if (sessionAuth === 'true' || isDebugAuthenticated) {
+                // Already authenticated, just toggle panel
+                const panel = document.getElementById('debugPanel');
+                const toggleBtn = document.getElementById('debugToggle');
+                
+                if (panel.style.display === 'none') {
+                    openDebugPanel();
+                } else {
+                    panel.style.display = 'none';
+                    toggleBtn.style.display = 'flex';
+                }
+            } else {
+                // Not authenticated, show password prompt
+                showPasswordPrompt();
+            }
+        }
+
+        function openDebugPanel() {
+            const panel = document.getElementById('debugPanel');
+            const toggleBtn = document.getElementById('debugToggle');
+            
+            panel.style.display = 'block';
+            toggleBtn.style.display = 'none';
+            refreshPollStatus();
+        }
+
+        // Make password functions globally accessible
+        window.closePasswordPrompt = closePasswordPrompt;
+        window.checkDebugPassword = checkDebugPassword;
+
+        function updateSystemStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('systemStatus');
+            if (!statusDiv) return;
+            
+            statusDiv.className = `debug-status ${type}`;
+            statusDiv.innerHTML = `<div class="debug-log">${message}</div>`;
+        }
+
+        function addActivityLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            activityLogs.unshift(`[${timestamp}] ${message}`);
+            
+            // Keep only last 10 logs
+            if (activityLogs.length > 10) {
+                activityLogs = activityLogs.slice(0, 10);
+            }
+            
+            updateActivityLog();
+        }
+
+        function updateActivityLog() {
+            const logDiv = document.getElementById('activityLog');
+            if (!logDiv) return;
+            
+            if (activityLogs.length === 0) {
+                logDiv.innerHTML = '<div class="debug-log">No activity yet</div>';
+            } else {
+                logDiv.innerHTML = activityLogs.map(log => 
+                    `<div class="debug-log">${log}</div>`
+                ).join('');
+            }
+        }
+
+        function updateCookieList() {
+            const cookieListDiv = document.getElementById('cookieList');
+            if (!cookieListDiv) return;
+            
+            const allCookies = document.cookie.split(';');
+            const pollCookies = allCookies.filter(cookie => 
+                cookie.trim().startsWith('pollVoted_')
+            );
+            
+            if (pollCookies.length === 0) {
+                cookieListDiv.innerHTML = '<div class="debug-log">✅ No poll cookies (you haven\'t voted yet)</div>';
+            } else {
+                cookieListDiv.innerHTML = pollCookies.map(cookie => {
+                    const [name, value] = cookie.trim().split('=');
+                    const pollId = name.replace('pollVoted_', '').substring(0, 8) + '...';
+                    return `<div class="cookie-item">🍪 ${pollId} = ${value}</div>`;
+                }).join('');
+            }
+        }
+
+        function clearAllPollCookies() {
+            if (!confirm('Are you sure you want to clear all poll vote cookies? You will be able to vote again.')) {
+                return;
+            }
+            
+            const allCookies = document.cookie.split(';');
+            let cleared = 0;
+            
+            allCookies.forEach(cookie => {
+                const cookieName = cookie.split('=')[0].trim();
+                if (cookieName.startsWith('pollVoted_')) {
+                    document.cookie = cookieName + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                    cleared++;
+                }
+            });
+            
+            addActivityLog(`🗑️ Cleared ${cleared} poll cookie(s)`);
+            updateCookieList();
+            
+            // Refresh polls to show voting is available again
+            fetchPolls();
+            
+            alert(`✅ Cleared ${cleared} poll cookies! You can vote again now.`);
+        }
+
+        function refreshPollStatus() {
+            updateSystemStatus('🔄 Refreshing...', 'info');
+            updateCookieList();
+            
+            setTimeout(() => {
+                if (pollSupabase) {
+                    updateSystemStatus(`✅ Connected | ${polls.length} poll(s) loaded`, 'success');
+                } else {
+                    updateSystemStatus('❌ Not connected to Supabase', 'error');
+                }
+            }, 500);
+            
+            addActivityLog('🔄 Status refreshed');
+        }
+
+        // Make functions globally accessible
+        window.toggleDebugPanel = toggleDebugPanel;
+        window.clearAllPollCookies = clearAllPollCookies;
+        window.refreshPollStatus = refreshPollStatus;
+
+        // Update debug panel when polls are fetched
+        const originalFetchPolls = fetchPolls;
+        fetchPolls = async function() {
+            await originalFetchPolls();
+            updateSystemStatus(`✅ Connected | ${polls.length} poll(s) loaded`, 'success');
+            addActivityLog(`📥 Loaded ${polls.length} poll(s)`);
+        };
+
+        // Update debug panel when voting
+        const originalSubmitPollVote = submitPollVote;
+        submitPollVote = async function(pollId) {
+            const optionIndex = selectedOptions[pollId];
+            addActivityLog(`🗳️ Voting on option ${optionIndex + 1}...`);
+            
+            await originalSubmitPollVote(pollId);
+            
+            if (hasVoted(pollId)) {
+                addActivityLog(`✅ Vote recorded! Cookie saved.`);
+                updateCookieList();
+            }
+        };
+
+
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM loaded, initializing...');
             
             createStarfield();
             
+            // Initialize debug panel
+            updateSystemStatus('🔄 Initializing...', 'info');
+            updateCookieList();
+            addActivityLog('🚀 Page loaded');
+            
             // Check if Supabase is available
             if (!window.supabase) {
                 console.error('Supabase library not loaded!');
                 showPollMessage('error', 'Failed to load polling system. Please refresh the page.');
+                updateSystemStatus('❌ Supabase not loaded', 'error');
+                addActivityLog('❌ Supabase library failed to load');
                 return;
             }
             
             console.log('Supabase available, initializing...');
+            updateSystemStatus('🔄 Connecting to database...', 'info');
             initializePollSupabase();
+            
+            // Fetch debug password in background
+            fetchDebugPassword().then(password => {
+                if (password) {
+                    debugPassword = password;
+                    console.log('🔐 Debug password loaded');
+                } else {
+                    console.warn('⚠️ Debug password not found in database');
+                }
+            });
             
             // Give Supabase a moment to initialize, then fetch polls
             setTimeout(() => {
                 console.log('Fetching polls...');
+                addActivityLog('📥 Fetching polls from database...');
                 fetchPolls();
             }, 500);
             
             setInterval(() => {
                 if (votingInProgress.size === 0) {
                     console.log('Auto-refreshing polls...');
+                    addActivityLog('🔄 Auto-refresh polls');
                     fetchPolls();
                 }
             }, 30000);
