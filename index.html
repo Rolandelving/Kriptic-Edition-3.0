@@ -1582,7 +1582,15 @@
             Built with precision and designed for excellence.
         </p>
     </section>
-
+<!-- AdSense Ad Unit 1 -->
+<div style="text-align: center; padding: 2rem 0; position: relative; z-index: 10;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7452690493067355"
+         data-ad-slot="5169295107"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+</div>
     <!-- Navigation -->
     <section class="nav-section">
         <div class="nav-grid">
@@ -1645,7 +1653,15 @@
                     Enhance your gaming experience.
                 </p>
             </a>
-
+        <!-- AdSense Ad Unit 2 -->
+        <div style="text-align: center; padding: 2rem 0; position: relative; z-index: 10;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-7452690493067355"
+                 data-ad-slot="4121589709"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
             <!-- Polls -->
             <a href="#polls" class="nav-card">
                 <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1673,7 +1689,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>KRIPTIC EDITION 3.0 © 2024 | Built with dedication over 600+ days</p>
+        <p>KRIPTIC EDITION 3.0 © 2025 | Built with dedication over 600+ days</p>
     </footer>
 
     <!-- Debug Panel Toggle Button -->
@@ -3018,16 +3034,89 @@
             'vortex': createVortex
         };
 
-        function changeBackground(type) {
+        // ===== BACKGROUND MANAGER WITH SUPABASE + LOCALSTORAGE =====
+        async function changeBackground(type) {
             const bgFunction = backgroundFunctions[type];
             if (bgFunction) {
-                // Reset starfield background before changing
                 const starfield = document.getElementById('starfield');
                 starfield.style.background = '';
                 
                 bgFunction();
-                setCookie('kripticBackground', type, 365);
+                
+                // Save to localStorage (instant)
+                localStorage.setItem('kripticBackground', type);
+                
+                // Save to Supabase (async)
+                if (pollSupabase) {
+                    try {
+                        const userId = sessionStorage.getItem('userId') || generateUserId();
+                        
+                        const { error } = await pollSupabase
+                            .from('user_preferences')
+                            .upsert({
+                                user_id: userId,
+                                background_type: type,
+                                updated_at: new Date().toISOString()
+                            }, {
+                                onConflict: 'user_id'
+                            });
+                        
+                        if (error) {
+                            console.warn('Failed to save background to Supabase:', error);
+                        } else {
+                            console.log('✅ Background saved to Supabase:', type);
+                        }
+                    } catch (err) {
+                        console.warn('Supabase save error:', err);
+                    }
+                }
             }
+        }
+        
+        // Generate unique user ID
+        function generateUserId() {
+            let userId = sessionStorage.getItem('userId');
+            if (!userId) {
+                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('userId', userId);
+            }
+            return userId;
+        }
+        
+        // Load saved background on page load
+        async function loadSavedBackground() {
+            try {
+                // Try Supabase first
+                if (pollSupabase) {
+                    const userId = sessionStorage.getItem('userId') || generateUserId();
+                    
+                    const { data, error } = await pollSupabase
+                        .from('user_preferences')
+                        .select('background_type')
+                        .eq('user_id', userId)
+                        .single();
+                    
+                    if (data && data.background_type) {
+                        console.log('✅ Loaded background from Supabase:', data.background_type);
+                        const backgroundSelector = document.getElementById('backgroundSelector');
+                        if (backgroundSelector) {
+                            backgroundSelector.value = data.background_type;
+                        }
+                        changeBackground(data.background_type);
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.warn('Failed to load from Supabase, using localStorage:', err);
+            }
+            
+            // Fallback to localStorage
+            const savedBackground = localStorage.getItem('kripticBackground') || 'stars';
+            const backgroundSelector = document.getElementById('backgroundSelector');
+            if (backgroundSelector) {
+                backgroundSelector.value = savedBackground;
+            }
+            changeBackground(savedBackground);
         }
 
         // ===== THEME SWITCHER =====
@@ -4110,6 +4199,10 @@ document.querySelectorAll('.nav-link').forEach(link => {
         link.classList.remove('active');
     }
 });
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </script>
 </body>
 </html>
