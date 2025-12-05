@@ -3178,16 +3178,13 @@
         // ===== BACKGROUND SELECTOR =====
         const backgroundSelector = document.getElementById('backgroundSelector');
         
-        // Load saved background
-        const savedBackground = getCookie('kripticBackground') || 'stars';
-        backgroundSelector.value = savedBackground;
-        changeBackground(savedBackground);
-
         // Background change handler
         backgroundSelector.addEventListener('change', (e) => {
             const selectedBackground = e.target.value;
             changeBackground(selectedBackground);
         });
+        
+        // Load background will be called after Supabase initializes
 
         // ===== CURSOR GRAVITY =====
         const cursorGravity = document.getElementById('cursorGravity');
@@ -4115,7 +4112,10 @@
                 console.log('✅ Debug mode active - Protections disabled');
             }
             
-            createStarfield();
+            // Load saved background instead of default starfield
+            setTimeout(() => {
+                loadSavedBackground();
+            }, 1000);
             
             // Initialize debug panel
             updateSystemStatus('🔄 Initializing...', 'info');
