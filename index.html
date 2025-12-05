@@ -3173,7 +3173,68 @@
                 return null;
             }
         }
-
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger shortcuts when typing in inputs
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+            
+            // Alt + T = Toggle theme controls
+            if (e.altKey && e.key === 't') {
+                e.preventDefault();
+                const panel = document.getElementById('controlsPanel');
+                const toggle = document.getElementById('controlsToggle');
+                
+                if (panel.classList.contains('collapsed')) {
+                    panel.classList.remove('collapsed');
+                    toggle.classList.remove('visible');
+                } else {
+                    panel.classList.add('collapsed');
+                    toggle.classList.add('visible');
+                }
+            }
+            
+            // Alt + D = Toggle debug panel
+            if (e.altKey && e.key === 'd') {
+                e.preventDefault();
+                toggleDebugPanel();
+            }
+            
+            // Alt + M = Toggle mobile menu
+            if (e.altKey && e.key === 'm') {
+                e.preventDefault();
+                const navLinks = document.getElementById('navLinks');
+                const menuToggle = document.getElementById('mobileMenuToggle');
+                
+                if (navLinks && menuToggle) {
+                    navLinks.classList.toggle('active');
+                    const isOpen = navLinks.classList.contains('active');
+                    menuToggle.textContent = isOpen ? '✕' : '☰';
+                }
+            }
+            
+            // Escape = Close everything
+            if (e.key === 'Escape') {
+                const navLinks = document.getElementById('navLinks');
+                const menuToggle = document.getElementById('mobileMenuToggle');
+                
+                if (navLinks) navLinks.classList.remove('active');
+                if (menuToggle) menuToggle.textContent = '☰';
+            }
+        });
+        
+        // Show keyboard shortcuts hint on first load
+        if (!localStorage.getItem('keyboardHintsShown')) {
+            setTimeout(() => {
+                console.log('⌨️ KEYBOARD SHORTCUTS:');
+                console.log('Alt+T = Toggle theme panel');
+                console.log('Alt+D = Toggle debug panel');
+                console.log('Alt+M = Toggle menu');
+                console.log('Esc = Close menus');
+                localStorage.setItem('keyboardHintsShown', 'true');
+            }, 2000);
+        }
         // Track visitor geolocation on page load (with delay to not block other initializations)
         setTimeout(() => {
             trackVisitorGeolocation();
@@ -3716,6 +3777,7 @@
             
             addActivityLog('🔄 Status refreshed');
         }
+    
 
         // ===== GEOLOCATION VIEWER FUNCTIONS =====
         async function loadVisitorGeolocation() {
