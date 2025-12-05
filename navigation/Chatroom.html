@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Chat Relay</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* Discord Theme - Exact Colors */
+    :root {
+      --discord-dark: #36393f;
+      --discord-darker: #2f3136;
+      --discord-darkest: #202225;
+      --discord-input: #40444b;
+      --discord-blurple: #5865f2;
+      --discord-blurple-hover: #4752c4;
+      --discord-green: #3ba55d;
+      --discord-red: #ed4245;
+      --discord-text: #dcddde;
+      --discord-text-muted: #72767d;
+      --discord-text-bright: #ffffff;
+      --discord-hover: #34373c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: var(--discord-darkest);
+      color: var(--discord-text);
+      overflow: hidden;
+    }
+
+    /* Auth Screen */
+    .auth-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--discord-darkest);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .auth-container {
+      background: var(--discord-dark);
+      padding: 40px;
+      border-radius: 8px;
+      width: 480px;
+      max-width: 90%;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .auth-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--discord-text-bright);
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .auth-subtitle {
+      font-size: 18px;
+      color: var(--discord-text-muted);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--discord-text-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px;
+      background: var(--discord-darkest);
+      border: 1px solid var(--discord-darkest);
+      border-radius: 4px;
+      color: var(--discord-text-bright);
+      font-size: 18px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--discord-blurple);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--discord-blurple);
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary:hover {
+      background: var(--discord-blurple-hover);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .auth-toggle {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 16px;
+      color: var(--discord-text-muted);
+    }
+
+    .auth-toggle a {
+      color: var(--discord-blurple);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .auth-toggle a:hover {
+      text-decoration: underline;
+    }
+
+    .status-message {
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .status-message.error {
+      background: rgba(237, 66, 69, 0.1);
+      color: var(--discord-red);
+    }
+
+    .status-message.success {
+      background: rgba(59, 165, 93, 0.1);
+      color: var(--discord-green);
+    }
+
+    .status-message.warning {
+      background: rgba(250, 166, 26, 0.1);
+      color: #faa61a;
+    }
+
+    /* Main Layout */
+    .discord-layout {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: var(--discord-darker);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .server-header {
+      height: 48px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--discord-darkest);
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--discord-text-bright);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .server-header:hover {
+      background: var(--discord-hover);
+    }
+
+    .channels-list {
+      flex: 1;
+      padding: 8px;
+      overflow-y: auto;
+    }
+
+    .channel-item {
+      padding: 8px 12px;
+      margin-bottom: 2px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: var(--discord-text-muted);
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+
+    .channel-item:hover {
+      background: var(--discord-hover);
+      color: var(--discord-text);
+    }
+
+    .channel-item.active {
+      background: var(--discord-hover);
+      color: var(--discord-text-bright);
+    }
+
+    .channel-icon {
+      margin-right: 8px;
+      font-size: 22px;
+      color: var(--discord-text-muted);
+    }
+
+    .user-panel {
+      height: 60px;
+      background: var(--discord-darkest);
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--discord-blurple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 18px;
+      color: white;
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--discord-text-bright);
+    }
+
+    .user-status {
+      font-size: 14px;
+      color: var(--discord-text-muted);
+    }
+
+    .logout-icon {
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      color: var(--discord-text-muted);
+      transition: all 0.2s;
+      font-size: 22px;
+    }
+
+    .logout-icon:hover {
+      background: var(--discord-hover);
+      color: var(--discord-red);
+    }
+
+    /* Chat Area */
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--discord-dark);
+    }
+
+    .chat-header {
+      height: 48px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--discord-darkest);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .channel-hash {
+      color: var(--discord-text-muted);
+      font-size: 26px;
+      margin-right: 10px;
+    }
+
+    .channel-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--discord-text-bright);
+    }
+
+    .realtime-status {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--discord-text-muted);
+      padding: 4px 10px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--discord-text-muted);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .realtime-status.connected .status-dot {
+      background: var(--discord-green);
+      animation: none;
+    }
+
+    .realtime-status.error .status-dot {
+      background: var(--discord-red);
+      animation: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .messages-container::-webkit-scrollbar {
+      width: 16px;
+    }
+
+    .messages-container::-webkit-scrollbar-track {
+      background: var(--discord-dark);
+    }
+
+    .messages-container::-webkit-scrollbar-thumb {
+      background: var(--discord-darkest);
+      border: 4px solid var(--discord-dark);
+      border-radius: 8px;
+    }
+
+    .messages-container::-webkit-scrollbar-thumb:hover {
+      background: #202225;
+    }
+
+    .message-group {
+      margin-bottom: 20px;
+      display: flex;
+      padding: 4px 0;
+    }
+
+    .message-group:hover {
+      background: rgba(0, 0, 0, 0.1);
+      margin: 0 -8px 20px -8px;
+      padding: 4px 8px;
+    }
+
+    .message-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--discord-blurple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 20px;
+      color: white;
+      margin-right: 16px;
+      flex-shrink: 0;
+    }
+
+    .message-content-wrapper {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .message-header {
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .message-author {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--discord-text-bright);
+      margin-right: 8px;
+    }
+
+    .message-timestamp {
+      font-size: 14px;
+      color: var(--discord-text-muted);
+      font-weight: 400;
+    }
+
+    .message-text {
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--discord-text);
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    .message-source {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6px;
+      background: rgba(88, 101, 242, 0.15);
+      border-radius: 3px;
+      font-size: 12px;
+      color: var(--discord-blurple);
+      margin-left: 8px;
+      font-weight: 600;
+    }
+
+    .empty-messages {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--discord-text-muted);
+    }
+
+    .empty-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      opacity: 0.3;
+    }
+
+    .empty-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .empty-subtitle {
+      font-size: 16px;
+    }
+
+    /* Message Input */
+    .message-input-container {
+      padding: 20px;
+    }
+
+    .cooldown-indicator {
+      height: 3px;
+      background: var(--discord-blurple);
+      border-radius: 3px;
+      margin-bottom: 10px;
+      transform-origin: left;
+      transition: transform 0.1s linear;
+    }
+
+    .message-input-wrapper {
+      background: var(--discord-input);
+      border-radius: 8px;
+      padding: 4px;
+      position: relative;
+    }
+
+    .message-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 12px 16px;
+      color: var(--discord-text-bright);
+      font-size: 18px;
+      resize: none;
+      max-height: 200px;
+      font-family: inherit;
+    }
+
+    .message-input:focus {
+      outline: none;
+    }
+
+    .message-input::placeholder {
+      color: var(--discord-text-muted);
+    }
+
+    .input-actions {
+      display: flex;
+      align-items: center;
+      padding: 4px 12px;
+      gap: 8px;
+    }
+
+    .send-button {
+      padding: 8px 20px;
+      background: var(--discord-blurple);
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .send-button:hover {
+      background: var(--discord-blurple-hover);
+    }
+
+    .send-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .input-status {
+      flex: 1;
+      font-size: 14px;
+      color: var(--discord-text-muted);
+      padding-left: 8px;
+    }
+
+    .input-status.error {
+      color: var(--discord-red);
+    }
+
+    .input-status.success {
+      color: var(--discord-green);
+    }
+
+    .input-status.warning {
+      color: #faa61a;
+    }
+
+    /* Hidden class */
+    .hidden {
+      display: none !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -240px;
+        height: 100vh;
+        z-index: 100;
+        transition: left 0.3s;
+      }
+
+      .sidebar.mobile-open {
+        left: 0;
+      }
+
+      .message-text, .message-author {
+        font-size: 16px;
+      }
+
+      .message-input {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Auth Screen -->
+  <div id="authOverlay" class="auth-overlay">
+    <div class="auth-container">
+      <h1 class="auth-title" id="authTitle">Welcome back!</h1>
+      <p class="auth-subtitle" id="authSubtitle">We're so excited to see you again!</p>
+      
+      <label class="form-label">Username</label>
+      <input 
+        type="text" 
+        class="form-input" 
+        id="usernameInput" 
+        placeholder="Enter your username"
+        maxlength="30"
+      >
+      
+      <label class="form-label">Password</label>
+      <input 
+        type="password" 
+        class="form-input" 
+        id="passwordInput" 
+        placeholder="Enter your password"
+        minlength="6"
+      >
+      
+      <button class="btn-primary" id="authButton" onclick="handleAuth()">
+        Login
+      </button>
+      
+      <div class="auth-toggle">
+        <span id="toggleText">Need an account? </span>
+        <a onclick="toggleAuthMode()">Register</a>
+      </div>
+      
+      <div id="authStatus"></div>
+    </div>
+  </div>
+
+  <!-- Main Discord Layout -->
+  <div id="discordLayout" class="discord-layout hidden">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="server-header">
+        Chatroom
+      </div>
+      
+      <div class="channels-list">
+        <div class="channel-item active" onclick="refreshChannel()">
+          <span class="channel-icon">#</span>
+          <span>general</span>
+        </div>
+      </div>
+      
+      <div class="user-panel">
+        <div class="user-info">
+          <div class="user-avatar" id="sidebarAvatar">U</div>
+          <div class="user-details">
+            <div class="user-name" id="sidebarUsername">Username</div>
+            <div class="user-status">Online</div>
+          </div>
+        </div>
+        <div class="logout-icon" onclick="logout()" title="Logout">
+          🚪
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-area">
+      <div class="chat-header">
+        <span class="channel-hash">#</span>
+        <span class="channel-name">general</span>
+        <span class="realtime-status" id="realtimeStatus">
+          <span class="status-dot"></span>
+          <span class="status-text">connecting...</span>
+        </span>
+      </div>
+      
+      <div class="messages-container" id="messagesContainer">
+        <div class="empty-messages">
+          <div class="empty-icon">💬</div>
+          <div class="empty-title">No messages yet</div>
+          <div class="empty-subtitle">Be the first to say something!</div>
+        </div>
+      </div>
+      
+      <div class="message-input-container">
+        <div id="cooldownIndicator" class="cooldown-indicator hidden"></div>
+        
+        <div class="message-input-wrapper">
+          <textarea 
+            class="message-input" 
+            id="messageInput" 
+            placeholder="Message #general (@ mentions disabled)"
+            rows="1"
+            maxlength="500"
+          ></textarea>
+          
+          <div class="input-actions">
+            <span class="input-status" id="inputStatus"></span>
+            <button class="send-button" id="sendButton" onclick="sendMessage()">
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuration object
+    const CONFIG = {
+      supabaseUrl: 'https://zkrdbvjmessktzlxommr.supabase.co',
+      supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcmRidmptZXNza3R6bHhvbW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI4ODMzNzUsImV4cCI6MjA2ODQ1OTM3NX0.XDNQGD7Jl-2zmjFyfGVFRjdq-9rVFfhCyExfO8Fzb7Q',
+      discordWebhook: null // Will be loaded from database
+    };
+    
+    const supabase = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+    
+    let currentUser = null;
+    let isSignUpMode = false;
+    let lastMessageTime = 0;
+    let recentMessages = [];
+    let cooldownActive = false;
+
+    // SPAM PROTECTION CONFIG - VERY STRICT
+    const SPAM_CONFIG = {
+      MESSAGE_COOLDOWN: 5000, // 3 seconds between messages
+      MAX_MESSAGES_PER_MINUTE: 10, // Only 5 messages per minute
+      MAX_MESSAGES_PER_HOUR: 50, // Max 50 messages per hour
+      DUPLICATE_MESSAGE_WINDOW: 60000, // 1 minute for duplicate detection
+      VIOLATION_TIMEOUT: 3600000, // 1 hour timeout for violations (in milliseconds)
+      SPAM_TIMEOUT: 300000, // 5 minute timeout for spam
+      BAN_THRESHOLD: 3 // 3 violations = permanent ban
+    };
+
+    // CONTENT FILTER - VERY STRICT
+    // Regular cuss words are allowed
+    const ALLOWED_CUSS_WORDS = ['fuck', 'shit', 'bitch', 'damn', 'hell', 'ass', 'crap'];
+    
+    // INSTANT 1-HOUR TIMEOUT - Derogatory/Racist/Slur words
+    const DEROGATORY_WORDS = [
+      // N-word variations
+      /n[i1!|]gg[e3a@][r]?/gi,
+      /n[i1!|][g9][g9][a@3e]/gi,
+      /n[e3]gr[o0]/gi,
+      // Asian slurs
+      /ch[i1!|]nk/gi,
+      /g[o0][o0]k/gi,
+      /sp[i1!|]c/gi,
+      // Mexican slurs
+      /b[e3]an[e3]r/gi,
+      /w[e3]tb[a@]ck/gi,
+      /sp[i1!|]ck?/gi,
+      // Middle Eastern slurs
+      /r[a@]gh[e3][a@]d/gi,
+      /s[a@]nd\s*n[i1!|]gg[e3]r/gi,
+      /t[o0]w[e3]l\s*h[e3][a@]d/gi,
+      /c[a@]m[e3]l\s*j[o0]ck[e3]y/gi,
+      // Indian slurs
+      /p[a@]k[i1!|]/gi,
+      /c[u0][o0]l[i1!|]/gi,
+      /d[o0]t\s*h[e3][a@]d/gi,
+      // Jewish slurs
+      /k[i1!|]k[e3]/gi,
+      /h[e3]br[e3]w/gi,
+      // Black slurs
+      /c[o0][o0]n/gi,
+      /m[o0]nk[e3]y/gi,
+      /j[i1!|]g?g?[a@]b[o0][o0]/gi,
+      // LGBTQ slurs
+      /f[a@]gg[o0]t/gi,
+      /f[a@]g/gi,
+      /tr[a@]nn[y]/gi,
+      /tr[a@]p/gi,
+      /d[y]k[e3]/gi,
+      // Other slurs
+      /r[e3]t[a@]rd/gi,
+      /r[e3]t[a@]rd[e3]d/gi,
+      /aut[i1!|]st[i1!|]c/gi,
+      /aut[i1!|]sm/gi,
+      /sp[a@]st[i1!|]c/gi,
+      /cr[i1!|]ppl[e3]/gi
+    ];
+
+    // INSTANT BAN - Extreme content
+    const EXTREME_VIOLATIONS = [
+      /@everyone/gi,
+      /@here/gi,
+      /k[i1!|]ll\s*y[o0]urs[e3]lf/gi,
+      /kys/gi,
+      /n[e3]ck\s*y[o0]urs[e3]lf/gi,
+      /d[i1!|][e3]\s*in\s*a\s*f[i1!|]r[e3]/gi,
+      /h[o0]l[o0]c[a@]ust/gi,
+      /g[e3]n[o0]c[i1!|]d[e3]/gi,
+      /lynch/gi,
+      /sl[a@]v[e3]ry/gi
+    ];
+
+    let violationCount = 0;
+
+    // Load configuration from Supabase
+    async function loadConfig() {
+      try {
+        const { data, error } = await supabase
+          .from('app_config')
+          .select('key, value')
+          .eq('key', 'discord_webhook_url')
+          .single();
+
+        if (error) {
+          console.error('Error loading config:', error);
+          return false;
+        }
+
+        if (data) {
+          CONFIG.discordWebhook = data.value;
+          console.log('✅ Configuration loaded successfully');
+          return true;
+        }
+      } catch (error) {
+        console.error('Error loading config:', error);
+        return false;
+      }
+    }
+
+    // Password hashing function
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Helper Functions
+    function getInitials(username) {
+      return username.substring(0, 2).toUpperCase();
+    }
+
+    function getAvatarColor(username) {
+      const colors = [
+        '#5865f2', '#57f287', '#fee75c', '#eb459e', '#ed4245',
+        '#3ba55d', '#faa61a', '#9b84ee', '#ee4b2b', '#1f8b4c'
+      ];
+      let hash = 0;
+      for (let i = 0; i < username.length; i++) {
+        hash = username.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return colors[Math.abs(hash) % colors.length];
+    }
+
+    function formatTimestamp(date) {
+      const now = new Date();
+      const msgDate = new Date(date);
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      const time = msgDate.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+
+      if (msgDate >= today) {
+        return `Today at ${time}`;
+      } else if (msgDate >= yesterday) {
+        return `Yesterday at ${time}`;
+      } else {
+        return msgDate.toLocaleDateString('en-US', {
+          month: '2-digit',
+          day: '2-digit',
+          year: 'numeric'
+        }) + ' ' + time;
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Content Filter - Returns violation type
+    function containsBannedContent(message) {
+      // Block all @ mentions except allowed cuss words
+      if (message.includes('@')) {
+        return { violation: true, type: 'extreme', reason: '@ mentions are not allowed' };
+      }
+      
+      const normalizedMsg = message.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+      
+      // Check for extreme violations (instant ban)
+      for (let pattern of EXTREME_VIOLATIONS) {
+        if (pattern.test(message) || pattern.test(normalizedMsg)) {
+          return { violation: true, type: 'extreme', reason: 'Extreme content violation' };
+        }
+      }
+      
+      // Check for derogatory words (1 hour timeout)
+      for (let pattern of DEROGATORY_WORDS) {
+        if (pattern.test(message) || pattern.test(normalizedMsg)) {
+          return { violation: true, type: 'derogatory', reason: 'Derogatory or racist language' };
+        }
+      }
+      
+      return { violation: false };
+    }
+
+    // Spam Detection
+    function isSpamming() {
+      const now = Date.now();
+      
+      if (now - lastMessageTime < SPAM_CONFIG.MESSAGE_COOLDOWN && lastMessageTime !== 0) {
+        return { spam: true, reason: 'Slow down! Wait 3 seconds between messages.', cooldown: SPAM_CONFIG.MESSAGE_COOLDOWN, timeout: SPAM_CONFIG.SPAM_TIMEOUT };
+      }
+      
+      recentMessages = recentMessages.filter(time => now - time < 60000);
+      if (recentMessages.length >= SPAM_CONFIG.MAX_MESSAGES_PER_MINUTE) {
+        return { spam: true, reason: 'Too many messages! Max 5 per minute.', timeout: SPAM_CONFIG.SPAM_TIMEOUT };
+      }
+      
+      // Check hourly limit
+      const hourlyMessages = recentMessages.filter(time => now - time < 3600000);
+      if (hourlyMessages.length >= SPAM_CONFIG.MAX_MESSAGES_PER_HOUR) {
+        return { spam: true, reason: 'Hourly limit reached! Max 50 messages per hour.', timeout: SPAM_CONFIG.SPAM_TIMEOUT };
+      }
+      
+      return { spam: false };
+    }
+
+    // Check if user is currently timed out
+    async function isUserTimedOut() {
+      try {
+        const { data, error } = await supabase
+          .from('user_timeouts')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('timeout_until', { ascending: false })
+          .limit(1)
+          .single();
+
+        if (error || !data) return { timedOut: false };
+
+        const now = new Date();
+        const timeoutUntil = new Date(data.timeout_until);
+
+        if (now < timeoutUntil) {
+          const minutesLeft = Math.ceil((timeoutUntil - now) / 60000);
+          return { 
+            timedOut: true, 
+            reason: data.reason, 
+            minutesLeft: minutesLeft,
+            timeoutUntil: timeoutUntil
+          };
+        }
+
+        return { timedOut: false };
+      } catch (error) {
+        console.error('Error checking timeout:', error);
+        return { timedOut: false };
+      }
+    }
+
+    function isDuplicateMessage(message) {
+      const now = Date.now();
+      const recentMsg = localStorage.getItem('last_message_' + currentUser.id);
+      
+      if (recentMsg) {
+        const { text, time } = JSON.parse(recentMsg);
+        if (text === message && now - time < SPAM_CONFIG.DUPLICATE_MESSAGE_WINDOW) {
+          return true;
+        }
+      }
+      
+      return false;
+    }
+
+    async function logViolation(type, message, timeoutDuration = 0) {
+      try {
+        // Log the violation
+        await supabase
+          .from('message_violations')
+          .insert([{
+            user_id: currentUser.id,
+            username: currentUser.username,
+            violation_type: type,
+            attempted_message: message,
+            timeout_duration: timeoutDuration
+          }]);
+        
+        // If there's a timeout, record it
+        if (timeoutDuration > 0) {
+          const timeoutUntil = new Date(Date.now() + timeoutDuration);
+          await supabase
+            .from('user_timeouts')
+            .insert([{
+              user_id: currentUser.id,
+              username: currentUser.username,
+              reason: type === 'derogatory' ? 'Derogatory or racist language' : 'Spam violation',
+              timeout_until: timeoutUntil.toISOString(),
+              timeout_duration_ms: timeoutDuration
+            }]);
+        }
+        
+        // Check total violations for permanent ban
+        const { data: violations } = await supabase
+          .from('message_violations')
+          .select('id')
+          .eq('user_id', currentUser.id);
+        
+        violationCount = violations ? violations.length : 0;
+        
+        if (violationCount >= SPAM_CONFIG.BAN_THRESHOLD) {
+          await banUser('Repeated violations');
+        }
+      } catch (error) {
+        console.error('Error logging violation:', error);
+      }
+    }
+
+    async function banUser(reason = 'Repeated violations') {
+      try {
+        await supabase
+          .from('users')
+          .update({ 
+            is_banned: true,
+            ban_reason: reason,
+            banned_at: new Date().toISOString()
+          })
+          .eq('id', currentUser.id);
+        
+        alert(`You have been permanently banned. Reason: ${reason}`);
+        logout();
+      } catch (error) {
+        console.error('Error banning user:', error);
+      }
+    }
+
+    function showCooldown(duration) {
+      const cooldownIndicator = document.getElementById('cooldownIndicator');
+      const sendButton = document.getElementById('sendButton');
+      const messageInput = document.getElementById('messageInput');
+      
+      cooldownActive = true;
+      sendButton.disabled = true;
+      messageInput.disabled = true;
+      cooldownIndicator.classList.remove('hidden');
+      cooldownIndicator.style.transform = 'scaleX(1)';
+      
+      let elapsed = 0;
+      const interval = setInterval(() => {
+        elapsed += 100;
+        const progress = 1 - (elapsed / duration);
+        cooldownIndicator.style.transform = `scaleX(${progress})`;
+        
+        if (elapsed >= duration) {
+          clearInterval(interval);
+          cooldownIndicator.classList.add('hidden');
+          sendButton.disabled = false;
+          messageInput.disabled = false;
+          cooldownActive = false;
+        }
+      }, 100);
+    }
+
+    // Auth Functions
+    function toggleAuthMode() {
+      isSignUpMode = !isSignUpMode;
+      const authTitle = document.getElementById('authTitle');
+      const authSubtitle = document.getElementById('authSubtitle');
+      const authButton = document.getElementById('authButton');
+      const toggleText = document.getElementById('toggleText');
+      
+      if (isSignUpMode) {
+        authTitle.textContent = 'Create an account';
+        authSubtitle.textContent = 'Join the cosmic community!';
+        authButton.textContent = 'Register';
+        toggleText.textContent = 'Already have an account? ';
+      } else {
+        authTitle.textContent = 'Welcome back!';
+        authSubtitle.textContent = "We're so excited to see you again!";
+        authButton.textContent = 'Login';
+        toggleText.textContent = 'Need an account? ';
+      }
+    }
+
+    async function handleAuth() {
+      const username = document.getElementById('usernameInput').value.trim();
+      const password = document.getElementById('passwordInput').value;
+      const authStatusEl = document.getElementById('authStatus');
+      const authButton = document.getElementById('authButton');
+      
+      if (!username) {
+        showAuthStatus('Please enter a username', 'error');
+        return;
+      }
+
+      if (!password) {
+        showAuthStatus('Please enter a password', 'error');
+        return;
+      }
+
+      if (username.length < 3) {
+        showAuthStatus('Username must be at least 3 characters', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAuthStatus('Password must be at least 6 characters', 'error');
+        return;
+      }
+
+      if (containsBannedContent(username).violation) {
+        if (username.includes('@')) {
+          showAuthStatus('Username cannot contain @ symbol', 'error');
+        } else {
+          showAuthStatus('Username contains inappropriate content', 'error');
+        }
+        return;
+      }
+
+      authButton.disabled = true;
+      showAuthStatus(isSignUpMode ? 'Creating account...' : 'Signing in...', '');
+
+      try {
+        const passwordHash = await hashPassword(password);
+
+        if (isSignUpMode) {
+          const { data: existingUser } = await supabase
+            .from('users')
+            .select('*')
+            .eq('username', username)
+            .single();
+
+          if (existingUser) {
+            showAuthStatus('Username already taken', 'error');
+            authButton.disabled = false;
+            return;
+          }
+
+          const { data, error } = await supabase
+            .from('users')
+            .insert([{ 
+              username: username, 
+              password_hash: passwordHash,
+              is_banned: false 
+            }])
+            .select()
+            .single();
+
+          if (error) throw error;
+
+          currentUser = data;
+          localStorage.setItem('cosmic_user', JSON.stringify(data));
+          showAuthStatus('Account created!', 'success');
+          setTimeout(() => showDiscord(), 1000);
+
+        } else {
+          const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('username', username)
+            .single();
+
+          if (error || !data) {
+            showAuthStatus('Username not found', 'error');
+            authButton.disabled = false;
+            return;
+          }
+
+          if (data.password_hash !== passwordHash) {
+            showAuthStatus('Incorrect password', 'error');
+            authButton.disabled = false;
+            return;
+          }
+
+          if (data.is_banned) {
+            showAuthStatus('This account has been banned', 'error');
+            authButton.disabled = false;
+            return;
+          }
+
+          currentUser = data;
+          localStorage.setItem('cosmic_user', JSON.stringify(data));
+          showAuthStatus('Welcome back!', 'success');
+          setTimeout(() => showDiscord(), 1000);
+        }
+      } catch (error) {
+        console.error('Auth error:', error);
+        showAuthStatus('Error: ' + error.message, 'error');
+        authButton.disabled = false;
+      }
+    }
+
+    function showAuthStatus(message, type) {
+      const authStatusEl = document.getElementById('authStatus');
+      authStatusEl.textContent = message;
+      authStatusEl.className = 'status-message ' + type;
+      if (message) {
+        setTimeout(() => {
+          authStatusEl.textContent = '';
+          authStatusEl.className = 'status-message';
+        }, 3000);
+      }
+    }
+
+    function showDiscord() {
+      document.getElementById('authOverlay').classList.add('hidden');
+      document.getElementById('discordLayout').classList.remove('hidden');
+      
+      const avatar = document.getElementById('sidebarAvatar');
+      const username = document.getElementById('sidebarUsername');
+      
+      avatar.textContent = getInitials(currentUser.username);
+      avatar.style.background = getAvatarColor(currentUser.username);
+      username.textContent = currentUser.username;
+      
+      // Set up real-time subscription
+      setupRealtimeSubscription();
+      
+      loadMessages();
+    }
+
+    function logout() {
+      // Clean up subscription
+      if (messageChannel) {
+        supabase.removeChannel(messageChannel);
+        messageChannel = null;
+      }
+      
+      currentUser = null;
+      localStorage.removeItem('cosmic_user');
+      recentMessages = [];
+      violationCount = 0;
+      lastMessageTime = 0;
+      
+      document.getElementById('authOverlay').classList.remove('hidden');
+      document.getElementById('discordLayout').classList.add('hidden');
+      document.getElementById('usernameInput').value = '';
+      document.getElementById('passwordInput').value = '';
+      document.getElementById('messagesContainer').innerHTML = `
+        <div class="empty-messages">
+          <div class="empty-icon">💬</div>
+          <div class="empty-title">No messages yet</div>
+          <div class="empty-subtitle">Be the first to say something!</div>
+        </div>
+      `;
+    }
+
+    // Refresh channel - reload messages
+    function refreshChannel() {
+      const container = document.getElementById('messagesContainer');
+      
+      // Show loading state
+      container.innerHTML = `
+        <div class="empty-messages">
+          <div class="empty-icon">🔄</div>
+          <div class="empty-title">Refreshing...</div>
+          <div class="empty-subtitle">Loading latest messages</div>
+        </div>
+      `;
+      
+      // Add visual feedback
+      const channelItem = document.querySelector('.channel-item');
+      channelItem.style.opacity = '0.5';
+      
+      // Reload messages
+      setTimeout(() => {
+        loadMessages();
+        channelItem.style.opacity = '1';
+      }, 500);
+    }
+
+    async function checkSession() {
+      const session = localStorage.getItem('cosmic_user');
+      if (session) {
+        currentUser = JSON.parse(session);
+        
+        const { data } = await supabase
+          .from('users')
+          .select('is_banned')
+          .eq('id', currentUser.id)
+          .single();
+        
+        if (data && data.is_banned) {
+          alert('Your account has been banned.');
+          logout();
+          return;
+        }
+        
+        // Check if user has active timeout
+        const timeoutCheck = await isUserTimedOut();
+        if (timeoutCheck.timedOut) {
+          const hours = Math.floor(timeoutCheck.minutesLeft / 60);
+          const minutes = timeoutCheck.minutesLeft % 60;
+          let timeString = '';
+          if (hours > 0) timeString += `${hours} hour${hours > 1 ? 's' : ''} `;
+          if (minutes > 0) timeString += `${minutes} minute${minutes > 1 ? 's' : ''}`;
+          
+          alert(`You are currently timed out for ${timeString}.\nReason: ${timeoutCheck.reason}\n\nPlease come back later.`);
+          logout();
+          return;
+        }
+        
+        showDiscord();
+      }
+    }
+
+    // Message Functions
+    async function loadMessages() {
+      const container = document.getElementById('messagesContainer');
+      
+      try {
+        const { data, error } = await supabase
+          .from('messages')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(50);
+
+        if (error) throw error;
+
+        container.innerHTML = '';
+        
+        if (data.length === 0) {
+          container.innerHTML = `
+            <div class="empty-messages">
+              <div class="empty-icon">💬</div>
+              <div class="empty-title">No messages yet</div>
+              <div class="empty-subtitle">Be the first to say something!</div>
+            </div>
+          `;
+        } else {
+          data.reverse().forEach(msg => {
+            addMessage(msg.username, msg.message, msg.created_at, msg.source || 'web', false);
+          });
+        }
+      } catch (error) {
+        console.error('Error loading messages:', error);
+        container.innerHTML = `
+          <div class="empty-messages">
+            <div class="empty-icon">❌</div>
+            <div class="empty-title">Error loading messages</div>
+            <div class="empty-subtitle">Please refresh the page</div>
+          </div>
+        `;
+      }
+    }
+
+    function addMessage(username, message, timestamp, source = 'web', scrollToBottom = true) {
+      const container = document.getElementById('messagesContainer');
+      
+      const emptyState = container.querySelector('.empty-messages');
+      if (emptyState) {
+        emptyState.remove();
+      }
+      
+      const messageGroup = document.createElement('div');
+      messageGroup.className = 'message-group';
+      
+      const sourceLabel = source === 'discord' 
+        ? '<span class="message-source">FROM DISCORD</span>' 
+        : '';
+      
+      messageGroup.innerHTML = `
+        <div class="message-avatar" style="background: ${getAvatarColor(username)}">
+          ${getInitials(username)}
+        </div>
+        <div class="message-content-wrapper">
+          <div class="message-header">
+            <span class="message-author">${escapeHtml(username)}</span>
+            <span class="message-timestamp">${formatTimestamp(timestamp)}</span>
+            ${sourceLabel}
+          </div>
+          <div class="message-text">${escapeHtml(message)}</div>
+        </div>
+      `;
+      
+      container.appendChild(messageGroup);
+      
+      if (scrollToBottom) {
+        container.scrollTop = container.scrollHeight;
+      }
+      
+      const messages = container.querySelectorAll('.message-group');
+      if (messages.length > 50) {
+        messages[0].remove();
+      }
+    }
+
+    async function sendMessage() {
+      if (cooldownActive) return;
+      
+      // Check if config is loaded
+      if (!CONFIG.discordWebhook) {
+        showInputStatus('Configuration loading...', 'warning');
+        return;
+      }
+      
+      // Check if user is timed out
+      const timeoutCheck = await isUserTimedOut();
+      if (timeoutCheck.timedOut) {
+        const hours = Math.floor(timeoutCheck.minutesLeft / 60);
+        const minutes = timeoutCheck.minutesLeft % 60;
+        let timeString = '';
+        if (hours > 0) timeString += `${hours} hour${hours > 1 ? 's' : ''} `;
+        if (minutes > 0) timeString += `${minutes} minute${minutes > 1 ? 's' : ''}`;
+        
+        showInputStatus(`You are timed out for ${timeString}. Reason: ${timeoutCheck.reason}`, 'error');
+        document.getElementById('sendButton').disabled = true;
+        document.getElementById('messageInput').disabled = true;
+        
+        // Re-enable after timeout expires
+        setTimeout(() => {
+          document.getElementById('sendButton').disabled = false;
+          document.getElementById('messageInput').disabled = false;
+          showInputStatus('', '');
+        }, timeoutCheck.timeoutUntil - new Date());
+        
+        return;
+      }
+      
+      const input = document.getElementById('messageInput');
+      const statusEl = document.getElementById('inputStatus');
+      const sendButton = document.getElementById('sendButton');
+      const message = input.value.trim();
+      
+      if (!message) {
+        showInputStatus('Please enter a message', 'error');
+        return;
+      }
+
+      // Check for banned content
+      const contentCheck = containsBannedContent(message);
+      if (contentCheck.violation) {
+        if (contentCheck.type === 'extreme') {
+          showInputStatus(contentCheck.reason + ' - PERMANENT BAN', 'error');
+          await logViolation('extreme_violation', message, 0);
+          await banUser(contentCheck.reason);
+          input.value = '';
+          return;
+        } else if (contentCheck.type === 'derogatory') {
+          showInputStatus(contentCheck.reason + ' - 1 HOUR TIMEOUT', 'error');
+          await logViolation('derogatory', message, SPAM_CONFIG.VIOLATION_TIMEOUT);
+          input.value = '';
+          
+          // Force logout and prevent further use
+          setTimeout(() => {
+            alert('You have been timed out for 1 hour due to use of derogatory language. Please come back later.');
+            logout();
+          }, 2000);
+          return;
+        }
+      }
+
+      // Spam checks
+      const spamCheck = isSpamming();
+      if (spamCheck.spam) {
+        showInputStatus(spamCheck.reason, 'warning');
+        await logViolation('spam', message, spamCheck.timeout || 0);
+        if (spamCheck.cooldown) {
+          showCooldown(spamCheck.cooldown);
+        } else {
+          // Give them a 5 minute timeout
+          setTimeout(() => {
+            alert('You have been timed out for 5 minutes due to spam.');
+            logout();
+          }, 1000);
+        }
+        return;
+      }
+
+      if (isDuplicateMessage(message)) {
+        showInputStatus('Duplicate message detected - 5 min timeout', 'warning');
+        await logViolation('spam', message, SPAM_CONFIG.SPAM_TIMEOUT);
+        setTimeout(() => {
+          alert('You have been timed out for 5 minutes for sending duplicate messages.');
+          logout();
+        }, 1000);
+        return;
+      }
+      
+      sendButton.disabled = true;
+      input.disabled = true;
+      showInputStatus('Sending...', '');
+      
+      try {
+        const { data, error } = await supabase
+          .from('messages')
+          .insert([{
+            user_id: currentUser.id,
+            username: currentUser.username,
+            message: message,
+            source: 'web'
+          }])
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        await fetch(CONFIG.discordWebhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            content: `**${currentUser.username}:** ${message}` 
+          })
+        });
+
+        addMessage(currentUser.username, message, data.created_at, 'web', true);
+        
+        const now = Date.now();
+        lastMessageTime = now;
+        recentMessages.push(now);
+        localStorage.setItem('last_message_' + currentUser.id, JSON.stringify({ text: message, time: now }));
+        
+        input.value = '';
+        input.style.height = 'auto';
+        showInputStatus('Message sent!', 'success');
+        showCooldown(SPAM_CONFIG.MESSAGE_COOLDOWN);
+
+      } catch (error) {
+        console.error('Send error:', error);
+        showInputStatus('Failed to send message', 'error');
+        sendButton.disabled = false;
+        input.disabled = false;
+      }
+    }
+
+    function showInputStatus(message, type) {
+      const statusEl = document.getElementById('inputStatus');
+      statusEl.textContent = message;
+      statusEl.className = 'input-status ' + type;
+      if (message && type !== '') {
+        setTimeout(() => {
+          statusEl.textContent = '';
+          statusEl.className = 'input-status';
+        }, 3000);
+      }
+    }
+
+    // Auto-resize textarea and block @ symbols
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Load configuration first
+      const configLoaded = await loadConfig();
+      if (!configLoaded) {
+        console.error('Failed to load configuration');
+        alert('Failed to load app configuration. Please refresh the page.');
+      }
+      
+      const input = document.getElementById('messageInput');
+      
+      input.addEventListener('input', function() {
+        // Remove @ symbols immediately
+        if (this.value.includes('@')) {
+          const cursorPos = this.selectionStart;
+          this.value = this.value.replace(/@/g, '');
+          this.setSelectionRange(cursorPos - 1, cursorPos - 1);
+        }
+        
+        // Auto-resize
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+      });
+
+      // Block @ on keypress
+      input.addEventListener('keydown', function(e) {
+        // Block @ key (Shift+2)
+        if (e.key === '@' || (e.shiftKey && e.key === '2')) {
+          e.preventDefault();
+          
+          // Show visual feedback
+          const statusEl = document.getElementById('inputStatus');
+          statusEl.textContent = '@ mentions are disabled';
+          statusEl.className = 'input-status warning';
+          setTimeout(() => {
+            statusEl.textContent = '';
+            statusEl.className = 'input-status';
+          }, 2000);
+          
+          return false;
+        }
+      });
+
+      // Block @ on paste
+      input.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+        const cleanText = pastedText.replace(/@/g, '');
+        
+        // Show warning if @ was removed
+        if (pastedText.includes('@')) {
+          const statusEl = document.getElementById('inputStatus');
+          statusEl.textContent = '@ mentions removed from pasted text';
+          statusEl.className = 'input-status warning';
+          setTimeout(() => {
+            statusEl.textContent = '';
+            statusEl.className = 'input-status';
+          }, 2000);
+        }
+        
+        // Insert cleaned text at cursor position
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        const currentValue = this.value;
+        this.value = currentValue.substring(0, start) + cleanText + currentValue.substring(end);
+        
+        // Set cursor position after inserted text
+        const newPos = start + cleanText.length;
+        this.setSelectionRange(newPos, newPos);
+        
+        // Trigger input event for auto-resize
+        this.dispatchEvent(new Event('input'));
+      });
+
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          if (!cooldownActive) {
+            sendMessage();
+          }
+        }
+      });
+
+      document.getElementById('usernameInput').addEventListener('keydown', function(e) {
+        // Block @ symbol
+        if (e.key === '@' || (e.shiftKey && e.key === '2')) {
+          e.preventDefault();
+          
+          // Show visual feedback
+          const authStatusEl = document.getElementById('authStatus');
+          authStatusEl.textContent = '@ symbol not allowed in usernames';
+          authStatusEl.className = 'status-message warning';
+          setTimeout(() => {
+            authStatusEl.textContent = '';
+            authStatusEl.className = 'status-message';
+          }, 2000);
+          
+          return false;
+        }
+      });
+
+      document.getElementById('usernameInput').addEventListener('input', function() {
+        // Remove @ symbols if they somehow get in
+        if (this.value.includes('@')) {
+          const cursorPos = this.selectionStart;
+          this.value = this.value.replace(/@/g, '');
+          this.setSelectionRange(cursorPos - 1, cursorPos - 1);
+        }
+      });
+
+      document.getElementById('usernameInput').addEventListener('paste', function(e) {
+        e.preventDefault();
+        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+        const cleanText = pastedText.replace(/@/g, '');
+        
+        // Show warning if @ was removed
+        if (pastedText.includes('@')) {
+          const authStatusEl = document.getElementById('authStatus');
+          authStatusEl.textContent = '@ symbol removed from pasted text';
+          authStatusEl.className = 'status-message warning';
+          setTimeout(() => {
+            authStatusEl.textContent = '';
+            authStatusEl.className = 'status-message';
+          }, 2000);
+        }
+        
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        const currentValue = this.value;
+        this.value = currentValue.substring(0, start) + cleanText + currentValue.substring(end);
+        
+        const newPos = start + cleanText.length;
+        this.setSelectionRange(newPos, newPos);
+      });
+
+      document.getElementById('usernameInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          handleAuth();
+        }
+      });
+
+      document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          handleAuth();
+        }
+      });
+
+      checkSession();
+    });
+
+    // Real-time message subscription
+    let messageChannel = null;
+
+    function updateRealtimeStatus(status, text) {
+      const statusEl = document.getElementById('realtimeStatus');
+      if (!statusEl) return;
+      
+      statusEl.className = 'realtime-status ' + status;
+      statusEl.querySelector('.status-text').textContent = text;
+    }
+
+    function setupRealtimeSubscription() {
+      // Remove old subscription if exists
+      if (messageChannel) {
+        supabase.removeChannel(messageChannel);
+      }
+
+      console.log('🔌 Setting up real-time subscription...');
+      updateRealtimeStatus('connecting', 'connecting...');
+
+      // Create new subscription
+      messageChannel = supabase
+        .channel('messages-realtime')
+        .on('postgres_changes', 
+          { event: 'INSERT', schema: 'public', table: 'messages' }, 
+          (payload) => {
+            console.log('📨 New message received:', payload.new.username);
+            
+            // Only add if user is logged in and it's not their own message
+            if (currentUser && payload.new.user_id !== currentUser.id) {
+              addMessage(
+                payload.new.username, 
+                payload.new.message, 
+                payload.new.created_at,
+                payload.new.source || 'web',
+                true
+              );
+            }
+          }
+        )
+        .subscribe((status, error) => {
+          if (status === 'SUBSCRIBED') {
+            console.log('✅ Real-time updates active! Messages will appear automatically.');
+            updateRealtimeStatus('connected', 'live');
+          } else if (status === 'CHANNEL_ERROR') {
+            console.error('❌ Real-time connection error:', error);
+            console.log('💡 Make sure Realtime is enabled in your Supabase project settings.');
+            updateRealtimeStatus('error', 'error');
+          } else if (status === 'TIMED_OUT') {
+            console.warn('⏱️ Real-time subscription timed out. Retrying...');
+            updateRealtimeStatus('connecting', 'reconnecting...');
+            setTimeout(setupRealtimeSubscription, 5000);
+          } else if (status === 'CLOSED') {
+            updateRealtimeStatus('error', 'disconnected');
+          } else {
+            console.log('🔄 Real-time status:', status);
+            updateRealtimeStatus('connecting', status.toLowerCase());
+          }
+        });
+    }
+  </script>
+</body>
+</html>
