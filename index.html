@@ -1440,7 +1440,6 @@
             filter: blur(0.3px);
         }
         
-        /* Enhanced glow with color shift */
         @keyframes moonGlow {
             0%, 100% { 
                 box-shadow: 
@@ -1458,7 +1457,6 @@
                     contrast(1.2) 
                     brightness(1.08)
                     saturate(0.95);
-                transform: scale(1);
             }
             50% { 
                 box-shadow: 
@@ -1478,10 +1476,17 @@
                     contrast(1.25) 
                     brightness(1.12)
                     saturate(1);
-                transform: scale(1.02);
             }
         }
-
+        /* Orbital motion animation */
+        @keyframes orbit {
+            0% { 
+                transform: rotate(0deg) translateX(250px) rotate(0deg); 
+            }
+            100% { 
+                transform: rotate(360deg) translateX(250px) rotate(-360deg); 
+            }
+        }
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .header {
