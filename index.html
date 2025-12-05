@@ -3035,7 +3035,7 @@
         };
 
         // ===== BACKGROUND MANAGER WITH SUPABASE + LOCALSTORAGE =====
-        async function changeBackground(type) {
+        function changeBackground(type) {
             const bgFunction = backgroundFunctions[type];
             if (bgFunction) {
                 const starfield = document.getElementById('starfield');
@@ -3046,30 +3046,37 @@
                 // Save to localStorage (instant)
                 localStorage.setItem('kripticBackground', type);
                 
-                // Save to Supabase (async)
-                if (pollSupabase) {
-                    try {
-                        const userId = sessionStorage.getItem('userId') || generateUserId();
-                        
-                        const { error } = await pollSupabase
-                            .from('user_preferences')
-                            .upsert({
-                                user_id: userId,
-                                background_type: type,
-                                updated_at: new Date().toISOString()
-                            }, {
-                                onConflict: 'user_id'
-                            });
-                        
-                        if (error) {
-                            console.warn('Failed to save background to Supabase:', error);
-                        } else {
-                            console.log('✅ Background saved to Supabase:', type);
-                        }
-                    } catch (err) {
-                        console.warn('Supabase save error:', err);
-                    }
+                // Save to Supabase (async, non-blocking)
+                if (typeof pollSupabase !== 'undefined' && pollSupabase) {
+                    saveBackgroundToSupabase(type).catch(err => {
+                        console.warn('Background save to Supabase failed (non-critical):', err);
+                    });
                 }
+            }
+        }
+        
+        // Separate async function for Supabase save
+        async function saveBackgroundToSupabase(type) {
+            try {
+                const userId = generateUserId();
+                
+                const { error } = await pollSupabase
+                    .from('user_preferences')
+                    .upsert({
+                        user_id: userId,
+                        background_type: type,
+                        updated_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'user_id'
+                    });
+                
+                if (error) {
+                    console.warn('Supabase background save error:', error);
+                } else {
+                    console.log('✅ Background saved to Supabase:', type);
+                }
+            } catch (err) {
+                console.warn('Supabase save exception:', err);
             }
         }
         
@@ -3084,39 +3091,49 @@
         }
         
         // Load saved background on page load
-        async function loadSavedBackground() {
-            try {
-                // Try Supabase first
-                if (pollSupabase) {
-                    const userId = sessionStorage.getItem('userId') || generateUserId();
-                    
-                    const { data, error } = await pollSupabase
-                        .from('user_preferences')
-                        .select('background_type')
-                        .eq('user_id', userId)
-                        .single();
-                    
-                    if (data && data.background_type) {
-                        console.log('✅ Loaded background from Supabase:', data.background_type);
-                        const backgroundSelector = document.getElementById('backgroundSelector');
-                        if (backgroundSelector) {
-                            backgroundSelector.value = data.background_type;
-                        }
-                        changeBackground(data.background_type);
-                        return;
-                    }
-                }
-            } catch (err) {
-                console.warn('Failed to load from Supabase, using localStorage:', err);
-            }
-            
-            // Fallback to localStorage
+        function loadSavedBackground() {
+            // Always load from localStorage first (instant)
             const savedBackground = localStorage.getItem('kripticBackground') || 'stars';
             const backgroundSelector = document.getElementById('backgroundSelector');
             if (backgroundSelector) {
                 backgroundSelector.value = savedBackground;
             }
             changeBackground(savedBackground);
+            
+            // Try to sync from Supabase in background (non-blocking)
+            if (typeof pollSupabase !== 'undefined' && pollSupabase) {
+                syncBackgroundFromSupabase().catch(err => {
+                    console.warn('Supabase sync failed (non-critical):', err);
+                });
+            }
+        }
+        
+        // Separate async function for Supabase load
+        async function syncBackgroundFromSupabase() {
+            try {
+                const userId = generateUserId();
+                
+                const { data, error } = await pollSupabase
+                    .from('user_preferences')
+                    .select('background_type')
+                    .eq('user_id', userId)
+                    .single();
+                
+                if (data && data.background_type) {
+                    const currentBg = localStorage.getItem('kripticBackground');
+                    if (currentBg !== data.background_type) {
+                        console.log('✅ Synced background from Supabase:', data.background_type);
+                        const backgroundSelector = document.getElementById('backgroundSelector');
+                        if (backgroundSelector) {
+                            backgroundSelector.value = data.background_type;
+                        }
+                        changeBackground(data.background_type);
+                    }
+                }
+            } catch (err) {
+                // Silently fail - localStorage is already working
+                console.warn('Supabase sync exception (non-critical):', err);
+            }
         }
 
         // ===== THEME SWITCHER =====
