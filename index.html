@@ -399,21 +399,20 @@
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--primary);
         }
-                /* Enhanced Navigation Bar */
+        /* Enhanced Navigation Bar */
         .main-nav {
             position: relative;
             z-index: 100;
-            background: rgba(10, 14, 39, 0.95);
+            background: rgba(10, 14, 39, 0.98);
             backdrop-filter: blur(30px);
             border-bottom: 2px solid var(--primary);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            padding: 0.5rem 0; /* Add this for better height control */
         }
         
         .nav-container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
-            padding: 0 1rem; /* Reduced from 2rem */
+            padding: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -421,29 +420,29 @@
         
         .nav-links {
             display: flex;
-            gap: 0; /* Keep this at 0 */
+            gap: 0;
             list-style: none;
             flex: 1;
             justify-content: center;
-            margin: 0; /* Add this */
-            padding: 0; /* Add this */
+            margin: 0;
+            padding: 0;
         }
         
         .nav-link {
             position: relative;
-            padding: 1.5rem 1.5rem; /* Reduced from 2rem */
+            padding: 1rem 1.5rem;
             color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
-            font-size: 0.9rem; /* Slightly smaller */
+            font-size: 0.85rem;
             font-weight: 600;
-            letter-spacing: 0.5px; /* Reduced from 1px */
+            letter-spacing: 0.5px;
             text-transform: uppercase;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-family: 'Segoe UI', 'Arial', sans-serif; /* Override custom fonts for navigation */
-            white-space: nowrap; /* Prevent text wrapping */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            white-space: nowrap;
         }
         
         .nav-link::before {
@@ -452,11 +451,11 @@
             bottom: 0;
             left: 50%;
             width: 0;
-            height: 3px;
+            height: 2px;
             background: linear-gradient(90deg, var(--primary), var(--accent));
             transform: translateX(-50%);
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 20px var(--primary);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px var(--primary);
         }
         
         .nav-link::after {
@@ -465,16 +464,15 @@
             inset: 0;
             background: radial-gradient(circle at 50% 50%, var(--primary), transparent);
             opacity: 0;
-            transition: opacity 0.4s;
+            transition: opacity 0.3s;
         }
         
         .nav-link:hover {
             color: #ffffff;
-            transform: translateY(-3px);
         }
         
         .nav-link:hover::before {
-            width: 100%;
+            width: 80%;
         }
         
         .nav-link:hover::after {
@@ -483,16 +481,83 @@
         
         .nav-link.active {
             color: var(--primary);
-            text-shadow: 0 0 20px var(--primary);
         }
         
         .nav-link.active::before {
-            width: 100%;
+            width: 80%;
         }
         
         .nav-icon {
-            font-size: 1.1rem; /* Reduced from 1.2rem */
-            filter: drop-shadow(0 0 6px currentColor); /* Reduced glow */
+            font-size: 1.1rem;
+            filter: drop-shadow(0 0 4px currentColor);
+        }
+        
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-size: 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 1rem;
+        }
+        
+        .mobile-menu-toggle:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 20px var(--primary);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 300px;
+                height: 100vh;
+                background: rgba(10, 14, 39, 0.98);
+                backdrop-filter: blur(30px);
+                flex-direction: column;
+                padding: 6rem 0 2rem;
+                border-left: 2px solid var(--primary);
+                transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+                gap: 0;
+                justify-content: flex-start;
+            }
+        
+            .nav-links.active {
+                right: 0;
+            }
+        
+            .mobile-menu-toggle {
+                display: block;
+            }
+        
+            .nav-link {
+                width: 100%;
+                padding: 1.5rem 2rem;
+                justify-content: flex-start;
+            }
+        
+            .nav-link::before {
+                left: 0;
+                transform: none;
+                width: 3px;
+                height: 0;
+                background: linear-gradient(180deg, var(--primary), var(--accent));
+            }
+        
+            .nav-link:hover::before,
+            .nav-link.active::before {
+                height: 100%;
+                width: 3px;
+            }
         }
         
         /* Mobile Menu Toggle */
@@ -3054,13 +3119,13 @@
 
         // ===== FIREBASE VISITOR COUNTER =====
         const firebaseConfig = {
-            apiKey: "AIzaSyDGpAHia_wODW7ynFYUZYTV22rIHd98r5s",
-            authDomain: "kriptic-site.firebaseapp.com",
-            databaseURL: "https://kriptic-site-default-rtdb.firebaseio.com",
-            projectId: "kriptic-site",
-            storageBucket: "kriptic-site.firebasestorage.app",
-            messagingSenderId: "639987847762",
-            appId: "1:639987847762:web:4985fd9e5fb887f4a59d3a"
+            apiKey: "AIzaSyBf86NMHrnOCUui_2VFF00wwehencFzF0Y",
+            authDomain: "kriptic-edition.firebaseapp.com",
+            databaseURL: "https://kriptic-edition-default-rtdb.firebaseio.com",
+            projectId: "kriptic-edition",
+            storageBucket: "kriptic-edition.firebasestorage.app",
+            messagingSenderId: "208515615130",
+            appId: "1:208515615130:web:2f94d2afdea3a668f91223"
         };
 
         // ===== FIREBASE VISITOR COUNTER =====
