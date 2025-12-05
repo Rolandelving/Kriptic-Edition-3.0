@@ -1335,64 +1335,151 @@
             pointer-events: none;
             animation: orbit 60s linear infinite;
         }
-        /* Enhanced Orbital Planet/Moon */
+        /* 🌕 ULTRA HIGH-QUALITY PHOTOREALISTIC MOON 🌕 */
         .orbital-planet {
             position: fixed;
-            width: 120px;
-            height: 120px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #ffffff, #d0d0d0 50%, #8a8a8a);
+            background: 
+                /* Bright crater rays */
+                radial-gradient(circle at 32% 32%, rgba(255, 255, 255, 0.95) 0%, transparent 4%),
+                radial-gradient(circle at 68% 42%, rgba(255, 255, 255, 0.85) 0%, transparent 3%),
+                radial-gradient(circle at 45% 72%, rgba(255, 255, 255, 0.9) 0%, transparent 3.5%),
+                radial-gradient(circle at 78% 68%, rgba(255, 255, 255, 0.75) 0%, transparent 2.5%),
+                radial-gradient(circle at 25% 58%, rgba(255, 255, 255, 0.8) 0%, transparent 3%),
+                radial-gradient(circle at 58% 28%, rgba(255, 255, 255, 0.7) 0%, transparent 2%),
+                /* Dark maria patterns */
+                radial-gradient(ellipse at 35% 45%, rgba(60, 60, 65, 0.9) 0%, transparent 25%),
+                radial-gradient(ellipse at 55% 55%, rgba(70, 70, 75, 0.8) 0%, transparent 20%),
+                radial-gradient(ellipse at 48% 38%, rgba(65, 65, 70, 0.85) 0%, transparent 18%),
+                /* Base realistic surface gradient */
+                radial-gradient(circle at 28% 28%, 
+                    #fefefe 0%, 
+                    #f8f8f8 15%, 
+                    #ececec 30%, 
+                    #d4d4d4 45%,
+                    #b8b8b8 60%,
+                    #9a9a9a 75%,
+                    #7a7a7a 90%,
+                    #5a5a5a 100%);
             box-shadow: 
-                0 0 80px var(--primary),
-                inset -15px -15px 40px rgba(0, 0, 0, 0.6),
-                inset 5px 5px 20px rgba(255, 255, 255, 0.3);
+                /* Outer glow */
+                0 0 120px var(--primary),
+                0 0 80px rgba(255, 255, 255, 0.4),
+                0 0 50px var(--accent),
+                /* Deep shadow side */
+                inset -35px -35px 80px rgba(0, 0, 0, 0.9),
+                inset -20px -20px 50px rgba(0, 0, 0, 0.7),
+                inset -10px -10px 30px rgba(0, 0, 0, 0.5),
+                /* Bright highlight side */
+                inset 12px 12px 35px rgba(255, 255, 255, 0.5),
+                inset 20px 20px 50px rgba(255, 255, 255, 0.3),
+                inset 8px 8px 20px rgba(255, 255, 255, 0.6);
             z-index: 2;
             pointer-events: none;
-            animation: orbit 60s linear infinite, moonGlow 4s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.4));
+            animation: orbit 60s linear infinite, moonGlow 8s ease-in-out infinite;
+            filter: 
+                drop-shadow(0 0 50px rgba(255, 255, 255, 0.6)) 
+                contrast(1.2) 
+                brightness(1.08)
+                saturate(0.95);
+            position: relative;
+            overflow: visible;
         }
         
-        /* Add crater effects */
+        /* Large prominent crater - Mare Tranquillitatis style */
         .orbital-planet::before {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, rgba(0, 0, 0, 0.3), transparent);
+            width: 45px;
+            height: 45px;
+            background: 
+                /* Crater rim highlight */
+                radial-gradient(circle at 35% 35%, rgba(220, 220, 220, 0.8) 0%, transparent 15%),
+                /* Central peak */
+                radial-gradient(circle at 50% 50%, rgba(180, 180, 180, 0.6) 0%, transparent 8%),
+                /* Dark crater floor */
+                radial-gradient(circle at 52% 52%, 
+                    rgba(45, 45, 50, 0.95) 0%, 
+                    rgba(55, 55, 60, 0.9) 30%, 
+                    rgba(75, 75, 80, 0.7) 60%, 
+                    transparent 85%);
             border-radius: 50%;
-            top: 35%;
-            left: 45%;
+            top: 36%;
+            left: 46%;
+            box-shadow: 
+                inset -5px -5px 15px rgba(0, 0, 0, 0.9),
+                inset 3px 3px 8px rgba(255, 255, 255, 0.3);
+            filter: blur(0.4px);
         }
         
+        /* Tycho-style ray crater with bright ejecta */
         .orbital-planet::after {
             content: '';
             position: absolute;
-            width: 15px;
-            height: 15px;
-            background: radial-gradient(circle, rgba(0, 0, 0, 0.25), transparent);
+            width: 28px;
+            height: 28px;
+            background: 
+                /* Bright central ray */
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.95) 0%, transparent 12%),
+                /* Ejecta blanket */
+                radial-gradient(circle at 50% 50%, 
+                    rgba(200, 200, 200, 0.9) 0%, 
+                    rgba(150, 150, 150, 0.8) 25%,
+                    rgba(100, 100, 105, 0.7) 50%, 
+                    transparent 75%);
             border-radius: 50%;
-            top: 55%;
+            top: 56%;
             left: 60%;
+            box-shadow: 
+                /* Ray system extending outward */
+                0 0 40px rgba(255, 255, 255, 0.6),
+                inset -3px -3px 10px rgba(0, 0, 0, 0.9),
+                inset 2px 2px 6px rgba(255, 255, 255, 0.4);
+            filter: blur(0.3px);
         }
         
+        /* Enhanced glow with color shift */
         @keyframes moonGlow {
             0%, 100% { 
                 box-shadow: 
-                    0 0 80px var(--primary),
-                    inset -15px -15px 40px rgba(0, 0, 0, 0.6),
-                    inset 5px 5px 20px rgba(255, 255, 255, 0.3);
+                    0 0 120px var(--primary),
+                    0 0 80px rgba(255, 255, 255, 0.4),
+                    0 0 50px var(--accent),
+                    inset -35px -35px 80px rgba(0, 0, 0, 0.9),
+                    inset -20px -20px 50px rgba(0, 0, 0, 0.7),
+                    inset -10px -10px 30px rgba(0, 0, 0, 0.5),
+                    inset 12px 12px 35px rgba(255, 255, 255, 0.5),
+                    inset 20px 20px 50px rgba(255, 255, 255, 0.3),
+                    inset 8px 8px 20px rgba(255, 255, 255, 0.6);
+                filter: 
+                    drop-shadow(0 0 50px rgba(255, 255, 255, 0.6)) 
+                    contrast(1.2) 
+                    brightness(1.08)
+                    saturate(0.95);
+                transform: scale(1);
             }
             50% { 
                 box-shadow: 
-                    0 0 120px var(--primary),
-                    0 0 60px rgba(255, 255, 255, 0.5),
-                    inset -15px -15px 40px rgba(0, 0, 0, 0.6),
-                    inset 5px 5px 20px rgba(255, 255, 255, 0.3);
+                    0 0 160px var(--primary),
+                    0 0 100px rgba(255, 255, 255, 0.6),
+                    0 0 70px var(--accent),
+                    0 0 40px var(--secondary),
+                    inset -35px -35px 80px rgba(0, 0, 0, 0.85),
+                    inset -20px -20px 50px rgba(0, 0, 0, 0.6),
+                    inset -10px -10px 30px rgba(0, 0, 0, 0.4),
+                    inset 12px 12px 35px rgba(255, 255, 255, 0.6),
+                    inset 20px 20px 50px rgba(255, 255, 255, 0.4),
+                    inset 8px 8px 20px rgba(255, 255, 255, 0.7);
+                filter: 
+                    drop-shadow(0 0 80px rgba(255, 255, 255, 0.8)) 
+                    drop-shadow(0 0 40px var(--primary))
+                    contrast(1.25) 
+                    brightness(1.12)
+                    saturate(1);
+                transform: scale(1.02);
             }
-        }
-        @keyframes orbit {
-            from { transform: rotate(0deg) translateX(200px) rotate(0deg); }
-            to { transform: rotate(360deg) translateX(200px) rotate(-360deg); }
         }
 
         /* Mobile Responsive */
@@ -4122,7 +4209,42 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM loaded, initializing...');
-            
+            // Create ultra-realistic micro-craters on moon
+            const moon = document.querySelector('.orbital-planet');
+            if (moon) {
+                const microCraters = [
+                    { size: 12, top: '25%', left: '35%', opacity: 0.7 },
+                    { size: 8, top: '45%', left: '68%', opacity: 0.6 },
+                    { size: 15, top: '70%', left: '42%', opacity: 0.75 },
+                    { size: 10, top: '62%', left: '78%', opacity: 0.65 },
+                    { size: 6, top: '32%', left: '62%', opacity: 0.5 },
+                    { size: 9, top: '78%', left: '28%', opacity: 0.7 },
+                    { size: 7, top: '48%', left: '25%', opacity: 0.55 },
+                    { size: 11, top: '15%', left: '52%', opacity: 0.8 },
+                    { size: 5, top: '85%', left: '65%', opacity: 0.6 },
+                    { size: 8, top: '22%', left: '75%', opacity: 0.65 }
+                ];
+                
+                microCraters.forEach(crater => {
+                    const craterEl = document.createElement('div');
+                    craterEl.style.position = 'absolute';
+                    craterEl.style.width = crater.size + 'px';
+                    craterEl.style.height = crater.size + 'px';
+                    craterEl.style.top = crater.top;
+                    craterEl.style.left = crater.left;
+                    craterEl.style.borderRadius = '50%';
+                    craterEl.style.background = `radial-gradient(circle at 40% 40%, 
+                        rgba(120, 120, 120, ${crater.opacity * 0.4}) 0%, 
+                        rgba(60, 60, 60, ${crater.opacity * 0.8}) 50%, 
+                        transparent 80%)`;
+                    craterEl.style.boxShadow = `inset -${crater.size * 0.15}px -${crater.size * 0.15}px ${crater.size * 0.3}px rgba(0, 0, 0, 0.8)`;
+                    craterEl.style.filter = 'blur(0.2px)';
+                    craterEl.style.pointerEvents = 'none';
+                    moon.appendChild(craterEl);
+                });
+                
+                console.log('🌕 Ultra-detailed moon surface rendered with', microCraters.length, 'micro-craters');
+            }
             // Check if user was previously authenticated in this session
             if (sessionStorage.getItem('debugAuthenticated') === 'true') {
                 isDebugAuthenticated = true;
