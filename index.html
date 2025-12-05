@@ -1339,25 +1339,31 @@
             pointer-events: none;
             animation: orbit 60s linear infinite;
         }
-        /* 🌕 ULTRA HIGH-QUALITY PHOTOREALISTIC MOON 🌕 */
+        /* 🌕 ULTRA HIGH-QUALITY PHOTOREALISTIC MOON */
         .orbital-planet {
+            /* Positioning & Structure */
             position: fixed;
             width: 180px;
             height: 180px;
             border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: visible;
+            
+            /* Surface Texture - Multi-layered gradients for realism */
             background: 
-                /* Bright crater rays */
+                /* Bright crater rays (Tycho-style ejecta patterns) */
                 radial-gradient(circle at 32% 32%, rgba(255, 255, 255, 0.95) 0%, transparent 4%),
                 radial-gradient(circle at 68% 42%, rgba(255, 255, 255, 0.85) 0%, transparent 3%),
                 radial-gradient(circle at 45% 72%, rgba(255, 255, 255, 0.9) 0%, transparent 3.5%),
                 radial-gradient(circle at 78% 68%, rgba(255, 255, 255, 0.75) 0%, transparent 2.5%),
                 radial-gradient(circle at 25% 58%, rgba(255, 255, 255, 0.8) 0%, transparent 3%),
                 radial-gradient(circle at 58% 28%, rgba(255, 255, 255, 0.7) 0%, transparent 2%),
-                /* Dark maria patterns */
+                /* Dark maria patterns (lunar seas) */
                 radial-gradient(ellipse at 35% 45%, rgba(60, 60, 65, 0.9) 0%, transparent 25%),
                 radial-gradient(ellipse at 55% 55%, rgba(70, 70, 75, 0.8) 0%, transparent 20%),
                 radial-gradient(ellipse at 48% 38%, rgba(65, 65, 70, 0.85) 0%, transparent 18%),
-                /* Base realistic surface gradient */
+                /* Base lunar surface (terminator shadow gradient) */
                 radial-gradient(circle at 28% 28%, 
                     #fefefe 0%, 
                     #f8f8f8 15%, 
@@ -1367,113 +1373,136 @@
                     #9a9a9a 75%,
                     #7a7a7a 90%,
                     #5a5a5a 100%);
+            
+            /* Advanced 3D Lighting & Shadows */
             box-shadow: 
-                /* Outer glow */
+                /* Outer atmospheric glow */
                 0 0 120px var(--primary),
                 0 0 80px rgba(255, 255, 255, 0.4),
                 0 0 50px var(--accent),
-                /* Deep shadow side */
+                /* Deep terminator shadow (dark side) */
                 inset -35px -35px 80px rgba(0, 0, 0, 0.9),
                 inset -20px -20px 50px rgba(0, 0, 0, 0.7),
                 inset -10px -10px 30px rgba(0, 0, 0, 0.5),
-                /* Bright highlight side */
+                /* Bright sunlit side highlights */
                 inset 12px 12px 35px rgba(255, 255, 255, 0.5),
                 inset 20px 20px 50px rgba(255, 255, 255, 0.3),
                 inset 8px 8px 20px rgba(255, 255, 255, 0.6);
-            z-index: 0;
-            pointer-events: none;
-            animation: orbit 60s linear infinite, moonGlow 8s ease-in-out infinite;
+            
+            /* Photorealistic Effects */
             filter: 
                 drop-shadow(0 0 50px rgba(255, 255, 255, 0.6)) 
                 contrast(1.2) 
                 brightness(1.08)
                 saturate(0.95);
-            position: relative;
-            overflow: visible;
+            
+            /* Animations */
+            animation: orbit 60s linear infinite, moonGlow 8s ease-in-out infinite;
         }
         
-        /* Large prominent crater - Mare Tranquillitatis style */
+        /* Large Impact Crater - Mare Tranquillitatis Style */
         .orbital-planet::before {
             content: '';
             position: absolute;
             width: 45px;
             height: 45px;
+            border-radius: 50%;
+            top: 36%;
+            left: 46%;
+            
+            /* Multi-layered crater structure */
             background: 
                 /* Crater rim highlight */
                 radial-gradient(circle at 35% 35%, rgba(220, 220, 220, 0.8) 0%, transparent 15%),
                 /* Central peak */
                 radial-gradient(circle at 50% 50%, rgba(180, 180, 180, 0.6) 0%, transparent 8%),
-                /* Dark crater floor */
+                /* Dark crater floor with depth */
                 radial-gradient(circle at 52% 52%, 
                     rgba(45, 45, 50, 0.95) 0%, 
                     rgba(55, 55, 60, 0.9) 30%, 
                     rgba(75, 75, 80, 0.7) 60%, 
                     transparent 85%);
-            border-radius: 50%;
-            top: 36%;
-            left: 46%;
+            
+            /* 3D crater lighting */
             box-shadow: 
                 inset -5px -5px 15px rgba(0, 0, 0, 0.9),
                 inset 3px 3px 8px rgba(255, 255, 255, 0.3);
+            
+            /* Subtle texture blur */
             filter: blur(0.4px);
         }
         
-        /* Tycho-style ray crater with bright ejecta */
+        /* Tycho-Style Ray Crater with Bright Ejecta */
         .orbital-planet::after {
             content: '';
             position: absolute;
             width: 28px;
             height: 28px;
+            border-radius: 50%;
+            top: 56%;
+            left: 60%;
+            
+            /* Bright ray crater structure */
             background: 
-                /* Bright central ray */
+                /* Brilliant central ray */
                 radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.95) 0%, transparent 12%),
-                /* Ejecta blanket */
+                /* Ejecta blanket spreading outward */
                 radial-gradient(circle at 50% 50%, 
                     rgba(200, 200, 200, 0.9) 0%, 
                     rgba(150, 150, 150, 0.8) 25%,
                     rgba(100, 100, 105, 0.7) 50%, 
                     transparent 75%);
-            border-radius: 50%;
-            top: 56%;
-            left: 60%;
+            
+            /* Ray system extending outward */
             box-shadow: 
-                /* Ray system extending outward */
                 0 0 40px rgba(255, 255, 255, 0.6),
                 inset -3px -3px 10px rgba(0, 0, 0, 0.9),
                 inset 2px 2px 6px rgba(255, 255, 255, 0.4);
+            
+            /* Subtle texture */
             filter: blur(0.3px);
         }
         
+        /* Pulsing Atmospheric Glow Animation */
         @keyframes moonGlow {
             0%, 100% { 
                 box-shadow: 
+                    /* Base glow state */
                     0 0 120px var(--primary),
                     0 0 80px rgba(255, 255, 255, 0.4),
                     0 0 50px var(--accent),
+                    /* Shadow definition */
                     inset -35px -35px 80px rgba(0, 0, 0, 0.9),
                     inset -20px -20px 50px rgba(0, 0, 0, 0.7),
                     inset -10px -10px 30px rgba(0, 0, 0, 0.5),
+                    /* Highlight definition */
                     inset 12px 12px 35px rgba(255, 255, 255, 0.5),
                     inset 20px 20px 50px rgba(255, 255, 255, 0.3),
                     inset 8px 8px 20px rgba(255, 255, 255, 0.6);
+                
                 filter: 
                     drop-shadow(0 0 50px rgba(255, 255, 255, 0.6)) 
                     contrast(1.2) 
                     brightness(1.08)
                     saturate(0.95);
             }
+            
             50% { 
                 box-shadow: 
+                    /* Enhanced glow peak */
                     0 0 160px var(--primary),
                     0 0 100px rgba(255, 255, 255, 0.6),
                     0 0 70px var(--accent),
                     0 0 40px var(--secondary),
+                    /* Softened shadows */
                     inset -35px -35px 80px rgba(0, 0, 0, 0.85),
                     inset -20px -20px 50px rgba(0, 0, 0, 0.6),
                     inset -10px -10px 30px rgba(0, 0, 0, 0.4),
+                    /* Intensified highlights */
                     inset 12px 12px 35px rgba(255, 255, 255, 0.6),
                     inset 20px 20px 50px rgba(255, 255, 255, 0.4),
                     inset 8px 8px 20px rgba(255, 255, 255, 0.7);
+                
                 filter: 
                     drop-shadow(0 0 80px rgba(255, 255, 255, 0.8)) 
                     drop-shadow(0 0 40px var(--primary))
@@ -1482,13 +1511,32 @@
                     saturate(1);
             }
         }
-        /* Orbital motion animation */
+        
+        /* Circular Orbital Motion with Counter-Rotation */
         @keyframes orbit {
             0% { 
                 transform: rotate(0deg) translateX(250px) rotate(0deg); 
             }
             100% { 
                 transform: rotate(360deg) translateX(250px) rotate(-360deg); 
+            }
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .orbital-planet {
+                display: none; /* Hide on mobile for performance */
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            @keyframes orbit {
+                0% { 
+                    transform: rotate(0deg) translateX(180px) rotate(0deg); 
+                }
+                100% { 
+                    transform: rotate(360deg) translateX(180px) rotate(-360deg); 
+                }
             }
         }
         /* Mobile Responsive */
