@@ -468,51 +468,59 @@
             }
         }
 
-            // ===== GAME LAUNCHER =====
-            function launchGame(url) {
-                try {
-                    // Open new window and navigate directly to the URL
-                    const gameWindow = window.open(url, '_blank', 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no');
-                    
-                    if (!gameWindow) {
-                        alert('Please allow popups for this site to launch games!');
-                        return;
-                    }
-            
-                    // Wait for game window to load, then apply protections
-                    gameWindow.addEventListener('load', function() {
-                        try {
-                            gameWindow.document.addEventListener('contextmenu', function(e) {
-                                e.preventDefault();
-                                return false;
-                            });
-            
-                            gameWindow.document.addEventListener('keydown', function(e) {
-                                if (e.keyCode === 123 || 
-                                    (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
-                                    (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
-                                    (e.ctrlKey && e.shiftKey && e.keyCode === 67) ||
-                                    (e.ctrlKey && e.keyCode === 85)) {
-                                    e.preventDefault();
-                                    return false;
-                                }
-                            });
-            
-                            gameWindow.document.addEventListener('selectstart', function(e) {
-                                e.preventDefault();
-                                return false;
-                            });
-                        } catch (protectionError) {
-                            // Silently ignore if protection can't be applied
-                        }
-                    });
-            
-                } catch (error) {
-                    console.error('Error launching game:', error);
-                    alert('Failed to load game. Please try again.');
-                }
-            }
+// ===== GAME LAUNCHER =====
+async function launchGame(url) {
+    try {
+        // Fetch the game HTML
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Failed to load game');
+        
+        const gameHTML = await response.text();
+        
+        // Open new window
+        const gameWindow = window.open('', '_blank', 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no');
+        
+        if (!gameWindow) {
+            alert('Please allow popups for this site to launch games!');
+            return;
+        }
 
+        // Write the game HTML to the new window
+        gameWindow.document.open();
+        gameWindow.document.write(gameHTML);
+        gameWindow.document.close();
+
+        // Add safer anti-inspect protection to game window
+        try {
+            gameWindow.document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            gameWindow.document.addEventListener('keydown', function(e) {
+                if (e.keyCode === 123 || 
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 67) ||
+                    (e.ctrlKey && e.keyCode === 85)) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            gameWindow.document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+        } catch (protectionError) {
+            // Silently ignore if protection can't be applied
+        }
+
+    } catch (error) {
+        console.error('Error launching game:', error);
+        alert('Failed to load game. Please check the URL or try again later.');
+    }
+}
         // ===== SEARCH & SORT =====
         const searchBox = document.getElementById('searchBox');
         const sortSelect = document.getElementById('sortSelect');
