@@ -1991,376 +1991,2535 @@
         <div style="margin-top: 1rem; color: var(--primary); font-size: 0.9rem;">— Roland</div>
     </div>
 
-<script>
-    // Google Analytics
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-Z2W798YNJP');
+    <script>
+        // Google Analytics
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-Z2W798YNJP');
 
-    // ===== ANTI-INSPECT ELEMENT PROTECTION =====
-    let isDebugAuthenticated = false;
+        // ===== ANTI-INSPECT ELEMENT PROTECTION =====
+        // Disable right-click
+        // Debug mode flag - when true, protections are disabled
+        let isDebugAuthenticated = false;
 
-    document.addEventListener('contextmenu', function(e) {
-        if (!isDebugAuthenticated) {
-            e.preventDefault();
-            return false;
-        }
-    });
-
-    document.addEventListener('keydown', function(e) {
-        if (!isDebugAuthenticated) {
-            if (e.keyCode === 123 || 
-                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
-                (e.ctrlKey && e.shiftKey && e.keyCode === 74) || 
-                (e.ctrlKey && e.shiftKey && e.keyCode === 67) || 
-                (e.ctrlKey && e.keyCode === 85)) {
+        // Disable right-click (unless debug mode is active)
+        document.addEventListener('contextmenu', function(e) {
+            if (!isDebugAuthenticated) {
                 e.preventDefault();
                 return false;
             }
-        }
-    });
+        });
 
-    document.addEventListener('selectstart', function(e) {
-        if (!isDebugAuthenticated) {
-            e.preventDefault();
-            return false;
-        }
-    });
-
-    document.addEventListener('copy', function(e) {
-        if (!isDebugAuthenticated) {
-            e.preventDefault();
-            return false;
-        }
-    });
-
-    setInterval(function() {
-        try {
-            if (window.console && typeof console.clear === 'function') {
-                console.clear();
+        // Disable common developer shortcuts (unless debug mode is active)
+        document.addEventListener('keydown', function(e) {
+            if (!isDebugAuthenticated) {
+                if (e.keyCode === 123 || // F12
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl+Shift+C
+                    (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
+                    e.preventDefault();
+                    return false;
+                }
             }
-        } catch (e) {}
-    }, 2000);
+        });
 
-    // ===== LOAD THEME LOADER =====
-    const loaderScript = document.createElement('script');
-    loaderScript.src = 'Themes/theme-loader.js';
-    loaderScript.onload = () => {
-        console.log('✅ Theme loader ready');
-        initializeBackgroundSystem();
-    };
-    document.head.appendChild(loaderScript);
-
-    // ===== BACKGROUND SYSTEM =====
-    async function changeBackground(type) {
-        if (window.themeLoader) {
-            await window.themeLoader.loadTheme(type);
-        }
-    }
-
-    async function loadSavedBackground() {
-        const savedBackground = localStorage.getItem('kripticBackground') || 'stars';
-        const backgroundSelector = document.getElementById('backgroundSelector');
-        if (backgroundSelector) {
-            backgroundSelector.value = savedBackground;
-        }
-        await changeBackground(savedBackground);
-    }
-
-    function initializeBackgroundSystem() {
-        // Background selector event
-        const backgroundSelector = document.getElementById('backgroundSelector');
-        if (backgroundSelector) {
-            backgroundSelector.addEventListener('change', async (e) => {
-                const selectedBackground = e.target.value;
-                await changeBackground(selectedBackground);
-            });
-        }
-
-        // Load saved background
-        setTimeout(() => {
-            loadSavedBackground();
-        }, 100);
-
-        // Preload popular themes after 3 seconds
-        setTimeout(() => {
-            if (window.themeLoader) {
-                window.themeLoader.preloadThemes(['stars', 'rain', 'nebula', 'matrix']).catch(err => {
-                    console.warn('Preload warning:', err);
-                });
+        // Disable text selection (unless debug mode is active)
+        document.addEventListener('selectstart', function(e) {
+            if (!isDebugAuthenticated) {
+                e.preventDefault();
+                return false;
             }
-        }, 3000);
-    }
-
-    // ===== CURSOR GRAVITY =====
-    const cursorGravity = document.getElementById('cursorGravity');
-    document.addEventListener('mousemove', (e) => {
-        cursorGravity.style.transform = `translate(${e.clientX - 150}px, ${e.clientY - 150}px)`;
-    });
-
-    // ===== CARD MOUSE TRACKING =====
-    document.querySelectorAll('.nav-card').forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width) * 100;
-            const y = ((e.clientY - rect.top) / rect.height) * 100;
-            card.style.setProperty('--mouse-x', x + '%');
-            card.style.setProperty('--mouse-y', y + '%');
         });
-    });
 
-    // ===== SCROLL TO TOP BUTTON =====
-    const scrollToTopBtn = document.getElementById('scrollToTop');
-    
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            scrollToTopBtn.classList.add('visible');
-        } else {
-            scrollToTopBtn.classList.remove('visible');
-        }
-    });
-    
-    scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+        // Disable copy (unless debug mode is active)
+        document.addEventListener('copy', function(e) {
+            if (!isDebugAuthenticated) {
+                e.preventDefault();
+                return false;
+            }
         });
-    });
 
-    // ===== THEME SWITCHER =====
-    const themeButtons = document.querySelectorAll('.theme-btn');
-    const body = document.body;
-    const controlsPanel = document.getElementById('controlsPanel');
-    const controlsToggle = document.getElementById('controlsToggle');
-    const controlsClose = document.getElementById('controlsClose');
+        // DevTools detection (safe version)
+        setInterval(function() {
+            try {
+                if (window.console && typeof console.clear === 'function') {
+                    console.clear();
+                }
+            } catch (e) {
+                // Silently ignore errors
+            }
+        }, 2000);
 
-    controlsClose.addEventListener('click', () => {
-        controlsPanel.classList.add('collapsed');
-        controlsToggle.classList.add('visible');
-    });
+        // ===== STARFIELD =====
+        function createStarfield() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = '';
+            const starCount = 150;
 
-    controlsToggle.addEventListener('click', () => {
-        controlsPanel.classList.remove('collapsed');
-        controlsToggle.classList.remove('visible');
-    });
-
-    const savedTheme = localStorage.getItem('kripticTheme') || 'theme-nebula';
-    body.className = savedTheme;
-    themeButtons.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.theme === savedTheme) {
-            btn.classList.add('active');
-        }
-    });
-
-    themeButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const theme = btn.dataset.theme;
-            body.className = theme;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 2.5 + 0.5;
+                const depth = Math.random();
+                
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.dataset.depth = depth;
+                
+                starfield.appendChild(star);
+            }
             
-            themeButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            localStorage.setItem('kripticTheme', theme);
-        });
-    });
-
-    // ===== FONT SELECTOR =====
-    const fontSelector = document.getElementById('fontSelector');
-    const savedFont = localStorage.getItem('kripticFont') || 'DripOctober';
-    document.body.style.fontFamily = `'${savedFont}', 'Segoe UI', sans-serif`;
-    fontSelector.value = savedFont;
-
-    fontSelector.addEventListener('change', (e) => {
-        const selectedFont = e.target.value;
-        document.body.style.fontFamily = `'${selectedFont}', 'Segoe UI', sans-serif`;
-        localStorage.setItem('kripticFont', selectedFont);
-    });
-
-    // ===== FIREBASE VISITOR COUNTER =====
-    const firebaseConfig = {
-        apiKey: "AIzaSyBf86NMHrnOCUui_2VFF00wwehencFzF0Y",
-        authDomain: "kriptic-edition.firebaseapp.com",
-        databaseURL: "https://kriptic-edition-default-rtdb.firebaseio.com",
-        projectId: "kriptic-edition",
-        storageBucket: "kriptic-edition.firebasestorage.app",
-        messagingSenderId: "208515615130",
-        appId: "1:208515615130:web:2f94d2afdea3a668f91223"
-    };
-
-    try {
-        if (typeof firebase !== 'undefined' && firebase.initializeApp) {
-            firebase.initializeApp(firebaseConfig);
-            console.log('✅ Firebase initialized');
-            
-            const database = firebase.database();
-            const visitorsRef = database.ref('visitors');
-            const sessionId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-
-            visitorsRef.child(sessionId).set({
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            }).then(() => {
-                console.log('✅ Visitor registered in Firebase');
-            }).catch((error) => {
-                console.error('❌ Failed to register visitor:', error);
-            });
-
-            window.addEventListener('beforeunload', () => {
-                visitorsRef.child(sessionId).remove();
-            });
-
-            visitorsRef.on('value', (snapshot) => {
-                const count = snapshot.numChildren();
-                document.getElementById('visitorCount').textContent = count;
-            }, (error) => {
-                console.error('❌ Firebase read error:', error);
-                document.getElementById('visitorCount').textContent = '?';
-            });
-
-            setInterval(() => {
-                const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
-                visitorsRef.once('value', (snapshot) => {
-                    snapshot.forEach((child) => {
-                        if (child.val().timestamp < fiveMinutesAgo) {
-                            child.ref.remove();
-                        }
-                    });
-                });
-            }, 60000);
+            // Show orbital planet for stars only
+            document.querySelector('.orbital-planet').style.display = 'block';
         }
-    } catch (firebaseError) {
-        console.error('❌ Firebase initialization error:', firebaseError);
-        document.getElementById('visitorCount').textContent = '?';
-    }
 
-    // ===== KEYBOARD SHORTCUTS =====
-    document.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-            return;
+        // ===== RAINY DAY BACKGROUND =====
+        function createRain() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add clouds
+            for (let i = 0; i < 8; i++) {
+                const cloud = document.createElement('div');
+                cloud.style.position = 'absolute';
+                cloud.style.width = Math.random() * 150 + 100 + 'px';
+                cloud.style.height = '60px';
+                cloud.style.background = 'rgba(40, 50, 70, 0.6)';
+                cloud.style.borderRadius = '50px';
+                cloud.style.left = Math.random() * 100 + '%';
+                cloud.style.top = Math.random() * 30 + '%';
+                cloud.style.filter = 'blur(15px)';
+                cloud.style.animation = `cloudDrift ${Math.random() * 20 + 30}s linear infinite`;
+                starfield.appendChild(cloud);
+            }
+
+            // Add rain drops
+            for (let i = 0; i < 150; i++) {
+                const drop = document.createElement('div');
+                drop.style.position = 'absolute';
+                drop.style.width = '2px';
+                drop.style.height = Math.random() * 30 + 15 + 'px';
+                drop.style.background = 'linear-gradient(180deg, rgba(150,180,255,0.8), rgba(100,150,255,0.2))';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.top = -Math.random() * 100 + '%';
+                drop.style.animation = `rainFall ${Math.random() * 0.8 + 0.4}s linear infinite`;
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                drop.style.opacity = Math.random() * 0.4 + 0.4;
+                starfield.appendChild(drop);
+            }
+
+            // Add splash effects
+            for (let i = 0; i < 20; i++) {
+                const splash = document.createElement('div');
+                splash.style.position = 'absolute';
+                splash.style.width = '4px';
+                splash.style.height = '4px';
+                splash.style.borderRadius = '50%';
+                splash.style.background = 'rgba(150,180,255,0.5)';
+                splash.style.left = Math.random() * 100 + '%';
+                splash.style.bottom = '0';
+                splash.style.animation = `splash ${Math.random() * 1 + 0.5}s ease-out infinite`;
+                splash.style.animationDelay = Math.random() * 2 + 's';
+                starfield.appendChild(splash);
+            }
+
+            if (!document.getElementById('rainAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'rainAnimation';
+                style.textContent = `
+                    @keyframes rainFall {
+                        0% { transform: translateY(-100px); opacity: 1; }
+                        100% { transform: translateY(100vh); opacity: 0.2; }
+                    }
+                    @keyframes cloudDrift {
+                        0% { transform: translateX(-150px); }
+                        100% { transform: translateX(calc(100vw + 150px)); }
+                    }
+                    @keyframes splash {
+                        0% { transform: translateY(0) scale(0); opacity: 1; }
+                        100% { transform: translateY(-20px) scale(1.5); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
         }
+
+        // ===== ROCKET SHIP BACKGROUND =====
+        function createRocket() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'radial-gradient(circle at 50% 50%, #0a0e27 0%, #000000 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add twinkling stars
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.background = 'white';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+                star.style.animation = `twinkle ${Math.random() * 3 + 1}s ease-in-out infinite`;
+                star.style.boxShadow = '0 0 10px rgba(255,255,255,0.8)';
+                starfield.appendChild(star);
+            }
+
+            // Add planets
+            const planets = ['🪐', '🌍', '🌙'];
+            for (let i = 0; i < 3; i++) {
+                const planet = document.createElement('div');
+                planet.innerHTML = planets[i];
+                planet.style.position = 'absolute';
+                planet.style.fontSize = Math.random() * 40 + 30 + 'px';
+                planet.style.left = Math.random() * 80 + 10 + '%';
+                planet.style.top = Math.random() * 60 + 10 + '%';
+                planet.style.opacity = 0.6;
+                planet.style.animation = `floatPlanet ${Math.random() * 10 + 15}s ease-in-out infinite`;
+                starfield.appendChild(planet);
+            }
+
+            // Add main rocket
+            const rocket = document.createElement('div');
+            rocket.innerHTML = '🚀';
+            rocket.style.position = 'absolute';
+            rocket.style.fontSize = '100px';
+            rocket.style.left = '50%';
+            rocket.style.top = '50%';
+            rocket.style.transform = 'translate(-50%, -50%) rotate(-45deg)';
+            rocket.style.animation = 'rocketFloat 4s ease-in-out infinite';
+            rocket.style.filter = 'drop-shadow(0 0 30px rgba(255,150,100,0.8))';
+            rocket.style.zIndex = '5';
+            starfield.appendChild(rocket);
+
+            // Add rocket trail
+            for (let i = 0; i < 5; i++) {
+                const trail = document.createElement('div');
+                trail.style.position = 'absolute';
+                trail.style.width = Math.random() * 15 + 10 + 'px';
+                trail.style.height = Math.random() * 15 + 10 + 'px';
+                trail.style.borderRadius = '50%';
+                trail.style.background = `rgba(255, ${150 - i * 30}, 50, ${0.6 - i * 0.1})`;
+                trail.style.left = '50%';
+                trail.style.top = '50%';
+                trail.style.filter = 'blur(5px)';
+                trail.style.animation = `rocketTrail${i} 2s ease-out infinite`;
+                starfield.appendChild(trail);
+            }
+
+            if (!document.getElementById('rocketAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'rocketAnimation';
+                style.textContent = `
+                    @keyframes rocketFloat {
+                        0%, 100% { transform: translate(-50%, -50%) rotate(-45deg) translateY(0); }
+                        50% { transform: translate(-50%, -50%) rotate(-45deg) translateY(-30px); }
+                    }
+                    @keyframes floatPlanet {
+                        0%, 100% { transform: translateY(0) rotate(0deg); }
+                        50% { transform: translateY(-20px) rotate(10deg); }
+                    }
+                    @keyframes rocketTrail0 {
+                        0% { transform: translate(20px, 20px) scale(1); opacity: 0.6; }
+                        100% { transform: translate(80px, 80px) scale(0.3); opacity: 0; }
+                    }
+                    @keyframes rocketTrail1 {
+                        0% { transform: translate(20px, 20px) scale(1); opacity: 0.5; }
+                        100% { transform: translate(70px, 70px) scale(0.3); opacity: 0; }
+                    }
+                    @keyframes rocketTrail2 {
+                        0% { transform: translate(20px, 20px) scale(1); opacity: 0.4; }
+                        100% { transform: translate(60px, 60px) scale(0.3); opacity: 0; }
+                    }
+                    @keyframes rocketTrail3 {
+                        0% { transform: translate(20px, 20px) scale(1); opacity: 0.3; }
+                        100% { transform: translate(50px, 50px) scale(0.3); opacity: 0; }
+                    }
+                    @keyframes rocketTrail4 {
+                        0% { transform: translate(20px, 20px) scale(1); opacity: 0.2; }
+                        100% { transform: translate(40px, 40px) scale(0.3); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        // ===== SCROLL TO TOP BUTTON =====
+        const scrollToTopBtn = document.getElementById('scrollToTop');
         
-        if (e.altKey && e.key === 't') {
-            e.preventDefault();
-            const panel = document.getElementById('controlsPanel');
-            const toggle = document.getElementById('controlsToggle');
-            
-            if (panel.classList.contains('collapsed')) {
-                panel.classList.remove('collapsed');
-                toggle.classList.remove('visible');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
             } else {
-                panel.classList.add('collapsed');
-                toggle.classList.add('visible');
+                scrollToTopBtn.classList.remove('visible');
             }
-        }
-        
-        if (e.altKey && e.key === 'd') {
-            e.preventDefault();
-            toggleDebugPanel();
-        }
-        
-        if (e.key === 'Escape') {
-            const navLinks = document.getElementById('navLinks');
-            if (navLinks) navLinks.classList.remove('active');
-        }
-    });
-
-    // ===== MOBILE NAVIGATION =====
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const navLinks = document.getElementById('navLinks');
-    
-    if (mobileMenuToggle && navLinks) {
-        mobileMenuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navLinks.classList.add('active');
         });
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
+        
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         });
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.main-nav')) {
-                navLinks.classList.remove('active');
+        // ===== SNOWFALL BACKGROUND =====
+        function createSnow() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #1a2a3a 0%, #2d3e50 50%, #34495e 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add snow layers for depth
+            for (let layer = 0; layer < 3; layer++) {
+                for (let i = 0; i < 40; i++) {
+                    const flake = document.createElement('div');
+                    flake.innerHTML = '❄';
+                    flake.style.position = 'absolute';
+                    flake.style.color = 'white';
+                    const size = Math.random() * 15 + 10 + (layer * 5);
+                    flake.style.fontSize = size + 'px';
+                    flake.style.left = Math.random() * 100 + '%';
+                    flake.style.top = -Math.random() * 100 + '%';
+                    flake.style.opacity = (Math.random() * 0.4 + 0.4) - (layer * 0.1);
+                    flake.style.animation = `snowFall ${Math.random() * 3 + 3 + layer}s linear infinite`;
+                    flake.style.animationDelay = Math.random() * 5 + 's';
+                    flake.style.textShadow = '0 0 5px rgba(255,255,255,0.5)';
+                    flake.style.zIndex = 3 - layer;
+                    starfield.appendChild(flake);
+                }
             }
-        });
-    }
 
-    // ===== ACTIVE NAV HIGHLIGHTING =====
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.nav-link').forEach(link => {
-        const linkPage = link.getAttribute('href').split('/').pop();
-        if (linkPage === currentPage) {
-            link.classList.add('active');
+            // Add ground snow
+            const ground = document.createElement('div');
+            ground.style.position = 'absolute';
+            ground.style.bottom = '0';
+            ground.style.left = '0';
+            ground.style.width = '100%';
+            ground.style.height = '100px';
+            ground.style.background = 'linear-gradient(180deg, transparent, rgba(255,255,255,0.3))';
+            ground.style.filter = 'blur(10px)';
+            starfield.appendChild(ground);
+
+            if (!document.getElementById('snowAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'snowAnimation';
+                style.textContent = `
+                    @keyframes snowFall {
+                        0% { 
+                            transform: translateY(-100px) translateX(0) rotate(0deg); 
+                            opacity: 1; 
+                        }
+                        100% { 
+                            transform: translateY(100vh) translateX(100px) rotate(360deg); 
+                            opacity: 0.8; 
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
         }
-    });
 
-    // ... [KEEP ALL YOUR POLL SYSTEM CODE HERE - Don't change it] ...
-    // ... [KEEP ALL YOUR DEBUG PANEL CODE HERE - Don't change it] ...
-    // ... [KEEP ALL YOUR GEOLOCATION CODE HERE - Don't change it] ...
+        // ===== MATRIX CODE BACKGROUND =====
+        function createMatrix() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = '#000000';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            const columns = 50;
+            const chars = 'ｦｱｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    // ===== INITIALIZE ON PAGE LOAD =====
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('🚀 Kriptic Edition 3.0 Loading...');
-        
-        // Check debug authentication
-        if (sessionStorage.getItem('debugAuthenticated') === 'true') {
-            isDebugAuthenticated = true;
-            console.log('✅ Debug mode active');
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.style.position = 'absolute';
+                column.style.left = (i * (100 / columns)) + '%';
+                column.style.top = '0';
+                column.style.width = '20px';
+                column.style.fontSize = '16px';
+                column.style.fontFamily = 'monospace';
+                column.style.fontWeight = 'bold';
+                column.style.whiteSpace = 'pre';
+                column.style.lineHeight = '1.2';
+                column.style.animation = `matrixFall ${Math.random() * 4 + 3}s linear infinite`;
+                column.style.animationDelay = Math.random() * 5 + 's';
+                
+                // Create column text with gradient
+                let text = '';
+                const height = Math.floor(Math.random() * 20) + 10;
+                for (let j = 0; j < height; j++) {
+                    text += chars.charAt(Math.floor(Math.random() * chars.length)) + '\n';
+                }
+                column.textContent = text;
+                
+                // Gradient effect
+                column.style.background = 'linear-gradient(180deg, transparent, #0f0 20%, #0f0 80%, transparent)';
+                column.style.webkitBackgroundClip = 'text';
+                column.style.backgroundClip = 'text';
+                column.style.color = 'transparent';
+                column.style.textShadow = '0 0 8px #0f0';
+                
+                starfield.appendChild(column);
+            }
+
+            // Add glowing highlights
+            for (let i = 0; i < 10; i++) {
+                const glow = document.createElement('div');
+                glow.style.position = 'absolute';
+                glow.style.width = '2px';
+                glow.style.height = '100px';
+                glow.style.background = 'linear-gradient(180deg, transparent, #0f0, transparent)';
+                glow.style.left = Math.random() * 100 + '%';
+                glow.style.top = Math.random() * 100 + '%';
+                glow.style.filter = 'blur(2px)';
+                glow.style.opacity = '0.8';
+                glow.style.animation = `matrixGlow ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                starfield.appendChild(glow);
+            }
+
+            if (!document.getElementById('matrixAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'matrixAnimation';
+                style.textContent = `
+                    @keyframes matrixFall {
+                        0% { transform: translateY(-100%); opacity: 0; }
+                        10% { opacity: 1; }
+                        90% { opacity: 1; }
+                        100% { transform: translateY(100vh); opacity: 0; }
+                    }
+                    @keyframes matrixGlow {
+                        0%, 100% { opacity: 0.3; }
+                        50% { opacity: 0.8; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
         }
-        
-        // Add moon micro-craters
-        const moon = document.querySelector('.orbital-planet');
-        if (moon) {
-            const microCraters = [
-                { size: 12, top: '25%', left: '35%', opacity: 0.7 },
-                { size: 8, top: '45%', left: '68%', opacity: 0.6 },
-                { size: 15, top: '70%', left: '42%', opacity: 0.75 },
-                { size: 10, top: '62%', left: '78%', opacity: 0.65 }
+
+        // ===== NEBULA CLOUD BACKGROUND =====
+        function createNebula() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'radial-gradient(circle at 30% 50%, #1a0033 0%, #000000 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+
+            // Add large nebula clouds
+            const colors = [
+                'rgba(138, 43, 226, 0.4)', // Purple
+                'rgba(255, 20, 147, 0.3)', // Pink
+                'rgba(0, 191, 255, 0.35)', // Blue
+                'rgba(255, 140, 0, 0.25)'  // Orange
+            ];
+
+            for (let i = 0; i < 6; i++) {
+                const cloud = document.createElement('div');
+                cloud.style.position = 'absolute';
+                cloud.style.width = Math.random() * 400 + 300 + 'px';
+                cloud.style.height = Math.random() * 400 + 300 + 'px';
+                cloud.style.borderRadius = '50%';
+                cloud.style.background = `radial-gradient(circle, ${colors[i % colors.length]}, transparent 70%)`;
+                cloud.style.left = (Math.random() * 120 - 10) + '%';
+                cloud.style.top = (Math.random() * 120 - 10) + '%';
+                cloud.style.filter = 'blur(60px)';
+                cloud.style.animation = `nebulaFloat ${Math.random() * 15 + 15}s ease-in-out infinite`;
+                cloud.style.animationDelay = Math.random() * 5 + 's';
+                starfield.appendChild(cloud);
+            }
+
+            // Add bright stars
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.background = 'white';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+                star.style.boxShadow = `0 0 ${Math.random() * 10 + 5}px rgba(255,255,255,0.8)`;
+                star.style.animation = `twinkle ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                starfield.appendChild(star);
+            }
+
+            if (!document.getElementById('nebulaAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'nebulaAnimation';
+                style.textContent = `
+                    @keyframes nebulaFloat {
+                        0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+                        33% { transform: translate(30px, -20px) scale(1.1) rotate(5deg); }
+                        66% { transform: translate(-20px, 30px) scale(0.9) rotate(-5deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== PIXEL ART BACKGROUND =====
+        function createPixel() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            const pixelSize = 25;
+            const cols = Math.ceil(window.innerWidth / pixelSize);
+            const rows = Math.ceil(window.innerHeight / pixelSize);
+            const colors = ['#ff006e', '#8338ec', '#3a86ff', '#06ffa5', '#ffbe0b', '#fb5607'];
+
+            // Create grid pattern
+            for (let i = 0; i < 150; i++) {
+                const pixel = document.createElement('div');
+                pixel.style.position = 'absolute';
+                pixel.style.width = pixelSize + 'px';
+                pixel.style.height = pixelSize + 'px';
+                pixel.style.left = Math.floor(Math.random() * cols) * pixelSize + 'px';
+                pixel.style.top = Math.floor(Math.random() * rows) * pixelSize + 'px';
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                pixel.style.background = color;
+                pixel.style.opacity = Math.random() * 0.4 + 0.1;
+                pixel.style.boxShadow = `0 0 20px ${color}`;
+                pixel.style.animation = `pixelPulse ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                pixel.style.animationDelay = Math.random() * 3 + 's';
+                starfield.appendChild(pixel);
+            }
+
+            // Add pixel art shapes
+            const shapes = ['▪', '▫', '◼', '◻', '●', '○'];
+            for (let i = 0; i < 30; i++) {
+                const shape = document.createElement('div');
+                shape.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+                shape.style.position = 'absolute';
+                shape.style.fontSize = Math.random() * 40 + 20 + 'px';
+                shape.style.color = colors[Math.floor(Math.random() * colors.length)];
+                shape.style.left = Math.random() * 100 + '%';
+                shape.style.top = Math.random() * 100 + '%';
+                shape.style.opacity = Math.random() * 0.5 + 0.3;
+                shape.style.animation = `pixelFloat ${Math.random() * 5 + 5}s ease-in-out infinite`;
+                starfield.appendChild(shape);
+            }
+
+            if (!document.getElementById('pixelAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'pixelAnimation';
+                style.textContent = `
+                    @keyframes pixelPulse {
+                        0%, 100% { opacity: 0.1; transform: scale(1); }
+                        50% { opacity: 0.5; transform: scale(1.2); }
+                    }
+                    @keyframes pixelFloat {
+                        0%, 100% { transform: translateY(0); }
+                        50% { transform: translateY(-20px); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== AURORA WAVES BACKGROUND =====
+        function createAurora() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #0a1128 0%, #001f54 50%, #034078 100%)';
+            
+            // Hide moon
+            document.querySelector('.orbital-planet').style.display = 'none';
+
+            // Add stars first
+            for (let i = 0; i < 80; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 2 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.background = 'white';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 60 + '%';
+                star.style.opacity = Math.random() * 0.7 + 0.3;
+                star.style.animation = `twinkle ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                starfield.appendChild(star);
+            }
+
+            // Add multiple aurora layers
+            const auroraColors = [
+                'rgba(0, 255, 150, 0.3)',
+                'rgba(100, 255, 200, 0.25)',
+                'rgba(0, 200, 255, 0.2)',
+                'rgba(150, 100, 255, 0.25)',
+                'rgba(255, 100, 200, 0.2)'
+            ];
+
+            for (let i = 0; i < 5; i++) {
+                const wave = document.createElement('div');
+                wave.style.position = 'absolute';
+                wave.style.width = '200%';
+                wave.style.height = '400px';
+                wave.style.left = '-50%';
+                wave.style.top = (i * 15 + 10) + '%';
+                wave.style.background = `linear-gradient(90deg, 
+                    transparent 0%, 
+                    ${auroraColors[i]} 25%, 
+                    ${auroraColors[(i + 1) % auroraColors.length]} 50%, 
+                    ${auroraColors[(i + 2) % auroraColors.length]} 75%, 
+                    transparent 100%)`;
+                wave.style.filter = 'blur(40px)';
+                wave.style.animation = `auroraWave ${10 + i * 2}s ease-in-out infinite`;
+                wave.style.animationDelay = i * 1.5 + 's';
+                wave.style.opacity = '0.8';
+                starfield.appendChild(wave);
+            }
+
+            // Add shimmer particles
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 3 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.borderRadius = '50%';
+                particle.style.background = auroraColors[Math.floor(Math.random() * auroraColors.length)];
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 80 + '%';
+                particle.style.filter = 'blur(2px)';
+                particle.style.animation = `auroraShimmer ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                starfield.appendChild(particle);
+            }
+
+            if (!document.getElementById('auroraAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'auroraAnimation';
+                style.textContent = `
+                    @keyframes auroraWave {
+                        0% { transform: translateX(0) skewY(0deg); opacity: 0.8; }
+                        50% { transform: translateX(-25%) skewY(3deg); opacity: 0.6; }
+                        100% { transform: translateX(-50%) skewY(0deg); opacity: 0.8; }
+                    }
+                    @keyframes auroraShimmer {
+                        0%, 100% { opacity: 0.3; transform: scale(1); }
+                        50% { opacity: 0.8; transform: scale(1.5); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== METEOR SHOWER BACKGROUND =====
+        function createMeteor() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'radial-gradient(circle at 50% 50%, #0f1419 0%, #000000 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add background stars
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 2 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.background = 'white';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.opacity = Math.random() * 0.7 + 0.3;
+                star.style.animation = `twinkle ${Math.random() * 3 + 2}s ease-in-out infinite`;
+                starfield.appendChild(star);
+            }
+            
+            // Add meteors with proper tails
+            for (let i = 0; i < 10; i++) {
+                const meteorContainer = document.createElement('div');
+                meteorContainer.style.position = 'absolute';
+                meteorContainer.style.left = Math.random() * 120 - 20 + '%';
+                meteorContainer.style.top = Math.random() * 50 + '%';
+                meteorContainer.style.animation = `meteorFall ${Math.random() * 2 + 1.5}s linear infinite`;
+                meteorContainer.style.animationDelay = Math.random() * 5 + 's';
+                
+                // Meteor head
+                const meteorHead = document.createElement('div');
+                meteorHead.style.position = 'absolute';
+                meteorHead.style.width = '8px';
+                meteorHead.style.height = '8px';
+                meteorHead.style.borderRadius = '50%';
+                meteorHead.style.background = 'rgba(255,255,255,1)';
+                meteorHead.style.boxShadow = '0 0 15px rgba(200,220,255,0.9), 0 0 30px rgba(100,150,255,0.6)';
+                meteorHead.style.left = '0';
+                meteorHead.style.top = '0';
+                meteorContainer.appendChild(meteorHead);
+                
+                // Meteor tail - extends BEHIND the direction of travel
+                const meteorTail = document.createElement('div');
+                meteorTail.style.position = 'absolute';
+                meteorTail.style.width = Math.random() * 80 + 60 + 'px';
+                meteorTail.style.height = '3px';
+                meteorTail.style.background = 'linear-gradient(90deg, rgba(255,255,255,0.9), rgba(200,220,255,0.6), rgba(100,150,255,0.3), transparent)';
+                meteorTail.style.boxShadow = '0 0 10px rgba(100,150,255,0.5)';
+                meteorTail.style.left = '4px'; // Start from center of head
+                meteorTail.style.top = '3px';
+                meteorTail.style.transformOrigin = 'left center';
+                meteorTail.style.transform = 'rotate(135deg)'; // Opposite to travel direction (-45deg)
+                meteorContainer.appendChild(meteorTail);
+                
+                starfield.appendChild(meteorContainer);
+            }
+
+            if (!document.getElementById('meteorAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'meteorAnimation';
+                style.textContent = `
+                    @keyframes meteorFall {
+                        0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; }
+                        10% { opacity: 1; }
+                        90% { opacity: 1; }
+                        100% { transform: translate(150vw, 150vh) rotate(-45deg); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== FIREFLIES BACKGROUND =====
+        function createFireflies() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #1a1a2e 0%, #0f1419 50%, #0a0e12 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add grass silhouettes
+            for (let i = 0; i < 20; i++) {
+                const grass = document.createElement('div');
+                grass.style.position = 'absolute';
+                grass.style.bottom = '0';
+                grass.style.left = i * 5 + '%';
+                grass.style.width = '2px';
+                grass.style.height = Math.random() * 80 + 40 + 'px';
+                grass.style.background = 'rgba(30, 50, 30, 0.6)';
+                grass.style.transform = 'rotate(' + (Math.random() * 10 - 5) + 'deg)';
+                starfield.appendChild(grass);
+            }
+            
+            // Add fireflies
+            for (let i = 0; i < 40; i++) {
+                const firefly = document.createElement('div');
+                firefly.style.position = 'absolute';
+                firefly.style.width = Math.random() * 4 + 3 + 'px';
+                firefly.style.height = firefly.style.width;
+                firefly.style.borderRadius = '50%';
+                firefly.style.background = 'rgba(255, 230, 100, 0.9)';
+                firefly.style.boxShadow = '0 0 20px rgba(255, 230, 100, 0.8), 0 0 40px rgba(255, 230, 100, 0.4)';
+                firefly.style.left = Math.random() * 100 + '%';
+                firefly.style.top = Math.random() * 80 + 10 + '%';
+                firefly.style.animation = `fireflyFloat${i % 3} ${Math.random() * 4 + 3}s ease-in-out infinite`;
+                firefly.style.animationDelay = Math.random() * 4 + 's';
+                starfield.appendChild(firefly);
+                
+                // Add glow pulse
+                const glow = document.createElement('div');
+                glow.style.position = 'absolute';
+                glow.style.width = '15px';
+                glow.style.height = '15px';
+                glow.style.borderRadius = '50%';
+                glow.style.background = 'radial-gradient(circle, rgba(255,230,100,0.4), transparent)';
+                glow.style.left = Math.random() * 100 + '%';
+                glow.style.top = Math.random() * 80 + 10 + '%';
+                glow.style.animation = `fireflyGlow ${Math.random() * 2 + 1}s ease-in-out infinite`;
+                glow.style.animationDelay = Math.random() * 3 + 's';
+                starfield.appendChild(glow);
+            }
+
+            if (!document.getElementById('fireflyAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'fireflyAnimation';
+                style.textContent = `
+                    @keyframes fireflyFloat0 {
+                        0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+                        25% { transform: translate(30px, -20px); opacity: 1; }
+                        50% { transform: translate(-20px, -40px); opacity: 0.4; }
+                        75% { transform: translate(20px, -10px); opacity: 0.9; }
+                    }
+                    @keyframes fireflyFloat1 {
+                        0%, 100% { transform: translate(0, 0); opacity: 0.4; }
+                        33% { transform: translate(-25px, -30px); opacity: 1; }
+                        66% { transform: translate(35px, -15px); opacity: 0.5; }
+                    }
+                    @keyframes fireflyFloat2 {
+                        0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+                        50% { transform: translate(-15px, -25px); opacity: 1; }
+                    }
+                    @keyframes fireflyGlow {
+                        0%, 100% { opacity: 0; transform: scale(0.5); }
+                        50% { opacity: 0.6; transform: scale(1.5); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== UNDERWATER BACKGROUND =====
+        function createUnderwater() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #001f3f 0%, #003d5c 50%, #00152a 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add light rays from surface
+            for (let i = 0; i < 6; i++) {
+                const ray = document.createElement('div');
+                ray.style.position = 'absolute';
+                ray.style.top = '-50%';
+                ray.style.left = i * 16 + '%';
+                ray.style.width = '80px';
+                ray.style.height = '200%';
+                ray.style.background = 'linear-gradient(180deg, rgba(100,180,255,0.15), transparent 70%)';
+                ray.style.transform = 'rotate(' + (Math.random() * 10 - 5) + 'deg)';
+                ray.style.animation = `waterRay ${Math.random() * 8 + 10}s ease-in-out infinite`;
+                ray.style.animationDelay = i * 1.5 + 's';
+                ray.style.filter = 'blur(10px)';
+                starfield.appendChild(ray);
+            }
+            
+            // Add bubbles
+            for (let i = 0; i < 30; i++) {
+                const bubble = document.createElement('div');
+                bubble.style.position = 'absolute';
+                bubble.style.width = Math.random() * 15 + 5 + 'px';
+                bubble.style.height = bubble.style.width;
+                bubble.style.borderRadius = '50%';
+                bubble.style.background = 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), rgba(100,180,255,0.1))';
+                bubble.style.border = '1px solid rgba(255,255,255,0.2)';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.bottom = -Math.random() * 100 + '%';
+                bubble.style.animation = `bubbleRise ${Math.random() * 4 + 4}s linear infinite`;
+                bubble.style.animationDelay = Math.random() * 5 + 's';
+                starfield.appendChild(bubble);
+            }
+            
+            // Add fish silhouettes
+            for (let i = 0; i < 8; i++) {
+                const fish = document.createElement('div');
+                fish.innerHTML = '🐟';
+                fish.style.position = 'absolute';
+                fish.style.fontSize = Math.random() * 30 + 20 + 'px';
+                fish.style.left = Math.random() * 100 + '%';
+                fish.style.top = Math.random() * 80 + 10 + '%';
+                fish.style.opacity = 0.4;
+                fish.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg)';
+                fish.style.animation = `fishSwim${i % 2} ${Math.random() * 10 + 8}s ease-in-out infinite`;
+                starfield.appendChild(fish);
+            }
+            
+            // Add floating particles
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 2 + 1 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.borderRadius = '50%';
+                particle.style.background = 'rgba(100,180,255,0.3)';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animation = `waterParticle ${Math.random() * 15 + 10}s linear infinite`;
+                starfield.appendChild(particle);
+            }
+
+            if (!document.getElementById('underwaterAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'underwaterAnimation';
+                style.textContent = `
+                    @keyframes waterRay {
+                        0%, 100% { opacity: 0.2; transform: rotate(2deg); }
+                        50% { opacity: 0.4; transform: rotate(-2deg); }
+                    }
+                    @keyframes bubbleRise {
+                        0% { transform: translateY(0) translateX(0); opacity: 0.4; }
+                        50% { transform: translateY(-50vh) translateX(20px); opacity: 0.7; }
+                        100% { transform: translateY(-100vh) translateX(-10px); opacity: 0; }
+                    }
+                    @keyframes fishSwim0 {
+                        0%, 100% { transform: translateX(0) scaleX(1); }
+                        50% { transform: translateX(30vw) scaleX(-1); }
+                    }
+                    @keyframes fishSwim1 {
+                        0%, 100% { transform: translateX(0) translateY(0) scaleX(-1); }
+                        50% { transform: translateX(-40vw) translateY(-20px) scaleX(1); }
+                    }
+                    @keyframes waterParticle {
+                        0% { transform: translateY(0) translateX(0); opacity: 0.2; }
+                        100% { transform: translateY(50px) translateX(30px); opacity: 0.5; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== LIGHTNING STORM BACKGROUND =====
+        function createLightning() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #0a0a0f 0%, #1a1a2e 50%, #2a2a3e 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add storm clouds
+            for (let i = 0; i < 12; i++) {
+                const cloud = document.createElement('div');
+                cloud.style.position = 'absolute';
+                cloud.style.width = Math.random() * 200 + 150 + 'px';
+                cloud.style.height = '80px';
+                cloud.style.background = 'rgba(20, 20, 30, 0.8)';
+                cloud.style.borderRadius = '50px';
+                cloud.style.left = Math.random() * 100 + '%';
+                cloud.style.top = Math.random() * 40 + '%';
+                cloud.style.filter = 'blur(20px)';
+                cloud.style.animation = `stormDrift ${Math.random() * 30 + 40}s linear infinite`;
+                starfield.appendChild(cloud);
+            }
+            
+            // Create realistic lightning bolts with SVG
+            for (let i = 0; i < 6; i++) {
+                const lightningContainer = document.createElement('div');
+                lightningContainer.style.position = 'absolute';
+                lightningContainer.style.left = Math.random() * 100 + '%';
+                lightningContainer.style.top = Math.random() * 20 + '%';
+                lightningContainer.style.width = '200px';
+                lightningContainer.style.height = '400px';
+                lightningContainer.style.animation = `lightningStrike ${Math.random() * 2 + 1}s ease-out infinite`;
+                lightningContainer.style.animationDelay = Math.random() * 8 + 's';
+                
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('width', '200');
+                svg.setAttribute('height', '400');
+                svg.style.filter = 'drop-shadow(0 0 8px rgba(200,220,255,0.9)) drop-shadow(0 0 15px rgba(100,150,255,0.7))';
+                
+                // Main lightning bolt path (jagged)
+                const mainPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const segments = 8;
+                let pathData = 'M 100 0';
+                let currentX = 100;
+                let currentY = 0;
+                
+                for (let j = 0; j < segments; j++) {
+                    currentY += 400 / segments;
+                    currentX += (Math.random() - 0.5) * 40;
+                    currentX = Math.max(20, Math.min(180, currentX));
+                    pathData += ` L ${currentX} ${currentY}`;
+                }
+                
+                mainPath.setAttribute('d', pathData);
+                mainPath.setAttribute('stroke', 'rgba(220,230,255,0.95)');
+                mainPath.setAttribute('stroke-width', '3');
+                mainPath.setAttribute('fill', 'none');
+                mainPath.setAttribute('stroke-linecap', 'round');
+                svg.appendChild(mainPath);
+                
+                // Add branches
+                for (let j = 0; j < 3; j++) {
+                    const branch = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const startY = Math.random() * 300 + 50;
+                    const startX = currentX + (Math.random() - 0.5) * 60;
+                    const endX = startX + (Math.random() - 0.5) * 80;
+                    const endY = startY + Math.random() * 100 + 50;
+                    
+                    let branchPath = `M ${startX} ${startY}`;
+                    const branchSegments = 3;
+                    let bX = startX;
+                    let bY = startY;
+                    
+                    for (let k = 0; k < branchSegments; k++) {
+                        bY += (endY - startY) / branchSegments;
+                        bX += (endX - startX) / branchSegments + (Math.random() - 0.5) * 20;
+                        branchPath += ` L ${bX} ${bY}`;
+                    }
+                    
+                    branch.setAttribute('d', branchPath);
+                    branch.setAttribute('stroke', 'rgba(200,220,255,0.7)');
+                    branch.setAttribute('stroke-width', '2');
+                    branch.setAttribute('fill', 'none');
+                    branch.setAttribute('stroke-linecap', 'round');
+                    svg.appendChild(branch);
+                }
+                
+                lightningContainer.appendChild(svg);
+                starfield.appendChild(lightningContainer);
+            }
+            
+            // Add flash effect
+            for (let i = 0; i < 3; i++) {
+                const flash = document.createElement('div');
+                flash.style.position = 'absolute';
+                flash.style.width = '100%';
+                flash.style.height = '100%';
+                flash.style.background = 'rgba(200,220,255,0.1)';
+                flash.style.pointerEvents = 'none';
+                flash.style.animation = `lightningFlash ${Math.random() * 3 + 2}s ease-out infinite`;
+                flash.style.animationDelay = Math.random() * 10 + 's';
+                starfield.appendChild(flash);
+            }
+            
+            // Add rain
+            for (let i = 0; i < 100; i++) {
+                const drop = document.createElement('div');
+                drop.style.position = 'absolute';
+                drop.style.width = '1px';
+                drop.style.height = Math.random() * 20 + 10 + 'px';
+                drop.style.background = 'rgba(150,170,200,0.3)';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.top = -Math.random() * 100 + '%';
+                drop.style.animation = `rainFall ${Math.random() * 0.5 + 0.3}s linear infinite`;
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                starfield.appendChild(drop);
+            }
+
+            if (!document.getElementById('lightningAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'lightningAnimation';
+                style.textContent = `
+                    @keyframes lightningStrike {
+                        0%, 10%, 100% { opacity: 0; }
+                        5% { opacity: 1; }
+                        7% { opacity: 0.7; }
+                        9% { opacity: 0.9; }
+                    }
+                    @keyframes lightningFlash {
+                        0%, 90%, 100% { opacity: 0; }
+                        5% { opacity: 1; }
+                        7% { opacity: 0.3; }
+                        9% { opacity: 0.6; }
+                    }
+                    @keyframes stormDrift {
+                        0% { transform: translateX(-100px); }
+                        100% { transform: translateX(calc(100vw + 100px)); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== CHERRY BLOSSOM BACKGROUND =====
+        function createCherryBlossom() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'linear-gradient(180deg, #ffe5ec 0%, #ffc2d1 50%, #ffb3c6 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Create tree trunk with SVG
+            const treeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            treeSvg.style.position = 'absolute';
+            treeSvg.style.left = '10%';
+            treeSvg.style.bottom = '0';
+            treeSvg.style.width = '500px';
+            treeSvg.style.height = '100%';
+            treeSvg.style.zIndex = '2';
+            treeSvg.style.opacity = '0.8';
+            
+            // Main trunk
+            const trunk = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            trunk.setAttribute('d', 'M 250 100% Q 250 80%, 240 60% Q 235 40%, 230 30% Q 225 20%, 220 10%');
+            trunk.setAttribute('stroke', 'rgba(60, 40, 30, 0.9)');
+            trunk.setAttribute('stroke-width', '25');
+            trunk.setAttribute('fill', 'none');
+            trunk.setAttribute('stroke-linecap', 'round');
+            treeSvg.appendChild(trunk);
+            
+            // Major branches
+            const branches = [
+                // Left side branches
+                { start: '220 40%', end: '100 25%', width: 15, curve: 'Q 150 35%' },
+                { start: '225 55%', end: '80 45%', width: 12, curve: 'Q 140 50%' },
+                { start: '230 70%', end: '120 60%', width: 10, curve: 'Q 170 65%' },
+                // Right side branches
+                { start: '230 30%', end: '380 20%', width: 15, curve: 'Q 320 25%' },
+                { start: '235 50%', end: '400 40%', width: 12, curve: 'Q 330 45%' },
+                { start: '240 65%', end: '380 55%', width: 10, curve: 'Q 320 60%' },
+                // Top branches
+                { start: '220 20%', end: '180 10%', width: 8, curve: 'Q 200 15%' },
+                { start: '220 15%', end: '260 8%', width: 8, curve: 'Q 240 12%' }
             ];
             
-            microCraters.forEach(crater => {
-                const craterEl = document.createElement('div');
-                craterEl.style.cssText = `
-                    position: absolute;
-                    width: ${crater.size}px;
-                    height: ${crater.size}px;
-                    top: ${crater.top};
-                    left: ${crater.left};
-                    border-radius: 50%;
-                    background: radial-gradient(circle at 40% 40%, 
-                        rgba(120, 120, 120, ${crater.opacity * 0.4}) 0%, 
-                        rgba(60, 60, 60, ${crater.opacity * 0.8}) 50%, 
-                        transparent 80%);
-                    box-shadow: inset -${crater.size * 0.15}px -${crater.size * 0.15}px ${crater.size * 0.3}px rgba(0, 0, 0, 0.8);
-                    filter: blur(0.2px);
-                    pointer-events: none;
-                `;
-                moon.appendChild(craterEl);
+            branches.forEach(b => {
+                const branch = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                branch.setAttribute('d', `M ${b.start} ${b.curve}, ${b.end}`);
+                branch.setAttribute('stroke', 'rgba(60, 40, 30, 0.85)');
+                branch.setAttribute('stroke-width', b.width.toString());
+                branch.setAttribute('fill', 'none');
+                branch.setAttribute('stroke-linecap', 'round');
+                treeSvg.appendChild(branch);
+                
+                // Add smaller twigs
+                for (let i = 0; i < 3; i++) {
+                    const twig = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const endParts = b.end.split(' ');
+                    const endX = parseInt(endParts[0]) + (Math.random() - 0.5) * 60;
+                    const endY = parseInt(endParts[1]) + (Math.random() - 0.5) * 10;
+                    const twigEnd = `${endX} ${endY}%`;
+                    
+                    twig.setAttribute('d', `M ${b.end} L ${twigEnd}`);
+                    twig.setAttribute('stroke', 'rgba(60, 40, 30, 0.7)');
+                    twig.setAttribute('stroke-width', '4');
+                    twig.setAttribute('fill', 'none');
+                    twig.setAttribute('stroke-linecap', 'round');
+                    treeSvg.appendChild(twig);
+                }
             });
+            
+            starfield.appendChild(treeSvg);
+            
+            // Add pink blossom clusters on branches
+            const blossomPositions = [
+                { x: '15%', y: '25%' }, { x: '12%', y: '45%' }, { x: '18%', y: '60%' },
+                { x: '68%', y: '20%' }, { x: '72%', y: '40%' }, { x: '70%', y: '55%' },
+                { x: '30%', y: '10%' }, { x: '45%', y: '8%' }
+            ];
+            
+            blossomPositions.forEach(pos => {
+                const cluster = document.createElement('div');
+                cluster.style.position = 'absolute';
+                cluster.style.left = pos.x;
+                cluster.style.top = pos.y;
+                cluster.style.width = '80px';
+                cluster.style.height = '80px';
+                cluster.style.borderRadius = '50%';
+                cluster.style.background = 'radial-gradient(circle, rgba(255,192,203,0.8), rgba(255,182,193,0.4), transparent)';
+                cluster.style.filter = 'blur(8px)';
+                cluster.style.zIndex = '3';
+                starfield.appendChild(cluster);
+            });
+            
+            // Add falling petals
+            for (let i = 0; i < 50; i++) {
+                const petal = document.createElement('div');
+                petal.innerHTML = '🌸';
+                petal.style.position = 'absolute';
+                petal.style.fontSize = Math.random() * 20 + 15 + 'px';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.top = -Math.random() * 50 + '%';
+                petal.style.opacity = Math.random() * 0.5 + 0.4;
+                petal.style.zIndex = '4';
+                petal.style.animation = `petalFall ${Math.random() * 8 + 6}s linear infinite`;
+                petal.style.animationDelay = Math.random() * 8 + 's';
+                starfield.appendChild(petal);
+            }
+            
+            // Add wind swirls
+            for (let i = 0; i < 20; i++) {
+                const swirl = document.createElement('div');
+                swirl.style.position = 'absolute';
+                swirl.style.width = Math.random() * 3 + 1 + 'px';
+                swirl.style.height = Math.random() * 30 + 20 + 'px';
+                swirl.style.background = 'rgba(255, 192, 203, 0.3)';
+                swirl.style.borderRadius = '50%';
+                swirl.style.left = Math.random() * 100 + '%';
+                swirl.style.top = Math.random() * 100 + '%';
+                swirl.style.filter = 'blur(2px)';
+                swirl.style.animation = `windSwirl ${Math.random() * 6 + 4}s ease-in-out infinite`;
+                swirl.style.animationDelay = Math.random() * 5 + 's';
+                starfield.appendChild(swirl);
+            }
+
+            if (!document.getElementById('cherryBlossomAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'cherryBlossomAnimation';
+                style.textContent = `
+                    @keyframes petalFall {
+                        0% { 
+                            transform: translateY(0) translateX(0) rotate(0deg); 
+                            opacity: 0.8; 
+                        }
+                        50% { 
+                            transform: translateY(50vh) translateX(30px) rotate(180deg); 
+                        }
+                        100% { 
+                            transform: translateY(100vh) translateX(-20px) rotate(360deg); 
+                            opacity: 0.3; 
+                        }
+                    }
+                    @keyframes windSwirl {
+                        0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 0.2; }
+                        50% { transform: translateX(50px) translateY(-30px) rotate(180deg); opacity: 0.5; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // ===== COSMIC VORTEX BACKGROUND =====
+        function createVortex() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            starfield.style.background = 'radial-gradient(circle at 50% 50%, #1a0033 0%, #000000 100%)';
+            
+            document.querySelector('.orbital-planet').style.display = 'none';
+            
+            // Add spiral particles
+            for (let i = 0; i < 200; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 3 + 1 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.borderRadius = '50%';
+                
+                const colors = ['#ff006e', '#8338ec', '#3a86ff', '#06ffa5', '#ffbe0b'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.boxShadow = `0 0 10px ${particle.style.background}`;
+                
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.animation = `vortexSpiral ${Math.random() * 4 + 3}s linear infinite`;
+                particle.style.animationDelay = (i * 0.02) + 's';
+                starfield.appendChild(particle);
+            }
+            
+            // Add rotating rings
+            for (let i = 0; i < 5; i++) {
+                const ring = document.createElement('div');
+                ring.style.position = 'absolute';
+                ring.style.left = '50%';
+                ring.style.top = '50%';
+                ring.style.width = (i + 1) * 100 + 'px';
+                ring.style.height = (i + 1) * 100 + 'px';
+                ring.style.border = '2px solid rgba(100,150,255,0.2)';
+                ring.style.borderRadius = '50%';
+                ring.style.transform = 'translate(-50%, -50%)';
+                ring.style.animation = `vortexRing ${4 + i}s linear infinite`;
+                starfield.appendChild(ring);
+            }
+            
+            // Add energy bursts
+            for (let i = 0; i < 12; i++) {
+                const burst = document.createElement('div');
+                burst.style.position = 'absolute';
+                burst.style.left = '50%';
+                burst.style.top = '50%';
+                burst.style.width = '2px';
+                burst.style.height = '80px';
+                burst.style.background = 'linear-gradient(180deg, rgba(100,150,255,0.8), transparent)';
+                burst.style.transformOrigin = 'top';
+                burst.style.transform = `translate(-50%, -50%) rotate(${i * 30}deg)`;
+                burst.style.animation = `vortexBurst 3s ease-in-out infinite`;
+                burst.style.animationDelay = (i * 0.25) + 's';
+                starfield.appendChild(burst);
+            }
+
+            if (!document.getElementById('vortexAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'vortexAnimation';
+                style.textContent = `
+                    @keyframes vortexSpiral {
+                        0% { 
+                            transform: translate(-50%, -50%) rotate(0deg) translateX(0px) scale(0); 
+                            opacity: 0; 
+                        }
+                        10% { opacity: 1; }
+                        90% { opacity: 0.8; }
+                        100% { 
+                            transform: translate(-50%, -50%) rotate(720deg) translateX(400px) scale(1.5); 
+                            opacity: 0; 
+                        }
+                    }
+                    @keyframes vortexRing {
+                        0% { transform: translate(-50%, -50%) rotate(0deg) scale(0.5); opacity: 0; }
+                        50% { opacity: 0.5; }
+                        100% { transform: translate(-50%, -50%) rotate(360deg) scale(2); opacity: 0; }
+                    }
+                    @keyframes vortexBurst {
+                        0%, 100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scaleY(0); }
+                        50% { opacity: 0.6; transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scaleY(1); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+                // ===== BACKGROUND MANAGER =====
+                const backgroundFunctions = {
+                    'stars': createStarfield,
+                    'rain': createRain,
+                    'rocket': createRocket,
+                    'snow': createSnow,
+                    'matrix': createMatrix,
+                    'nebula': createNebula,
+                    'pixel': createPixel,
+                    'aurora': createAurora,
+                    'meteor': createMeteor,
+                    'fireflies': createFireflies,
+                    'underwater': createUnderwater,
+                    'lightning': createLightning,
+                    'cherry': createCherryBlossom,
+                    'vortex': createVortex
+                };
+        
+        function changeBackground(type) {
+            const starfield = document.getElementById('starfield');
+            if (!starfield) return;
+            
+            // Clean up
+            starfield.innerHTML = '';
+            starfield.style.background = '';
+            document.querySelectorAll('style[data-theme]').forEach(s => s.remove());
+            
+            // Call the theme function
+            const bgFunctions = {
+                'stars': createStarfield,
+                'rain': createRain,
+                'rocket': createRocket,
+                'snow': createSnow,
+                'matrix': createMatrix,
+                'nebula': createNebula,
+                'pixel': createPixel,
+                'aurora': createAurora,
+                'meteor': createMeteor,
+                'fireflies': createFireflies,
+                'underwater': createUnderwater,
+                'lightning': createLightning,
+                'cherry': createCherryBlossom,
+                'vortex': createVortex
+            };
+            
+            if (bgFunctions[type]) {
+                bgFunctions[type]();
+            }
+            
+            // Save preference
+            localStorage.setItem('kripticBackground', type);
         }
         
-        // Initialize Supabase and polls
-        if (window.supabase) {
-            initializePollSupabase();
+        // Separate async function for Supabase save
+        async function saveBackgroundToSupabase(type) {
+            try {
+                const userId = generateUserId();
+                
+                const { error } = await pollSupabase
+                    .from('user_preferences')
+                    .upsert({
+                        user_id: userId,
+                        background_type: type,
+                        updated_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'user_id'
+                    });
+                
+                if (error) {
+                    console.warn('Supabase background save error:', error);
+                } else {
+                    console.log('✅ Background saved to Supabase:', type);
+                }
+            } catch (err) {
+                console.warn('Supabase save exception:', err);
+            }
+        }
+        
+        // Generate unique user ID
+        function generateUserId() {
+            let userId = sessionStorage.getItem('userId');
+            if (!userId) {
+                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('userId', userId);
+            }
+            return userId;
+        }
+        
+        // Load saved background on page load
+        function loadSavedBackground() {
+            const savedBackground = localStorage.getItem('kripticBackground') || 'stars';
+            const backgroundSelector = document.getElementById('backgroundSelector');
+            if (backgroundSelector) {
+                backgroundSelector.value = savedBackground;
+            }
+            changeBackground(savedBackground);
+        }
+                
+        // Separate async function for Supabase load
+        async function syncBackgroundFromSupabase() {
+            try {
+                const userId = generateUserId();
+                
+                const { data, error } = await pollSupabase
+                    .from('user_preferences')
+                    .select('background_type')
+                    .eq('user_id', userId)
+                    .single();
+                
+                if (data && data.background_type) {
+                    const currentBg = localStorage.getItem('kripticBackground');
+                    if (currentBg !== data.background_type) {
+                        console.log('✅ Synced background from Supabase:', data.background_type);
+                        const backgroundSelector = document.getElementById('backgroundSelector');
+                        if (backgroundSelector) {
+                            backgroundSelector.value = data.background_type;
+                        }
+                        changeBackground(data.background_type);
+                    }
+                }
+            } catch (err) {
+                // Silently fail - localStorage is already working
+                console.warn('Supabase sync exception (non-critical):', err);
+            }
+        }
+
+        // ===== THEME SWITCHER =====
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        const body = document.body;
+        const controlsPanel = document.getElementById('controlsPanel');
+        const controlsToggle = document.getElementById('controlsToggle');
+        const controlsClose = document.getElementById('controlsClose');
+
+        // Controls panel collapse/expand
+        controlsClose.addEventListener('click', () => {
+            controlsPanel.classList.add('collapsed');
+            controlsToggle.classList.add('visible');
+        });
+
+        controlsToggle.addEventListener('click', () => {
+            controlsPanel.classList.remove('collapsed');
+            controlsToggle.classList.remove('visible');
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('kripticTheme') || 'theme-nebula';
+        body.className = savedTheme;
+        themeButtons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.theme === savedTheme) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Theme button click handlers
+        themeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.dataset.theme;
+                body.className = theme;
+                
+                themeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                localStorage.setItem('kripticTheme', theme);
+            });
+        });
+
+        // ===== FONT SELECTOR =====
+        const fontSelector = document.getElementById('fontSelector');
+        
+        // Load saved font
+        const savedFont = localStorage.getItem('kripticFont') || 'DripOctober';
+        document.body.style.fontFamily = `'${savedFont}', 'Segoe UI', sans-serif`;
+        fontSelector.value = savedFont;
+
+        // Font change handler
+        fontSelector.addEventListener('change', (e) => {
+            const selectedFont = e.target.value;
+            document.body.style.fontFamily = `'${selectedFont}', 'Segoe UI', sans-serif`;
+            localStorage.setItem('kripticFont', selectedFont);
+        });
+
+        // ===== BACKGROUND SELECTOR =====
+        const backgroundSelector = document.getElementById('backgroundSelector');
+        
+        // Background change handler
+        backgroundSelector.addEventListener('change', (e) => {
+            const selectedBackground = e.target.value;
+            changeBackground(selectedBackground);
+        });
+        
+        // Load background will be called after Supabase initializes
+
+        // ===== CURSOR GRAVITY =====
+        const cursorGravity = document.getElementById('cursorGravity');
+        document.addEventListener('mousemove', (e) => {
+            cursorGravity.style.transform = `translate(${e.clientX - 150}px, ${e.clientY - 150}px)`;
+        });
+
+        // ===== CARD MOUSE TRACKING =====
+        document.querySelectorAll('.nav-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--mouse-x', x + '%');
+                card.style.setProperty('--mouse-y', y + '%');
+            });
+        });
+
+        // ===== FIREBASE VISITOR COUNTER =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyBf86NMHrnOCUui_2VFF00wwehencFzF0Y",
+            authDomain: "kriptic-edition.firebaseapp.com",
+            databaseURL: "https://kriptic-edition-default-rtdb.firebaseio.com",
+            projectId: "kriptic-edition",
+            storageBucket: "kriptic-edition.firebasestorage.app",
+            messagingSenderId: "208515615130",
+            appId: "1:208515615130:web:2f94d2afdea3a668f91223"
+        };
+
+        // ===== FIREBASE VISITOR COUNTER =====
+        try {
+            if (typeof firebase !== 'undefined' && firebase.initializeApp) {
+                firebase.initializeApp(firebaseConfig);
+                console.log('✅ Firebase initialized');
+                
+                const database = firebase.database();
+                const visitorsRef = database.ref('visitors');
+
+                const sessionId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                console.log('📝 Session ID:', sessionId);
+
+                visitorsRef.child(sessionId).set({
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                }).then(() => {
+                    console.log('✅ Visitor registered in Firebase');
+                }).catch((error) => {
+                    console.error('❌ Failed to register visitor:', error);
+                    console.error('Check Firebase Realtime Database Rules!');
+                });
+
+                window.addEventListener('beforeunload', () => {
+                    visitorsRef.child(sessionId).remove();
+                });
+
+                visitorsRef.on('value', (snapshot) => {
+                    const count = snapshot.numChildren();
+                    console.log('👥 Active visitors:', count);
+                    document.getElementById('visitorCount').textContent = count;
+                }, (error) => {
+                    console.error('❌ Firebase read error:', error);
+                    document.getElementById('visitorCount').textContent = '?';
+                });
+
+                setInterval(() => {
+                    const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+                    visitorsRef.once('value', (snapshot) => {
+                        snapshot.forEach((child) => {
+                            if (child.val().timestamp < fiveMinutesAgo) {
+                                child.ref.remove();
+                            }
+                        });
+                    });
+                }, 60000);
+            } else {
+                console.error('❌ Firebase not loaded properly');
+                document.getElementById('visitorCount').textContent = '?';
+            }
+        } catch (firebaseError) {
+            console.error('❌ Firebase initialization error:', firebaseError);
+            document.getElementById('visitorCount').textContent = '?';
+        }
+
+        // ===== IP GEOLOCATION TRACKING =====
+        async function trackVisitorGeolocation() {
+            try {
+                console.log('🌍 Fetching IP and geolocation data...');
+                
+                // Fetch IP and geolocation data from ipapi.co (free, no API key needed)
+                const response = await fetch('https://ipapi.co/json/');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch geolocation data');
+                }
+                
+                const geoData = await response.json();
+                
+                console.log('✅ Geolocation data received:', {
+                    ip: geoData.ip,
+                    country: geoData.country_name,
+                    city: geoData.city
+                });
+                
+                // Prepare data for Supabase
+                const visitorData = {
+                    ip_address: geoData.ip || 'Unknown',
+                    country: geoData.country_name || 'Unknown',
+                    country_code: geoData.country_code || 'XX',
+                    region: geoData.region || 'Unknown',
+                    city: geoData.city || 'Unknown',
+                    latitude: geoData.latitude || 0,
+                    longitude: geoData.longitude || 0,
+                    timezone: geoData.timezone || 'Unknown',
+                    isp: geoData.org || 'Unknown',
+                    user_agent: navigator.userAgent,
+                    screen_resolution: `${screen.width}x${screen.height}`,
+                    language: navigator.language || 'Unknown',
+                    visited_at: new Date().toISOString()
+                };
+                
+                // Store in Supabase
+                if (pollSupabase) {
+                    const { data, error } = await pollSupabase
+                        .from('visitor_geolocation')
+                        .insert([visitorData]);
+                    
+                    if (error) {
+                        console.error('❌ Failed to store geolocation in Supabase:', error);
+                        addActivityLog(`❌ Geolocation storage failed: ${error.message}`);
+                    } else {
+                        console.log('✅ Visitor geolocation stored in Supabase');
+                        addActivityLog(`🌍 Visitor from ${geoData.city}, ${geoData.country_name} tracked`);
+                    }
+                } else {
+                    console.warn('⚠️ Supabase not initialized, skipping geolocation storage');
+                }
+                
+                return geoData;
+                
+            } catch (error) {
+                console.error('❌ Geolocation tracking error:', error);
+                addActivityLog(`❌ Geolocation tracking failed: ${error.message}`);
+                return null;
+            }
+        }
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger shortcuts when typing in inputs
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+            
+            // Alt + T = Toggle theme controls
+            if (e.altKey && e.key === 't') {
+                e.preventDefault();
+                const panel = document.getElementById('controlsPanel');
+                const toggle = document.getElementById('controlsToggle');
+                
+                if (panel.classList.contains('collapsed')) {
+                    panel.classList.remove('collapsed');
+                    toggle.classList.remove('visible');
+                } else {
+                    panel.classList.add('collapsed');
+                    toggle.classList.add('visible');
+                }
+            }
+            
+            // Alt + D = Toggle debug panel
+            if (e.altKey && e.key === 'd') {
+                e.preventDefault();
+                toggleDebugPanel();
+            }
+            
+            // Alt + M = Toggle mobile menu
+            if (e.altKey && e.key === 'm') {
+                e.preventDefault();
+                const navLinks = document.getElementById('navLinks');
+                const menuToggle = document.getElementById('mobileMenuToggle');
+                
+                if (navLinks && menuToggle) {
+                    navLinks.classList.toggle('active');
+                    const isOpen = navLinks.classList.contains('active');
+                    menuToggle.textContent = isOpen ? '✕' : '☰';
+                }
+            }
+            
+            // Escape = Close everything
+            if (e.key === 'Escape') {
+                const navLinks = document.getElementById('navLinks');
+                const menuToggle = document.getElementById('mobileMenuToggle');
+                
+                if (navLinks) navLinks.classList.remove('active');
+                if (menuToggle) menuToggle.textContent = '☰';
+            }
+        });
+        
+        // Show keyboard shortcuts hint on first load
+        if (!localStorage.getItem('keyboardHintsShown')) {
             setTimeout(() => {
-                fetchPolls();
-            }, 500);
+                console.log('⌨️ KEYBOARD SHORTCUTS:');
+                console.log('Alt+T = Toggle theme panel');
+                console.log('Alt+D = Toggle debug panel');
+                console.log('Alt+M = Toggle menu');
+                console.log('Esc = Close menus');
+                localStorage.setItem('keyboardHintsShown', 'true');
+            }, 2000);
         }
-        
-        // Track geolocation
+        // Track visitor geolocation on page load (with delay to not block other initializations)
         setTimeout(() => {
             trackVisitorGeolocation();
         }, 2000);
-    });
-</script>
 
-<!-- AdSense Ad Initialization -->
-<script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-    (adsbygoogle = window.adsbygoogle || []).push({});
+        // ===== POLL SYSTEM V2 (SIMPLIFIED) =====
+        const SUPABASE_URL = 'https://zkrdbvjmessktzlxommr.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcmRidmptZXNza3R6bHhvbW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI4ODMzNzUsImV4cCI6MjA2ODQ1OTM3NX0.XDNQGD7Jl-2zmjFyfGVFRjdq-9rVFfhCyExfO8Fzb7Q';
+
+        let pollSupabase;
+        let polls = [];
+        let selectedOptions = {};
+        let votingInProgress = new Set();
+
+        // ===== COOKIE FUNCTIONS (for anti-spam) =====
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=Strict";
+            console.log(`🍪 Cookie set: ${name} = ${value} (expires in ${days} days)`);
+            
+            // Update debug panel
+            if (typeof updateCookieList === 'function') {
+                updateCookieList();
+            }
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function hasVoted(pollId) {
+            return getCookie(`pollVoted_${pollId}`) === 'true';
+        }
+
+        function markAsVoted(pollId) {
+            // Cookie expires in 365 days (1 year)
+            setCookie(`pollVoted_${pollId}`, 'true', 365);
+        }
+
+        function initializePollSupabase() {
+            try {
+                if (window.supabase && typeof window.supabase.createClient === 'function') {
+                    pollSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    console.log('✅ Supabase initialized successfully');
+                } else {
+                    console.error('❌ Supabase library not loaded, retrying...');
+                    setTimeout(initializePollSupabase, 500);
+                }
+            } catch (error) {
+                console.error('❌ Error initializing Supabase:', error);
+                setTimeout(initializePollSupabase, 500);
+            }
+        }
+
+        async function fetchPolls() {
+            try {
+                console.log('📥 Fetching polls from Supabase...');
+                
+                const { data, error } = await pollSupabase
+                    .from('polls')
+                    .select('*')
+                    .eq('active', true)
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    console.error('❌ Supabase error:', error);
+                    throw error;
+                }
+                
+                console.log('📊 Raw poll data from database:', data);
+                
+                if (!data || data.length === 0) {
+                    console.warn('⚠️ No polls found in database');
+                    polls = [];
+                    renderPolls();
+                    return;
+                }
+                
+                // Convert database format to simple array format
+                polls = data.map(poll => {
+                    // Build options array from option1, option2, etc.
+                    const options = [];
+                    const votes = [];
+                    
+                    for (let i = 1; i <= 5; i++) {
+                        const optionKey = `option${i}`;
+                        const voteKey = `votes${i}`;
+                        
+                        if (poll[optionKey]) {
+                            options.push(poll[optionKey]);
+                            votes.push(poll[voteKey] || 0);
+                        }
+                    }
+                    
+                    console.log(`✅ Poll parsed: "${poll.question}" - ${options.length} options`);
+                    
+                    return {
+                        id: poll.id,
+                        question: poll.question,
+                        options: options,
+                        votes: votes,
+                        created_at: poll.created_at
+                    };
+                });
+                
+                console.log(`✅ ${polls.length} polls ready to display`);
+                renderPolls();
+            } catch (error) {
+                console.error('❌ Failed to fetch polls:', error);
+                showPollMessage('error', 'Failed to load polls. Check console for details.');
+            }
+        }
+
+        function showPollMessage(type, message) {
+            const container = document.getElementById('pollContainer');
+            if (!container) return;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `poll-message ${type}`;
+            messageDiv.textContent = message;
+            
+            container.insertBefore(messageDiv, container.firstChild);
+            
+            setTimeout(() => messageDiv.remove(), type === 'success' ? 3000 : 5000);
+        }
+
+        function selectPollOption(pollId, optionIndex) {
+            if (votingInProgress.has(pollId)) return;
+            
+            console.log(`👆 Selected option ${optionIndex} for poll ${pollId}`);
+            selectedOptions[pollId] = optionIndex;
+            renderPolls();
+        }
+
+        async function submitPollVote(pollId) {
+            const optionIndex = selectedOptions[pollId];
+
+            // Check if already voted (using cookie)
+            if (hasVoted(pollId)) {
+                showPollMessage('error', '🚫 You already voted on this poll. One vote per person!');
+                return;
+            }
+            
+            // Check if option selected
+            if (optionIndex === undefined) {
+                showPollMessage('error', '⚠️ Please select an option before voting');
+                return;
+            }
+
+            // Prevent double-clicking
+            if (votingInProgress.has(pollId)) return;
+            votingInProgress.add(pollId);
+            
+            try {
+                const poll = polls.find(p => p.id === pollId);
+                if (!poll) throw new Error('Poll not found');
+                
+                console.log(`🗳️ Submitting vote for option ${optionIndex + 1}...`);
+                
+                // Build update object with the correct vote column
+                const voteColumn = `votes${optionIndex + 1}`;
+                const currentVoteCount = poll.votes[optionIndex];
+                const updateData = {};
+                updateData[voteColumn] = currentVoteCount + 1;
+                
+                console.log('📤 Updating database:', updateData);
+
+                // Update in Supabase
+                const { data, error } = await pollSupabase
+                    .from('polls')
+                    .update(updateData)
+                    .eq('id', pollId)
+                    .select();
+
+                if (error) {
+                    console.error('❌ Vote update failed:', error);
+                    throw error;
+                }
+                
+                console.log('✅ Vote recorded successfully!', data);
+
+                // Mark as voted using cookie (expires in 1 year)
+                markAsVoted(pollId);
+                delete selectedOptions[pollId];
+                
+                showPollMessage('success', '✅ Vote submitted successfully! Thanks for participating!');
+                
+                // Refresh polls to show updated results
+                await fetchPolls();
+                
+            } catch (error) {
+                console.error('❌ Vote submission error:', error);
+                showPollMessage('error', '❌ Vote failed: ' + error.message);
+            } finally {
+                votingInProgress.delete(pollId);
+            }
+        }
+
+        function renderPolls() {
+            const container = document.getElementById('pollContainer');
+            if (!container) return;
+            
+            console.log(`🎨 Rendering ${polls.length} polls...`);
+            
+            if (polls.length === 0) {
+                container.innerHTML = `
+                    <div class="poll-loading">
+                        <p>📊 No polls available</p>
+                        <p style="font-size: 0.9rem; margin-top: 1rem; color: rgba(255,255,255,0.5);">
+                            Polls will appear here once added to the database
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            const pollsHTML = polls.map(poll => {
+                const totalVotes = poll.votes.reduce((sum, count) => sum + count, 0);
+                const selectedIndex = selectedOptions[poll.id];
+                const isVoting = votingInProgress.has(poll.id);
+                const hasVotedOnPoll = hasVoted(poll.id); // Check cookie
+
+                const optionsHTML = poll.options.map((option, index) => {
+                    const voteCount = poll.votes[index];
+                    const percentage = totalVotes ? Math.round((voteCount / totalVotes) * 100) : 0;
+                    const isSelected = selectedIndex === index;
+
+                    return `
+                        <div class="poll-option ${isSelected ? 'selected' : ''} ${hasVotedOnPoll ? 'disabled' : ''}" 
+                             style="--vote-percent: ${percentage}%"
+                             onclick="${hasVotedOnPoll ? '' : `selectPollOption('${poll.id}', ${index})`}"
+                             role="button"
+                             tabindex="0">
+                            <span class="poll-option-text">${escapeHtml(option)}</span>
+                            <div class="poll-option-stats">
+                                <span class="poll-vote-count">${voteCount} vote${voteCount !== 1 ? 's' : ''}</span>
+                                <span>${percentage}%</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="poll-card">
+                        ${hasVotedOnPoll ? '<div class="poll-message success">✅ You already voted on this poll</div>' : ''}
+                        <h3 class="poll-question">${escapeHtml(poll.question)}</h3>
+                        <div class="poll-options">${optionsHTML}</div>
+                        <div class="poll-actions">
+                            <div class="poll-meta">
+                                Total: ${totalVotes} vote${totalVotes !== 1 ? 's' : ''}
+                            </div>
+                            <button class="poll-submit-btn" 
+                                    onclick="submitPollVote('${poll.id}')"
+                                    ${isVoting || selectedIndex === undefined || hasVotedOnPoll ? 'disabled' : ''}>
+                                ${isVoting ? '⏳ Submitting...' : hasVotedOnPoll ? '🔒 Already Voted' : '🗳️ Submit Vote'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = pollsHTML;
+            console.log('✅ Polls rendered successfully');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        window.selectPollOption = selectPollOption;
+        window.submitPollVote = submitPollVote;
+
+        // ===== DEBUG PANEL FUNCTIONS =====
+        let activityLogs = [];
+        let debugPassword = null;
+
+        // Fetch debug password from Supabase on page load
+        async function fetchDebugPassword() {
+            try {
+                const { data, error } = await pollSupabase
+                    .from('debug_config')
+                    .select('setting_value')
+                    .eq('setting_name', 'debug_password')
+                    .single();
+
+                if (error) {
+                    console.error('Failed to fetch debug password:', error);
+                    return null;
+                }
+
+                return data?.setting_value || null;
+            } catch (error) {
+                console.error('Error fetching debug password:', error);
+                return null;
+            }
+        }
+
+        function showPasswordPrompt() {
+            // Create modal
+            const modal = document.createElement('div');
+            modal.className = 'password-modal';
+            modal.id = 'passwordModal';
+            
+            modal.innerHTML = `
+                <div class="password-modal-content">
+                    <div class="password-modal-title">🔐 Debug Panel Access</div>
+                    <div class="password-modal-description">
+                        This panel is restricted. Please enter the password to continue.
+                    </div>
+                    <input 
+                        type="password" 
+                        id="passwordInput" 
+                        class="password-input" 
+                        placeholder="Enter password..."
+                        autocomplete="off"
+                    />
+                    <div id="passwordFeedback"></div>
+                    <div class="password-buttons">
+                        <button class="password-btn password-btn-cancel" onclick="closePasswordPrompt()">Cancel</button>
+                        <button class="password-btn password-btn-submit" onclick="checkDebugPassword()">Unlock</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Focus input
+            setTimeout(() => {
+                const input = document.getElementById('passwordInput');
+                if (input) {
+                    input.focus();
+                    
+                    // Allow Enter key to submit
+                    input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            checkDebugPassword();
+                        }
+                    });
+                }
+            }, 100);
+        }
+
+        function closePasswordPrompt() {
+            const modal = document.getElementById('passwordModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        async function checkDebugPassword() {
+            const input = document.getElementById('passwordInput');
+            const feedback = document.getElementById('passwordFeedback');
+            
+            if (!input || !feedback) return;
+            
+            const enteredPassword = input.value;
+            
+            // Show loading
+            feedback.innerHTML = '<div class="password-loading">🔄 Verifying...</div>';
+            
+            // Fetch password from Supabase if not already fetched
+            if (!debugPassword) {
+                debugPassword = await fetchDebugPassword();
+            }
+            
+            if (!debugPassword) {
+                feedback.innerHTML = '<div class="password-error">❌ Failed to load password from database</div>';
+                return;
+            }
+            
+            // Check password
+            if (enteredPassword === debugPassword) {
+                feedback.innerHTML = '<div class="password-loading">✅ Access granted! Protections disabled.</div>';
+                
+                // Store authentication in sessionStorage (lasts until browser tab closes)
+                sessionStorage.setItem('debugAuthenticated', 'true');
+                isDebugAuthenticated = true;
+                
+                // Log to console
+                console.log('🔓 DEBUG MODE ACTIVATED');
+                console.log('✅ Right-click enabled');
+                console.log('✅ Inspect element shortcuts enabled (F12, Ctrl+Shift+I, etc.)');
+                console.log('✅ Text selection enabled');
+                console.log('✅ Copy/paste enabled');
+                
+                addActivityLog('🔓 Debug mode activated - All protections disabled');
+                
+                // Close modal and open debug panel
+                setTimeout(() => {
+                    closePasswordPrompt();
+                    openDebugPanel();
+                }, 500);
+            } else {
+                feedback.innerHTML = '<div class="password-error">❌ Incorrect password. Try again.</div>';
+                input.value = '';
+                input.focus();
+                
+                // Shake animation
+                input.style.animation = 'shake 0.3s';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 300);
+            }
+        }
+
+        function toggleDebugPanel() {
+            // Check if already authenticated (session-based)
+            const sessionAuth = sessionStorage.getItem('debugAuthenticated');
+            
+            if (sessionAuth === 'true' || isDebugAuthenticated) {
+                // Already authenticated, just toggle panel
+                const panel = document.getElementById('debugPanel');
+                const toggleBtn = document.getElementById('debugToggle');
+                
+                if (panel.style.display === 'none') {
+                    openDebugPanel();
+                } else {
+                    panel.style.display = 'none';
+                    toggleBtn.style.display = 'flex';
+                }
+            } else {
+                // Not authenticated, show password prompt
+                showPasswordPrompt();
+            }
+        }
+
+        function openDebugPanel() {
+            const panel = document.getElementById('debugPanel');
+            const toggleBtn = document.getElementById('debugToggle');
+            
+            panel.style.display = 'block';
+            toggleBtn.style.display = 'none';
+            refreshPollStatus();
+        }
+
+        // Make password functions globally accessible
+        window.closePasswordPrompt = closePasswordPrompt;
+        window.checkDebugPassword = checkDebugPassword;
+
+        function updateSystemStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('systemStatus');
+            if (!statusDiv) return;
+            
+            statusDiv.className = `debug-status ${type}`;
+            statusDiv.innerHTML = `<div class="debug-log">${message}</div>`;
+        }
+
+        function addActivityLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            activityLogs.unshift(`[${timestamp}] ${message}`);
+            
+            // Keep only last 10 logs
+            if (activityLogs.length > 10) {
+                activityLogs = activityLogs.slice(0, 10);
+            }
+            
+            updateActivityLog();
+        }
+
+        function updateActivityLog() {
+            const logDiv = document.getElementById('activityLog');
+            if (!logDiv) return;
+            
+            if (activityLogs.length === 0) {
+                logDiv.innerHTML = '<div class="debug-log">No activity yet</div>';
+            } else {
+                logDiv.innerHTML = activityLogs.map(log => 
+                    `<div class="debug-log">${log}</div>`
+                ).join('');
+            }
+        }
+
+        function updateCookieList() {
+            const cookieListDiv = document.getElementById('cookieList');
+            if (!cookieListDiv) return;
+            
+            const allCookies = document.cookie.split(';');
+            const pollCookies = allCookies.filter(cookie => 
+                cookie.trim().startsWith('pollVoted_')
+            );
+            
+            if (pollCookies.length === 0) {
+                cookieListDiv.innerHTML = '<div class="debug-log">✅ No poll cookies (you haven\'t voted yet)</div>';
+            } else {
+                cookieListDiv.innerHTML = pollCookies.map(cookie => {
+                    const [name, value] = cookie.trim().split('=');
+                    const pollId = name.replace('pollVoted_', '').substring(0, 8) + '...';
+                    return `<div class="cookie-item">🍪 ${pollId} = ${value}</div>`;
+                }).join('');
+            }
+        }
+
+        function clearAllPollCookies() {
+            if (!confirm('Are you sure you want to clear all poll vote cookies? You will be able to vote again.')) {
+                return;
+            }
+            
+            const allCookies = document.cookie.split(';');
+            let cleared = 0;
+            
+            allCookies.forEach(cookie => {
+                const cookieName = cookie.split('=')[0].trim();
+                if (cookieName.startsWith('pollVoted_')) {
+                    document.cookie = cookieName + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                    cleared++;
+                }
+            });
+            
+            addActivityLog(`🗑️ Cleared ${cleared} poll cookie(s)`);
+            updateCookieList();
+            
+            // Refresh polls to show voting is available again
+            fetchPolls();
+            
+            alert(`✅ Cleared ${cleared} poll cookies! You can vote again now.`);
+        }
+
+        function refreshPollStatus() {
+            updateSystemStatus('🔄 Refreshing...', 'info');
+            updateCookieList();
+            
+            setTimeout(() => {
+                if (pollSupabase) {
+                    updateSystemStatus(`✅ Connected | ${polls.length} poll(s) loaded`, 'success');
+                } else {
+                    updateSystemStatus('❌ Not connected to Supabase', 'error');
+                }
+            }, 500);
+            
+            addActivityLog('🔄 Status refreshed');
+        }
+    
+
+        // ===== GEOLOCATION VIEWER FUNCTIONS =====
+        async function loadVisitorGeolocation() {
+            const container = document.getElementById('geolocationData');
+            container.innerHTML = '<div class="debug-log">⏳ Loading visitor data...</div>';
+            
+            try {
+                if (!pollSupabase) {
+                    container.innerHTML = '<div class="debug-log" style="color: #ff6b6b;">❌ Supabase not connected</div>';
+                    return;
+                }
+                
+                // Fetch last 50 visitors
+                const { data, error } = await pollSupabase
+                    .from('visitor_geolocation')
+                    .select('*')
+                    .order('visited_at', { ascending: false })
+                    .limit(50);
+                
+                if (error) {
+                    container.innerHTML = `<div class="debug-log" style="color: #ff6b6b;">❌ Error: ${error.message}</div>`;
+                    console.error('Geolocation fetch error:', error);
+                    return;
+                }
+                
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="debug-log">📭 No visitor data yet. Data appears after first visit is tracked.</div>';
+                    return;
+                }
+                
+                // Display visitor data
+                let html = `<div style="margin-bottom: 0.5rem; font-weight: bold; color: #4ade80;">📊 ${data.length} Recent Visitors</div>`;
+                
+                // Group by country
+                const countryStats = {};
+                data.forEach(visitor => {
+                    const country = visitor.country || 'Unknown';
+                    countryStats[country] = (countryStats[country] || 0) + 1;
+                });
+                
+                html += '<div style="margin-bottom: 0.5rem; padding: 0.5rem; background: rgba(74, 222, 128, 0.1); border-radius: 4px;">';
+                html += '<strong>By Country:</strong><br>';
+                Object.entries(countryStats)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 5)
+                    .forEach(([country, count]) => {
+                        html += `${country}: ${count} | `;
+                    });
+                html = html.slice(0, -3) + '</div>';
+                
+                // List recent visitors
+                data.slice(0, 20).forEach((visitor, index) => {
+                    const date = new Date(visitor.visited_at);
+                    const timeAgo = getTimeAgo(date);
+                    
+                    html += `
+                        <div style="padding: 0.4rem; margin-bottom: 0.3rem; background: rgba(255,255,255,0.05); border-radius: 4px; border-left: 3px solid #4ade80;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <span style="font-weight: bold; color: #4ade80;">${visitor.city || 'Unknown'}, ${visitor.country || 'Unknown'}</span>
+                                    <span style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-left: 0.5rem;">${visitor.country_code || ''}</span>
+                                </div>
+                                <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5);">${timeAgo}</div>
+                            </div>
+                            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem;">
+                                IP: ${visitor.ip_address || 'Unknown'} | ISP: ${(visitor.isp || 'Unknown').substring(0, 30)}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+                addActivityLog(`📊 Loaded ${data.length} visitor records`);
+                
+            } catch (err) {
+                container.innerHTML = `<div class="debug-log" style="color: #ff6b6b;">❌ Error: ${err.message}</div>`;
+                console.error('Error loading geolocation:', err);
+            }
+        }
+        
+        async function exportGeolocationData() {
+            try {
+                if (!pollSupabase) {
+                    alert('❌ Supabase not connected');
+                    return;
+                }
+                
+                addActivityLog('💾 Exporting geolocation data...');
+                
+                // Fetch ALL visitor data
+                const { data, error } = await pollSupabase
+                    .from('visitor_geolocation')
+                    .select('*')
+                    .order('visited_at', { ascending: false });
+                
+                if (error) {
+                    alert(`❌ Export failed: ${error.message}`);
+                    console.error('Export error:', error);
+                    return;
+                }
+                
+                if (!data || data.length === 0) {
+                    alert('📭 No data to export yet');
+                    return;
+                }
+                
+                // Create JSON file
+                const json = JSON.stringify(data, null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                // Download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `visitor-geolocation-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                addActivityLog(`✅ Exported ${data.length} visitor records`);
+                alert(`✅ Exported ${data.length} visitor records!\n\nFile saved as: ${a.download}`);
+                
+            } catch (err) {
+                alert(`❌ Export failed: ${err.message}`);
+                console.error('Export error:', err);
+            }
+        }
+        
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+            if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+            return date.toLocaleDateString();
+        }
+
+        // Make functions globally accessible
+        window.toggleDebugPanel = toggleDebugPanel;
+        window.clearAllPollCookies = clearAllPollCookies;
+        window.refreshPollStatus = refreshPollStatus;
+        window.loadVisitorGeolocation = loadVisitorGeolocation;
+        window.exportGeolocationData = exportGeolocationData;
+
+        // Update debug panel when polls are fetched
+        const originalFetchPolls = fetchPolls;
+        fetchPolls = async function() {
+            await originalFetchPolls();
+            updateSystemStatus(`✅ Connected | ${polls.length} poll(s) loaded`, 'success');
+            addActivityLog(`📥 Loaded ${polls.length} poll(s)`);
+        };
+
+        // Update debug panel when voting
+        const originalSubmitPollVote = submitPollVote;
+        submitPollVote = async function(pollId) {
+            const optionIndex = selectedOptions[pollId];
+            addActivityLog(`🗳️ Voting on option ${optionIndex + 1}...`);
+            
+            await originalSubmitPollVote(pollId);
+            
+            if (hasVoted(pollId)) {
+                addActivityLog(`✅ Vote recorded! Cookie saved.`);
+                updateCookieList();
+            }
+        };
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing...');
+            // Create ultra-realistic micro-craters on moon
+            const moon = document.querySelector('.orbital-planet');
+            if (moon) {
+                const microCraters = [
+                    { size: 12, top: '25%', left: '35%', opacity: 0.7 },
+                    { size: 8, top: '45%', left: '68%', opacity: 0.6 },
+                    { size: 15, top: '70%', left: '42%', opacity: 0.75 },
+                    { size: 10, top: '62%', left: '78%', opacity: 0.65 },
+                    { size: 6, top: '32%', left: '62%', opacity: 0.5 },
+                    { size: 9, top: '78%', left: '28%', opacity: 0.7 },
+                    { size: 7, top: '48%', left: '25%', opacity: 0.55 },
+                    { size: 11, top: '15%', left: '52%', opacity: 0.8 },
+                    { size: 5, top: '85%', left: '65%', opacity: 0.6 },
+                    { size: 8, top: '22%', left: '75%', opacity: 0.65 }
+                ];
+                
+                microCraters.forEach(crater => {
+                    const craterEl = document.createElement('div');
+                    craterEl.style.position = 'absolute';
+                    craterEl.style.width = crater.size + 'px';
+                    craterEl.style.height = crater.size + 'px';
+                    craterEl.style.top = crater.top;
+                    craterEl.style.left = crater.left;
+                    craterEl.style.borderRadius = '50%';
+                    craterEl.style.background = `radial-gradient(circle at 40% 40%, 
+                        rgba(120, 120, 120, ${crater.opacity * 0.4}) 0%, 
+                        rgba(60, 60, 60, ${crater.opacity * 0.8}) 50%, 
+                        transparent 80%)`;
+                    craterEl.style.boxShadow = `inset -${crater.size * 0.15}px -${crater.size * 0.15}px ${crater.size * 0.3}px rgba(0, 0, 0, 0.8)`;
+                    craterEl.style.filter = 'blur(0.2px)';
+                    craterEl.style.pointerEvents = 'none';
+                    moon.appendChild(craterEl);
+                });
+                
+                console.log('🌕 Ultra-detailed moon surface rendered with', microCraters.length, 'micro-craters');
+            }
+            // Check if user was previously authenticated in this session
+            if (sessionStorage.getItem('debugAuthenticated') === 'true') {
+                isDebugAuthenticated = true;
+                console.log('✅ Debug mode active - Protections disabled');
+            }
+            
+            // Load saved background instead of default starfield
+            setTimeout(() => {
+                loadSavedBackground();
+            }, 1000);
+            
+            // Initialize debug panel
+            updateSystemStatus('🔄 Initializing...', 'info');
+            updateCookieList();
+            addActivityLog('🚀 Page loaded');
+            
+            // Check if Supabase is available
+            if (!window.supabase) {
+                console.error('Supabase library not loaded!');
+                showPollMessage('error', 'Failed to load polling system. Please refresh the page.');
+                updateSystemStatus('❌ Supabase not loaded', 'error');
+                addActivityLog('❌ Supabase library failed to load');
+                return;
+            }
+            
+            console.log('Supabase available, initializing...');
+            updateSystemStatus('🔄 Connecting to database...', 'info');
+            initializePollSupabase();
+            
+            // Fetch debug password in background
+            fetchDebugPassword().then(password => {
+                if (password) {
+                    debugPassword = password;
+                    console.log('🔐 Debug password loaded');
+                } else {
+                    console.warn('⚠️ Debug password not found in database');
+                }
+            });
+            
+            // Give Supabase a moment to initialize, then fetch polls
+            setTimeout(() => {
+                console.log('Fetching polls...');
+                addActivityLog('📥 Fetching polls from database...');
+                fetchPolls();
+            }, 500);
+            
+            setInterval(() => {
+                if (votingInProgress.size === 0) {
+                    console.log('Auto-refreshing polls...');
+                    addActivityLog('🔄 Auto-refresh polls');
+                    fetchPolls();
+                }
+            }, 30000);
+        });
+        // ===== MOBILE NAVIGATION MENU WITH CLOSE BUTTON =====
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileMenuToggle && navLinks) {
+            // Open menu
+            mobileMenuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navLinks.classList.add('active');
+                mobileMenuToggle.setAttribute('aria-expanded', 'true');
+            });
+        
+            // Close menu when clicking X (mobile only)
+            if (window.innerWidth <= 1024) {
+                navLinks.addEventListener('click', (e) => {
+                    if (e.target === navLinks) {
+                        navLinks.classList.remove('active');
+                        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+        
+            // Close menu when clicking a link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+        
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.main-nav')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        
+            // Close menu on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+        
+        // ===== ACTIVE NAV LINK HIGHLIGHTING =====
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-link').forEach(link => {
+            const linkPage = link.getAttribute('href').split('/').pop();
+            if (linkPage === currentPage) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
 </script>
+    
+    <!-- AdSense Ad Initialization -->
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
 </body>
 </html>
