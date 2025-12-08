@@ -419,56 +419,64 @@ function theme_starfield() {
     console.log('💫 Initializing shooting star system...');
     
     function createShootingStar() {
-        const meteor = document.createElement('div');
+        const container = document.createElement('div');
         const startX = Math.random() * 100;
         const startY = Math.random() * 50;
         const size = Math.random() * 2 + 1;
         const length = Math.random() * 80 + 40;
-        const angle = Math.random() * 30 + 30;
+        const angle = 45; // Fixed diagonal angle
         const duration = Math.random() * 1 + 0.5;
         const brightness = Math.random() * 0.5 + 0.6;
         
+        container.style.cssText = `
+            position: absolute;
+            left: ${startX}%;
+            top: ${startY}%;
+            animation: shootingStar ${duration}s linear;
+            pointer-events: none;
+            z-index: 10;
+        `;
+        
+        // Star head
+        const meteor = document.createElement('div');
         meteor.style.cssText = `
             position: absolute;
             width: ${size}px;
             height: ${size}px;
-            left: ${startX}%;
-            top: ${startY}%;
             background: #ffffff;
             border-radius: 50%;
             box-shadow: 
                 0 0 ${size * 4}px #ffffff,
                 0 0 ${size * 8}px #aabfff;
             opacity: ${brightness};
-            animation: shootingStar ${duration}s linear;
             pointer-events: none;
-            z-index: 10;
         `;
         
+        // Trail (separate, not child of meteor)
         const trail = document.createElement('div');
         trail.style.cssText = `
             position: absolute;
             width: ${length}px;
             height: ${size * 0.5}px;
-            left: 50%;
-            top: 50%;
-            transform: translate(-100%, -50%) rotate(-${angle}deg);
+            right: ${size}px;
+            top: ${size / 2 - (size * 0.25)}px;
             background: linear-gradient(
                 to left,
-                #ffffff00 0%,
-                #ffffff80 20%,
-                #aabfffcc 50%,
-                #ffffff 100%
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.5) 20%,
+                rgba(170, 191, 255, 0.8) 50%,
+                rgba(255, 255, 255, 1) 100%
             );
             border-radius: 50%;
             filter: blur(1px);
             pointer-events: none;
         `;
         
-        meteor.appendChild(trail);
-        starfield.appendChild(meteor);
+        container.appendChild(meteor);
+        container.appendChild(trail);
+        starfield.appendChild(container);
         
-        setTimeout(() => meteor.remove(), duration * 1000);
+        setTimeout(() => container.remove(), duration * 1000);
     }
     
     setInterval(() => {
