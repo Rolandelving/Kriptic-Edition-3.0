@@ -52,6 +52,47 @@
             font-family: 'DripOctober';
             src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/DripOctober-vm0JA%5B1%5D.ttf') format('truetype');
         }
+        @font-face {
+            font-family: 'Chainsaw Carnage';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/ChainsawCarnage%5B1%5D.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Halloween';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/SuperCursed.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'CrotahItalic';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/CrotahFreeVersionItalic-z8Ev3.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Dangernight';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Dangernight-vnZ5y.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'HeavyJack';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/HeavyJack-DYz7R.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Marlita';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/MarlitaDemo-2vXRK.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'MockBear';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/MockBear-3lgA8.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Mulinarstamp';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/MulinarstampRegularDemo-q2V9d.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'UnderThreat';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/UnderThreatDemo-vnVD4.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'BlackDahlia';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/BlackDahlia-LBRG.woff2') format('woff2'),
+                 url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/BlackDahlia-LBRG_1_.woff') format('woff');
+        }
 
         * {
             margin: 0;
@@ -372,6 +413,36 @@
             text-align: center;
             margin-top: 0.5rem;
             color: rgba(255, 255, 255, 0.7);
+        }
+
+        .theme-dropdown {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'DripOctober', sans-serif;
+        }
+
+        .theme-dropdown:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .theme-dropdown:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .theme-dropdown option {
+            background: #1a1a1a;
+            color: white;
+            padding: 0.5rem;
         }
 
         /* Main Content */
@@ -1101,6 +1172,23 @@
                 </div>
             </div>
         </div>
+
+        <div class="theme-section">
+            <span class="theme-label">Font Style</span>
+            <select class="theme-dropdown" id="fontSelector">
+                <option value="DripOctober">Drip October</option>
+                <option value="Chainsaw Carnage">Chainsaw Carnage</option>
+                <option value="Halloween">Halloween</option>
+                <option value="CrotahItalic">Crotah Italic</option>
+                <option value="Dangernight">Dangernight</option>
+                <option value="HeavyJack">Heavy Jack</option>
+                <option value="Marlita">Marlita</option>
+                <option value="MockBear">Mock Bear</option>
+                <option value="Mulinarstamp">Mulinarstamp</option>
+                <option value="UnderThreat">Under Threat</option>
+                <option value="BlackDahlia">Black Dahlia</option>
+            </select>
+        </div>
     </div>
 
     <!-- Main Content -->
@@ -1371,7 +1459,6 @@ SELECT * FROM pg_policies WHERE tablename = 'visitor_geolocation';
         let visitorData = [];
         let clusteringEnabled = true;
         let heatmapEnabled = false;
-        let debugPassword = null;
 
         // ===== INITIALIZE SUPABASE =====
         function initSupabase() {
@@ -1414,6 +1501,7 @@ SELECT * FROM pg_policies WHERE tablename = 'visitor_geolocation';
             const themePanel = document.getElementById('themePanel');
             const themeClose = document.getElementById('themeClose');
             const themeButtons = document.querySelectorAll('.theme-btn');
+            const fontSelector = document.getElementById('fontSelector');
 
             // Load saved theme
             const savedTheme = localStorage.getItem('kripticTheme') || 'theme-nebula';
@@ -1425,6 +1513,11 @@ SELECT * FROM pg_policies WHERE tablename = 'visitor_geolocation';
                     btn.classList.add('active');
                 }
             });
+
+            // Load saved font
+            const savedFont = localStorage.getItem('kripticFont') || 'DripOctober';
+            document.body.style.fontFamily = `'${savedFont}', 'Segoe UI', sans-serif`;
+            if (fontSelector) fontSelector.value = savedFont;
 
             // Try to load from Supabase
             loadThemeFromSupabase();
@@ -1454,6 +1547,20 @@ SELECT * FROM pg_policies WHERE tablename = 'visitor_geolocation';
                     saveThemeToSupabase(theme);
                 });
             });
+
+            // Font selection
+            if (fontSelector) {
+                fontSelector.addEventListener('change', (e) => {
+                    const selectedFont = e.target.value;
+                    document.body.style.fontFamily = `'${selectedFont}', 'Segoe UI', sans-serif`;
+                    
+                    // Save to localStorage (instant)
+                    localStorage.setItem('kripticFont', selectedFont);
+                    
+                    // Save to Supabase (async)
+                    saveFontToSupabase(selectedFont);
+                });
+            }
 
             // Close on outside click
             document.addEventListener('click', (e) => {
@@ -1487,6 +1594,30 @@ SELECT * FROM pg_policies WHERE tablename = 'visitor_geolocation';
             }
         }
 
+        async function saveFontToSupabase(font) {
+            try {
+                if (!supabase) return;
+                
+                const userId = getUserId();
+                
+                const { error } = await supabase
+                    .from('user_preferences')
+                    .upsert({
+                        user_id: userId,
+                        font: font,
+                        updated_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'user_id'
+                    });
+                
+                if (!error) {
+                    console.log('✅ Font saved to Supabase:', font);
+                }
+            } catch (err) {
+                console.warn('Supabase font save error:', err);
+            }
+        }
+
         async function loadThemeFromSupabase() {
             try {
                 if (!supabase) return;
@@ -1495,26 +1626,40 @@ SELECT * FROM pg_policies WHERE tablename = 'visitor_geolocation';
                 
                 const { data, error } = await supabase
                     .from('user_preferences')
-                    .select('theme')
+                    .select('theme, font')
                     .eq('user_id', userId)
                     .single();
                 
-                if (data && data.theme) {
-                    document.body.className = data.theme;
-                    localStorage.setItem('kripticTheme', data.theme);
+                if (data) {
+                    // Load theme
+                    if (data.theme) {
+                        document.body.className = data.theme;
+                        localStorage.setItem('kripticTheme', data.theme);
+                        
+                        // Update active button
+                        document.querySelectorAll('.theme-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                            if (btn.dataset.theme === data.theme) {
+                                btn.classList.add('active');
+                            }
+                        });
+                        
+                        console.log('✅ Theme loaded from Supabase:', data.theme);
+                    }
                     
-                    // Update active button
-                    document.querySelectorAll('.theme-btn').forEach(btn => {
-                        btn.classList.remove('active');
-                        if (btn.dataset.theme === data.theme) {
-                            btn.classList.add('active');
-                        }
-                    });
-                    
-                    console.log('✅ Theme loaded from Supabase:', data.theme);
+                    // Load font
+                    if (data.font) {
+                        document.body.style.fontFamily = `'${data.font}', 'Segoe UI', sans-serif`;
+                        localStorage.setItem('kripticFont', data.font);
+                        
+                        const fontSelector = document.getElementById('fontSelector');
+                        if (fontSelector) fontSelector.value = data.font;
+                        
+                        console.log('✅ Font loaded from Supabase:', data.font);
+                    }
                 }
             } catch (err) {
-                console.warn('Supabase theme load error:', err);
+                console.warn('Supabase theme/font load error:', err);
             }
         }
 
