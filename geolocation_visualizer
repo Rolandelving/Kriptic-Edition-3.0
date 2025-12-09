@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Geolocation Map | Kriptic Edition 3.0</title>
+    <meta name="description" content="Real-time visitor geolocation tracking and visualization">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Leaflet MarkerCluster CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Leaflet MarkerCluster JS -->
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    
+    <style>
+        @font-face {
+            font-family: 'DripOctober';
+            src: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/DripOctober-vm0JA%5B1%5D.ttf') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DripOctober', 'Segoe UI', sans-serif;
+            background: radial-gradient(ellipse at top, #0a0e27, #000000),
+                        radial-gradient(ellipse at bottom, #1a1a3e, #000000);
+            color: #e0e7ff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Theme Variables */
+        :root {
+            --primary: #6495ff;
+            --secondary: #9d7dff;
+            --accent: #00d9ff;
+        }
+
+        body.theme-nebula {
+            --primary: #6495ff;
+            --secondary: #9d7dff;
+            --accent: #00d9ff;
+        }
+
+        body.theme-aurora {
+            --primary: #00ff88;
+            --secondary: #00ffff;
+            --accent: #88ff00;
+        }
+
+        body.theme-supernova {
+            --primary: #ff6b35;
+            --secondary: #ff0055;
+            --accent: #ffaa00;
+        }
+
+        body.theme-galaxy {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+        }
+
+        body.theme-creme {
+            --primary: #d4a574;
+            --secondary: #c9a581;
+            --accent: #f9f5f0;
+        }
+
+        body.theme-void {
+            --primary: #1a1a1a;
+            --secondary: #4a4a4a;
+            --accent: #ffffff;
+        }
+
+        body.theme-plasma {
+            --primary: #ff00ff;
+            --secondary: #00ffff;
+            --accent: #ffff00;
+        }
+
+        body.theme-solar {
+            --primary: #ffaa00;
+            --secondary: #ff6600;
+            --accent: #ffdd00;
+        }
+
+        body.theme-lunar {
+            --primary: #c0c0c0;
+            --secondary: #e0e0e0;
+            --accent: #ffffff;
+        }
+
+        body.theme-cosmic {
+            --primary: #ff1493;
+            --secondary: #00bfff;
+            --accent: #7fff00;
+        }
+
+        /* Starfield Background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+            animation: twinkle linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(30px);
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px var(--primary);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .back-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--primary);
+        }
+
+        .theme-toggle-btn {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: rotate(45deg) scale(1.1);
+        }
+
+        /* Theme Panel */
+        .theme-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: rgba(10, 14, 39, 0.98);
+            backdrop-filter: blur(40px);
+            border-left: 2px solid var(--primary);
+            box-shadow: -10px 0 50px rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .theme-panel.active {
+            right: 0;
+        }
+
+        .theme-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .theme-panel-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .theme-close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .theme-close-btn:hover {
+            background: rgba(255, 0, 0, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .theme-section {
+            margin-bottom: 2rem;
+        }
+
+        .theme-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .theme-btn {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 30px currentColor;
+        }
+
+        .theme-btn.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 40px currentColor, 0 0 20px #ffffff;
+            transform: scale(1.15);
+        }
+
+        .theme-nebula-btn { background: linear-gradient(135deg, #6495ff, #9d7dff, #00d9ff); }
+        .theme-aurora-btn { background: linear-gradient(135deg, #00ff88, #00ffff, #88ff00); }
+        .theme-supernova-btn { background: linear-gradient(135deg, #ff6b35, #ff0055, #ffaa00); }
+        .theme-galaxy-btn { background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); }
+        .theme-creme-btn { background: linear-gradient(135deg, #f9f5f0, #f1e9dc, #d4a574); }
+        .theme-void-btn { background: linear-gradient(135deg, #1a1a1a, #4a4a4a, #ffffff); }
+        .theme-plasma-btn { background: linear-gradient(135deg, #ff00ff, #00ffff, #ffff00); }
+        .theme-solar-btn { background: linear-gradient(135deg, #ffaa00, #ff6600, #ffdd00); }
+        .theme-lunar-btn { background: linear-gradient(135deg, #c0c0c0, #e0e0e0, #ffffff); }
+        .theme-cosmic-btn { background: linear-gradient(135deg, #ff1493, #00bfff, #7fff00); }
+
+        .theme-name {
+            font-size: 0.75rem;
+            text-align: center;
+            margin-top: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Main Content */
+        .container {
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px var(--primary)); }
+            50% { filter: drop-shadow(0 0 40px var(--primary)); }
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(10, 14, 39, 0.8);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px var(--primary);
+            border-color: var(--accent);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Map Container */
+        .map-wrapper {
+            background: rgba(10, 14, 39, 0.8);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2rem;
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .map-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .map-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'DripOctober', sans-serif;
+        }
+
+        .control-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--primary);
+        }
+
+        .control-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        #map {
+            width: 100%;
+            height: 600px;
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 30px var(--primary);
+        }
+
+        /* Country List */
+        .country-list-wrapper {
+            background: rgba(10, 14, 39, 0.8);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .country-list-header {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .country-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .country-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .country-item:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .country-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .country-stats {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--primary);
+            font-size: 1.2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            #map {
+                height: 400px;
+            }
+
+            .theme-panel {
+                width: 100%;
+                right: -100%;
+            }
+
+            .country-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Leaflet Popup Customization */
+        .leaflet-popup-content-wrapper {
+            background: rgba(10, 14, 39, 0.95) !important;
+            color: #e0e7ff !important;
+            border: 2px solid var(--primary) !important;
+            border-radius: 12px !important;
+            backdrop-filter: blur(20px) !important;
+        }
+
+        .leaflet-popup-content {
+            margin: 1rem !important;
+            font-family: 'DripOctober', sans-serif !important;
+        }
+
+        .leaflet-popup-tip {
+            background: rgba(10, 14, 39, 0.95) !important;
+        }
+
+        .popup-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .popup-info {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .popup-info strong {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body class="theme-nebula">
+    <!-- Starfield -->
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">🌍 GEOLOCATION MAP</div>
+        <div class="header-right">
+            <button class="theme-toggle-btn" id="themeToggle" title="Change Theme">⚙️</button>
+            <a href="index.html" class="back-btn">
+                <span>←</span>
+                <span>Back to Home</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Theme Panel -->
+    <div class="theme-panel" id="themePanel">
+        <div class="theme-panel-header">
+            <div class="theme-panel-title">Cosmic Themes</div>
+            <button class="theme-close-btn" id="themeClose">×</button>
+        </div>
+
+        <div class="theme-section">
+            <span class="theme-label">Select Your Theme</span>
+            <div class="theme-grid">
+                <div>
+                    <button class="theme-btn theme-nebula-btn active" data-theme="theme-nebula"></button>
+                    <div class="theme-name">Nebula</div>
+                </div>
+                <div>
+                    <button class="theme-btn theme-aurora-btn" data-theme="theme-aurora"></button>
+                    <div class="theme-name">Aurora</div>
+                </div>
+                <div>
+                    <button class="theme-btn theme-supernova-btn" data-theme="theme-supernova"></button>
+                    <div class="theme-name">Supernova</div>
+                </div>
+                <div>
+                    <button class="theme-btn theme-galaxy-btn" data-theme="theme-galaxy"></button>
+                    <div class="theme-name">Galaxy</div>
+                </div>
+                <div>
+                    <button class="theme-btn theme-creme-btn" data-theme="theme-creme"></button>
+                    <div class="theme-name">Creme</div>
+                </div>
+                <div>
+                    <button class="theme-btn theme-void-btn" data-theme="theme-void"></button>
+                    <div class="theme-name">Void</div>
+                </div>
+                <div>
+                    <button class="theme-btn theme-plasma-btn" data-theme="theme-plasma"></button>
+                    <div class="theme-name">Plasma</div>
+                </div>
+                <div>
+                    <button class="theme-btn theme-solar-btn" data-theme="theme-solar"></button>
+                    <div class="theme-name">Solar</div>
+                </div>
+                <div>
+                    <button class="theme-btn theme-lunar-btn" data-theme="theme-lunar"></button>
+                    <div class="theme-name">Lunar</div>
+                </div>
+                <div>
+                    <button class="theme-btn theme-cosmic-btn" data-theme="theme-cosmic"></button>
+                    <div class="theme-name">Cosmic</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Visitor Geolocation Tracker</h1>
+        <p class="page-subtitle">Real-time visualization of global visitor locations</p>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalVisitors">0</div>
+                <div class="stat-label">Total Visitors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="uniqueCountries">0</div>
+                <div class="stat-label">Countries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="uniqueCities">0</div>
+                <div class="stat-label">Cities</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="recentVisitors">0</div>
+                <div class="stat-label">Last 24 Hours</div>
+            </div>
+        </div>
+
+        <!-- Map -->
+        <div class="map-wrapper">
+            <div class="map-header">
+                <div class="map-title">🗺️ Interactive Visitor Map</div>
+                <div class="map-controls">
+                    <button class="control-btn" id="refreshBtn">🔄 Refresh Data</button>
+                    <button class="control-btn" id="clusterToggle">📍 Toggle Clustering</button>
+                    <button class="control-btn" id="heatmapToggle">🔥 Heatmap View</button>
+                </div>
+            </div>
+            <div id="map"></div>
+        </div>
+
+        <!-- Country List -->
+        <div class="country-list-wrapper">
+            <div class="country-list-header">📊 Visitors by Country</div>
+            <div class="country-list" id="countryList">
+                <div class="loading">Loading country data...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURATION =====
+        const SUPABASE_URL = 'https://zkrdbvjmessktzlxommr.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcmRidmptZXNza3R6bHhvbW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI4ODMzNzUsImV4cCI6MjA2ODQ1OTM3NX0.XDNQGD7Jl-2zmjFyfGVFRjdq-9rVFfhCyExfO8Fzb7Q';
+
+        let supabase;
+        let map;
+        let markerClusterGroup;
+        let markers = [];
+        let visitorData = [];
+        let clusteringEnabled = true;
+
+        // ===== INITIALIZE SUPABASE =====
+        function initSupabase() {
+            try {
+                if (window.supabase && typeof window.supabase.createClient === 'function') {
+                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    console.log('✅ Supabase initialized');
+                    return true;
+                }
+            } catch (error) {
+                console.error('❌ Supabase initialization failed:', error);
+            }
+            return false;
+        }
+
+        // ===== STARFIELD BACKGROUND =====
+        function createStarfield() {
+            const starfield = document.getElementById('starfield');
+            starfield.innerHTML = '';
+            
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                star.style.animationDelay = (Math.random() * 2) + 's';
+                
+                starfield.appendChild(star);
+            }
+        }
+
+        // ===== THEME SYSTEM =====
+        function initThemeSystem() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themePanel = document.getElementById('themePanel');
+            const themeClose = document.getElementById('themeClose');
+            const themeButtons = document.querySelectorAll('.theme-btn');
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('kripticTheme') || 'theme-nebula';
+            document.body.className = savedTheme;
+            
+            themeButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.theme === savedTheme) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Try to load from Supabase
+            loadThemeFromSupabase();
+
+            // Theme panel toggle
+            themeToggle.addEventListener('click', () => {
+                themePanel.classList.add('active');
+            });
+
+            themeClose.addEventListener('click', () => {
+                themePanel.classList.remove('active');
+            });
+
+            // Theme selection
+            themeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const theme = btn.dataset.theme;
+                    document.body.className = theme;
+                    
+                    themeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Save to localStorage (instant)
+                    localStorage.setItem('kripticTheme', theme);
+                    
+                    // Save to Supabase (async)
+                    saveThemeToSupabase(theme);
+                });
+            });
+
+            // Close on outside click
+            document.addEventListener('click', (e) => {
+                if (!themePanel.contains(e.target) && !themeToggle.contains(e.target)) {
+                    themePanel.classList.remove('active');
+                }
+            });
+        }
+
+        async function saveThemeToSupabase(theme) {
+            try {
+                if (!supabase) return;
+                
+                const userId = getUserId();
+                
+                const { error } = await supabase
+                    .from('user_preferences')
+                    .upsert({
+                        user_id: userId,
+                        theme: theme,
+                        updated_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'user_id'
+                    });
+                
+                if (!error) {
+                    console.log('✅ Theme saved to Supabase:', theme);
+                }
+            } catch (err) {
+                console.warn('Supabase theme save error:', err);
+            }
+        }
+
+        async function loadThemeFromSupabase() {
+            try {
+                if (!supabase) return;
+                
+                const userId = getUserId();
+                
+                const { data, error } = await supabase
+                    .from('user_preferences')
+                    .select('theme')
+                    .eq('user_id', userId)
+                    .single();
+                
+                if (data && data.theme) {
+                    document.body.className = data.theme;
+                    localStorage.setItem('kripticTheme', data.theme);
+                    
+                    // Update active button
+                    document.querySelectorAll('.theme-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.dataset.theme === data.theme) {
+                            btn.classList.add('active');
+                        }
+                    });
+                    
+                    console.log('✅ Theme loaded from Supabase:', data.theme);
+                }
+            } catch (err) {
+                console.warn('Supabase theme load error:', err);
+            }
+        }
+
+        function getUserId() {
+            let userId = sessionStorage.getItem('userId');
+            if (!userId) {
+                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('userId', userId);
+            }
+            return userId;
+        }
+
+        // ===== MAP INITIALIZATION =====
+        function initMap() {
+            console.log('🗺️ Initializing map...');
+            
+            map = L.map('map', {
+                center: [20, 0],
+                zoom: 2,
+                minZoom: 2,
+                maxZoom: 18,
+                worldCopyJump: true
+            });
+
+            // Dark theme tile layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(map);
+
+            // Initialize marker cluster group
+            markerClusterGroup = L.markerClusterGroup({
+                chunkedLoading: true,
+                spiderfyOnMaxZoom: true,
+                showCoverageOnHover: false,
+                zoomToBoundsOnClick: true,
+                iconCreateFunction: function(cluster) {
+                    const count = cluster.getChildCount();
+                    let size = 'small';
+                    if (count > 10) size = 'medium';
+                    if (count > 50) size = 'large';
+                    
+                    return L.divIcon({
+                        html: '<div style="background: rgba(100, 149, 255, 0.8); color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #00d9ff; box-shadow: 0 0 20px rgba(100, 149, 255, 0.6);">' + count + '</div>',
+                        className: 'marker-cluster marker-cluster-' + size,
+                        iconSize: L.point(40, 40)
+                    });
+                }
+            });
+
+            map.addLayer(markerClusterGroup);
+            
+            console.log('✅ Map initialized');
+        }
+
+        // ===== FETCH VISITOR DATA =====
+        async function fetchVisitorData() {
+            try {
+                console.log('📥 Fetching visitor data...');
+
+                const { data, error } = await supabase
+                    .from('visitor_geolocation')
+                    .select('*')
+                    .order('visited_at', { ascending: false })
+                    .limit(1000);
+
+                if (error) {
+                    console.error('❌ Supabase fetch error:', error);
+                    throw error;
+                }
+
+                if (!data || data.length === 0) {
+                    console.warn('⚠️ No visitor data found');
+                    visitorData = [];
+                    updateStats();
+                    updateCountryList();
+                    return;
+                }
+
+                console.log(`✅ Fetched ${data.length} visitor records`);
+                visitorData = data;
+                
+                updateStats();
+                addMarkersToMap();
+                updateCountryList();
+
+            } catch (error) {
+                console.error('❌ Failed to fetch visitor data:', error);
+                alert('Failed to load visitor data. Check console for details.');
+            }
+        }
+
+        // ===== UPDATE STATISTICS =====
+        function updateStats() {
+            const total = visitorData.length;
+            
+            const uniqueCountries = new Set(visitorData.map(v => v.country).filter(Boolean)).size;
+            const uniqueCities = new Set(visitorData.map(v => v.city).filter(Boolean)).size;
+            
+            const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+            const recent = visitorData.filter(v => new Date(v.visited_at) > oneDayAgo).length;
+
+            document.getElementById('totalVisitors').textContent = total;
+            document.getElementById('uniqueCountries').textContent = uniqueCountries;
+            document.getElementById('uniqueCities').textContent = uniqueCities;
+            document.getElementById('recentVisitors').textContent = recent;
+        }
+
+        // ===== ADD MARKERS TO MAP =====
+        function addMarkersToMap() {
+            console.log('📍 Adding markers to map...');
+            
+            // Clear existing markers
+            markerClusterGroup.clearLayers();
+            markers = [];
+
+            visitorData.forEach(visitor => {
+                if (visitor.latitude && visitor.longitude) {
+                    const marker = L.marker([visitor.latitude, visitor.longitude], {
+                        icon: L.divIcon({
+                            className: 'custom-marker',
+                            html: '<div style="background: #6495ff; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #00d9ff; box-shadow: 0 0 10px rgba(100, 149, 255, 0.8);"></div>',
+                            iconSize: [12, 12]
+                        })
+                    });
+
+                    const popupContent = `
+                        <div class="popup-title">📍 ${visitor.city || 'Unknown'}, ${visitor.country || 'Unknown'}</div>
+                        <div class="popup-info">
+                            <strong>Country:</strong> ${visitor.country || 'Unknown'} (${visitor.country_code || 'XX'})<br>
+                            <strong>Region:</strong> ${visitor.region || 'Unknown'}<br>
+                            <strong>Timezone:</strong> ${visitor.timezone || 'Unknown'}<br>
+                            <strong>ISP:</strong> ${(visitor.isp || 'Unknown').substring(0, 50)}<br>
+                            <strong>Visited:</strong> ${new Date(visitor.visited_at).toLocaleString()}<br>
+                            <strong>Resolution:</strong> ${visitor.screen_resolution || 'Unknown'}<br>
+                            <strong>Language:</strong> ${visitor.language || 'Unknown'}
+                        </div>
+                    `;
+
+                    marker.bindPopup(popupContent);
+                    markers.push(marker);
+                    markerClusterGroup.addLayer(marker);
+                }
+            });
+
+            console.log(`✅ Added ${markers.length} markers to map`);
+        }
+
+        // ===== UPDATE COUNTRY LIST =====
+        function updateCountryList() {
+            const countryStats = {};
+            
+            visitorData.forEach(visitor => {
+                const country = visitor.country || 'Unknown';
+                const countryCode = visitor.country_code || 'XX';
+                
+                if (!countryStats[country]) {
+                    countryStats[country] = {
+                        count: 0,
+                        code: countryCode,
+                        cities: new Set()
+                    };
+                }
+                
+                countryStats[country].count++;
+                if (visitor.city) {
+                    countryStats[country].cities.add(visitor.city);
+                }
+            });
+
+            const sortedCountries = Object.entries(countryStats)
+                .sort((a, b) => b[1].count - a[1].count);
+
+            const countryListEl = document.getElementById('countryList');
+            
+            if (sortedCountries.length === 0) {
+                countryListEl.innerHTML = '<div class="loading">No country data available</div>';
+                return;
+            }
+
+            countryListEl.innerHTML = sortedCountries.map(([country, stats]) => `
+                <div class="country-item" onclick="focusCountry('${country}')">
+                    <div class="country-name">${getFlagEmoji(stats.code)} ${country}</div>
+                    <div class="country-stats">
+                        ${stats.count} visitor${stats.count !== 1 ? 's' : ''} • 
+                        ${stats.cities.size} ${stats.cities.size === 1 ? 'city' : 'cities'}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getFlagEmoji(countryCode) {
+            if (!countryCode || countryCode === 'XX') return '🌍';
+            const codePoints = countryCode
+                .toUpperCase()
+                .split('')
+                .map(char => 127397 + char.charCodeAt());
+            return String.fromCodePoint(...codePoints);
+        }
+
+        function focusCountry(countryName) {
+            const countryVisitors = visitorData.filter(v => v.country === countryName);
+            
+            if (countryVisitors.length === 0) return;
+
+            const latitudes = countryVisitors.map(v => v.latitude).filter(Boolean);
+            const longitudes = countryVisitors.map(v => v.longitude).filter(Boolean);
+
+            if (latitudes.length === 0 || longitudes.length === 0) return;
+
+            const avgLat = latitudes.reduce((a, b) => a + b) / latitudes.length;
+            const avgLng = longitudes.reduce((a, b) => a + b) / longitudes.length;
+
+            map.setView([avgLat, avgLng], 5, {
+                animate: true,
+                duration: 1
+            });
+        }
+
+        // ===== CONTROLS =====
+        function initControls() {
+            // Refresh button
+            document.getElementById('refreshBtn').addEventListener('click', () => {
+                fetchVisitorData();
+            });
+
+            // Cluster toggle
+            document.getElementById('clusterToggle').addEventListener('click', (e) => {
+                clusteringEnabled = !clusteringEnabled;
+                
+                if (clusteringEnabled) {
+                    markerClusterGroup.addLayers(markers);
+                    e.target.classList.remove('active');
+                } else {
+                    markerClusterGroup.removeLayers(markers);
+                    markers.forEach(marker => marker.addTo(map));
+                    e.target.classList.add('active');
+                }
+            });
+
+            // Heatmap toggle (placeholder)
+            document.getElementById('heatmapToggle').addEventListener('click', (e) => {
+                alert('🔥 Heatmap view coming soon! This feature requires additional Leaflet plugins.');
+            });
+        }
+
+        // ===== INITIALIZE EVERYTHING =====
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 Geolocation Visualizer Loading...');
+            
+            createStarfield();
+            initThemeSystem();
+
+            // Initialize Supabase
+            if (!initSupabase()) {
+                console.error('❌ Failed to initialize Supabase');
+                alert('Failed to connect to database. Please refresh the page.');
+                return;
+            }
+
+            // Small delay to ensure Leaflet is loaded
+            setTimeout(() => {
+                initMap();
+                initControls();
+                
+                // Fetch data
+                fetchVisitorData();
+
+                // Auto-refresh every 30 seconds
+                setInterval(() => {
+                    console.log('🔄 Auto-refreshing data...');
+                    fetchVisitorData();
+                }, 30000);
+            }, 100);
+
+            console.log('✅ Geolocation Visualizer Ready!');
+        });
+    </script>
+</body>
+</html>
