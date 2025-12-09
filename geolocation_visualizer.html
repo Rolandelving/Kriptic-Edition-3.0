@@ -688,6 +688,57 @@
         <h1 class="page-title">Visitor Geolocation Tracker</h1>
         <p class="page-subtitle">Real-time visualization of global visitor locations</p>
 
+        <!-- Quick Fix Alert -->
+        <div id="rlsAlert" style="
+            background: rgba(255, 149, 0, 0.1);
+            border: 2px solid #ff9500;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: none;
+        ">
+            <div style="display: flex; align-items: start; gap: 1rem;">
+                <div style="font-size: 2rem;">⚠️</div>
+                <div style="flex: 1;">
+                    <div style="font-size: 1.2rem; font-weight: 700; color: #ff9500; margin-bottom: 0.5rem;">
+                        🔒 Database Access Issue Detected
+                    </div>
+                    <div style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">
+                        Your Supabase table needs Row Level Security (RLS) policies enabled for public read access.
+                    </div>
+                    <details style="margin-bottom: 1rem;">
+                        <summary style="cursor: pointer; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem;">
+                            📋 Show SQL Fix (Click to expand)
+                        </summary>
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.5); border-radius: 10px; font-family: monospace; font-size: 0.9rem; overflow-x: auto;">
+                            <div style="color: #00ff88; margin-bottom: 0.5rem;">-- Run this in Supabase SQL Editor:</div>
+                            <div style="color: #e0e7ff;">
+-- Step 1: Enable RLS on the table<br>
+ALTER TABLE visitor_geolocation ENABLE ROW LEVEL SECURITY;<br><br>
+
+-- Step 2: Create policy to allow public reads<br>
+CREATE POLICY "Allow public read access" ON visitor_geolocation<br>
+FOR SELECT USING (true);<br><br>
+
+-- Step 3: Verify the policy was created<br>
+SELECT * FROM pg_policies WHERE tablename = 'visitor_geolocation';
+                            </div>
+                        </div>
+                    </details>
+                    <button onclick="document.getElementById('rlsAlert').style.display='none'" style="
+                        padding: 0.5rem 1.5rem;
+                        background: var(--primary);
+                        border: none;
+                        color: white;
+                        border-radius: 50px;
+                        cursor: pointer;
+                        font-weight: 600;
+                        font-family: 'DripOctober', sans-serif;
+                    ">Dismiss</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card">
@@ -943,38 +994,111 @@
         // ===== FETCH VISITOR DATA =====
         async function fetchVisitorData() {
             try {
-                console.log('📥 Fetching visitor data...');
+                console.log('📥 Fetching visitor data from Supabase...');
+                console.log('🔗 Supabase URL:', SUPABASE_URL);
 
-                const { data, error } = await supabase
+                const { data, error, status, statusText } = await supabase
                     .from('visitor_geolocation')
                     .select('*')
                     .order('visited_at', { ascending: false })
                     .limit(1000);
 
+                console.log('📊 Query response:', { data, error, status, statusText });
+
                 if (error) {
                     console.error('❌ Supabase fetch error:', error);
+                    console.error('Error details:', {
+                        message: error.message,
+                        code: error.code,
+                        details: error.details,
+                        hint: error.hint
+                    });
+                    
+                    // Show user-friendly error
+                    showError(`Database Error: ${error.message}`, error.hint);
                     throw error;
                 }
 
                 if (!data || data.length === 0) {
-                    console.warn('⚠️ No visitor data found');
+                    console.warn('⚠️ No visitor data found in database');
+                    console.warn('This could mean:');
+                    console.warn('1. The table is empty');
+                    console.warn('2. Row Level Security (RLS) is blocking reads');
+                    console.warn('3. The table name is incorrect');
+                    
+                    // Show RLS alert
+                    const rlsAlert = document.getElementById('rlsAlert');
+                    if (rlsAlert) rlsAlert.style.display = 'block';
+                    
+                    showError(
+                        '📭 No Visitor Data Found', 
+                        'If you have data in the database, scroll up to see the SQL fix for Row Level Security.'
+                    );
+                    
                     visitorData = [];
                     updateStats();
                     updateCountryList();
                     return;
                 }
 
-                console.log(`✅ Fetched ${data.length} visitor records`);
+                console.log(`✅ Successfully fetched ${data.length} visitor records`);
                 visitorData = data;
                 
                 updateStats();
                 addMarkersToMap();
                 updateCountryList();
 
+                // Hide any error messages
+                const errorDiv = document.getElementById('errorMessage');
+                if (errorDiv) errorDiv.remove();
+
             } catch (error) {
                 console.error('❌ Failed to fetch visitor data:', error);
-                alert('Failed to load visitor data. Check console for details.');
+                showError('Failed to load visitor data', 'Check browser console for details (F12)');
             }
+        }
+
+        function showError(title, message) {
+            // Remove existing error if present
+            const existingError = document.getElementById('errorMessage');
+            if (existingError) existingError.remove();
+
+            const errorDiv = document.createElement('div');
+            errorDiv.id = 'errorMessage';
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(255, 0, 85, 0.95);
+                border: 3px solid #ff6b6b;
+                border-radius: 20px;
+                padding: 2rem;
+                z-index: 10001;
+                max-width: 500px;
+                text-align: center;
+                box-shadow: 0 20px 60px rgba(255, 0, 85, 0.5);
+                backdrop-filter: blur(20px);
+            `;
+
+            errorDiv.innerHTML = `
+                <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: white;">${title}</div>
+                <div style="font-size: 1rem; color: rgba(255,255,255,0.9); margin-bottom: 1.5rem;">${message}</div>
+                <button onclick="document.getElementById('errorMessage').remove()" style="
+                    padding: 0.75rem 2rem;
+                    background: white;
+                    color: #ff0055;
+                    border: none;
+                    border-radius: 50px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    font-size: 1rem;
+                    font-family: 'DripOctober', sans-serif;
+                ">Close</button>
+            `;
+
+            document.body.appendChild(errorDiv);
         }
 
         // ===== UPDATE STATISTICS =====
