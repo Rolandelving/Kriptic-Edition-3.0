@@ -1647,48 +1647,6 @@
         }
     </style>
 </head>
-    <!-- 🔥 DEBUG CONSOLE -->
-<button id="superDebugBtn" style="position:fixed;top:20px;right:280px;width:50px;height:50px;background:rgba(255,0,255,0.1);border:2px solid #ff00ff;color:#ff00ff;border-radius:50%;cursor:pointer;font-size:1.5rem;z-index:9999;display:flex;align-items:center;justify-content:center" onclick="openSuperDebug()">🔍</button>
-
-<script src="debug-console-for-index.js"></script>
-
-<script>
-function openSuperDebug() {
-    const pass = prompt("🔐 Enter debug password:");
-    if (!pass) return;
-    
-    fetch(`https://zkrdbvjmessktzlxommr.supabase.co/rest/v1/debug_config?setting_name=eq.debug_password`, {
-        headers: {'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcmRidmptZXNza3R6bHhvbW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI4ODMzNzUsImV4cCI6MjA2ODQ1OTM3NX0.XDNQGD7Jl-2zmjFyfGVFRjdq-9rVFfhCyExfO8Fzb7Q'}
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (data[0] && data[0].setting_value === pass) {
-            alert("✅ Debug mode activated!\n\n🔓 All protections removed\n✅ F12 now works\n✅ Right-click now works");
-            document.oncontextmenu = null;
-            document.onkeydown = null;
-            document.onselectstart = null;
-            document.oncopy = null;
-            document.body.style.userSelect = 'text';
-            sessionStorage.setItem('debugAuthenticated', 'true');
-            window.isDebugAuthenticated = true;
-            if (typeof initDebugConsole === 'function') initDebugConsole();
-            console.log("🔥 DEBUG MODE ACTIVE");
-        } else {
-            alert("❌ Wrong password!");
-        }
-    })
-    .catch(err => alert("❌ Error: " + err.message));
-}
-
-if (sessionStorage.getItem('debugAuthenticated') === 'true') {
-    document.oncontextmenu = null;
-    document.onkeydown = null;
-    document.onselectstart = null;
-    document.oncopy = null;
-    document.body.style.userSelect = 'text';
-    window.isDebugAuthenticated = true;
-}
-</script>
 <body>
     <!-- Scroll to Top -->
 <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top"></button>
@@ -1755,12 +1713,6 @@ if (sessionStorage.getItem('debugAuthenticated') === 'true') {
                 <a href="information.html" class="nav-link">
                     <span class="nav-icon">ℹ️</span>
                     <span>Information</span>
-                </a>
-            </li>
-            <li>
-                <a href="geolocation_visualizer.html" class="nav-link">
-                    <span class="nav-icon">🌍</span>
-                    <span>Geolocation Visualizer</span>
                 </a>
             </li>
             <li>
