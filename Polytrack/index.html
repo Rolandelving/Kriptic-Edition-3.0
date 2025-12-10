@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0a0e27">
     <meta name="description" content="Kriptic Edition 3.0 - Offline Capable Entertainment Platform">
     <title>Kriptic Edition 3.0</title>
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/Polytrack/manifest.json">
     <style>
         body {
             margin: 0;
@@ -112,7 +112,9 @@
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
+                navigator.serviceWorker.register('/Polytrack/service-worker.js', {
+                    scope: '/Polytrack/'
+                })
                     .then(registration => {
                         console.log('Service Worker registered successfully:', registration.scope);
                         
@@ -187,6 +189,6 @@
     </script>
 
     <!-- Load the main bundle -->
-    <script src="main_bundle.js"></script>
+    <script src="/Polytrack/main_bundle.js"></script>
 </body>
 </html>
