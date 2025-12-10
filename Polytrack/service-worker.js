@@ -4,11 +4,11 @@ const RUNTIME_CACHE = 'kriptic-runtime-v1';
 
 // Resources to cache immediately on install
 const PRECACHE_URLS = [
-  '/',
-  '/index.html',
-  '/main_bundle.js',
-  '/manifest.json',
-  '/offline.html'
+  '/Polytrack/',
+  '/Polytrack/index.html',
+  '/Polytrack/main_bundle.js',
+  '/Polytrack/manifest.json',
+  '/Polytrack/offline.html'
 ];
 
 // Install event - cache critical resources
@@ -112,7 +112,7 @@ self.addEventListener('fetch', event => {
             
             // Return offline page for navigation requests
             if (request.mode === 'navigate') {
-              return caches.match('/offline.html');
+              return caches.match('/Polytrack/offline.html');
             }
             
             // For other requests, return a generic offline response
