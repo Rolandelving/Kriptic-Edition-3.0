@@ -73,9 +73,16 @@ self.addEventListener('fetch', event => {
           }
           return response;
         })
-        .catch(() => {
+        .catch(error => {
           // If network fails, try cache
-          return caches.match(request);
+          return caches.match(request).then(cachedResponse => {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            // No cached version and network failed - let the error propagate naturally
+            console.log('[Service Worker] Cross-origin request failed (CORS or network):', url.href);
+            return Promise.reject(error);
+          });
         })
     );
     return;
