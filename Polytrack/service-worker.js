@@ -58,34 +58,10 @@ self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip cross-origin requests
+  // Don't intercept cross-origin requests - let them handle naturally
+  // This avoids CORS issues and uncaught promise rejections
   if (url.origin !== location.origin) {
-    // For cross-origin requests, try network first, then cache
-    event.respondWith(
-      fetch(request)
-        .then(response => {
-          // Cache successful cross-origin responses
-          if (response && response.status === 200) {
-            const responseClone = response.clone();
-            caches.open(RUNTIME_CACHE).then(cache => {
-              cache.put(request, responseClone);
-            });
-          }
-          return response;
-        })
-        .catch(error => {
-          // If network fails, try cache
-          return caches.match(request).then(cachedResponse => {
-            if (cachedResponse) {
-              return cachedResponse;
-            }
-            // No cached version and network failed - let the error propagate naturally
-            console.log('[Service Worker] Cross-origin request failed (CORS or network):', url.href);
-            return Promise.reject(error);
-          });
-        })
-    );
-    return;
+    return; // Let the browser handle it normally
   }
 
   // For same-origin requests, use cache-first strategy
