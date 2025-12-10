@@ -6,9 +6,12 @@ const RUNTIME_CACHE = 'kriptic-runtime-v1';
 const PRECACHE_URLS = [
   '/Kriptic-Edition-3.0/Polytrack/',
   '/Kriptic-Edition-3.0/Polytrack/index.html',
+  '/Kriptic-Edition-3.0/Polytrack/error_screen.bundle.js',
   '/Kriptic-Edition-3.0/Polytrack/main_bundle.js',
   '/Kriptic-Edition-3.0/Polytrack/manifest.json',
-  '/Kriptic-Edition-3.0/Polytrack/offline.html'
+  '/Kriptic-Edition-3.0/Polytrack/offline.html',
+  '/Kriptic-Edition-3.0/Polytrack/forced_square.woff2'
+  // Audio, images, lib, models, tracks folders will cache dynamically as loaded
 ];
 
 // Install event - cache critical resources
