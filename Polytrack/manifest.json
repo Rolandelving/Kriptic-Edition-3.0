@@ -2,7 +2,7 @@
   "name": "Kriptic Edition 3.0",
   "short_name": "Kriptic",
   "description": "Comprehensive entertainment platform with offline support",
-  "start_url": "/Polytrack/",
+  "start_url": "/Kriptic-Edition-3.0/Polytrack/",
   "display": "standalone",
   "background_color": "#0a0e27",
   "theme_color": "#0a0e27",
