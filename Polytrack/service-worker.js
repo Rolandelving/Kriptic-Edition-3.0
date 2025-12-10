@@ -10,13 +10,6 @@ const PRECACHE_URLS = [
   '/Kriptic-Edition-3.0/Polytrack/manifest.json',
   '/Kriptic-Edition-3.0/Polytrack/offline.html'
 ];
-```
-
-## 🎯 Quick Test
-
-Try opening this URL right now:
-```
-https://rolandelving.github.io/Kriptic-Edition-3.0/Polytrack/index.html
 
 // Install event - cache critical resources
 self.addEventListener('install', event => {
@@ -119,7 +112,7 @@ self.addEventListener('fetch', event => {
             
             // Return offline page for navigation requests
             if (request.mode === 'navigate') {
-              return caches.match('/Polytrack/offline.html');
+              return caches.match('/Kriptic-Edition-3.0/Polytrack/offline.html');
             }
             
             // For other requests, return a generic offline response
