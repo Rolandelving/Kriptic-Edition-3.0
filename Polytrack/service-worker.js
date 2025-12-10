@@ -4,12 +4,19 @@ const RUNTIME_CACHE = 'kriptic-runtime-v1';
 
 // Resources to cache immediately on install
 const PRECACHE_URLS = [
-  '/Polytrack/',
-  '/Polytrack/index.html',
-  '/Polytrack/main_bundle.js',
-  '/Polytrack/manifest.json',
-  '/Polytrack/offline.html'
+  '/Kriptic-Edition-3.0/Polytrack/',
+  '/Kriptic-Edition-3.0/Polytrack/index.html',
+  '/Kriptic-Edition-3.0/Polytrack/main_bundle.js',
+  '/Kriptic-Edition-3.0/Polytrack/manifest.json',
+  '/Kriptic-Edition-3.0/Polytrack/offline.html'
 ];
+```
+
+## 🎯 Quick Test
+
+Try opening this URL right now:
+```
+https://rolandelving.github.io/Kriptic-Edition-3.0/Polytrack/index.html
 
 // Install event - cache critical resources
 self.addEventListener('install', event => {
