@@ -6,6 +6,9 @@
     <meta name="theme-color" content="#0a0e27">
     <meta name="description" content="Kriptic Edition 3.0 - Offline Capable Entertainment Platform">
     <title>Kriptic Edition 3.0</title>
+    <link rel="preload" href="/Kriptic-Edition-3.0/Polytrack/forced_square.woff2" as="font" type="font/woff2" crossorigin="anonymous"/>
+    <link rel="preload" href="/Kriptic-Edition-3.0/Polytrack/images/logo.svg" as="image" type="image/svg+xml"/>
+    <link rel="preload" href="/Kriptic-Edition-3.0/Polytrack/images/discord.svg" as="image" type="image/svg+xml"/>
     <link rel="manifest" href="/Kriptic-Edition-3.0/Polytrack/manifest.json">
     <style>
         body {
@@ -19,46 +22,6 @@
         #app {
             width: 100%;
             height: 100vh;
-        }
-
-        /* Loading screen */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loader {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(102, 126, 234, 0.2);
-            border-top-color: #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            color: #a0aec0;
         }
 
         .status-indicator {
@@ -92,20 +55,16 @@
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loader"></div>
-        <div class="loading-text">Loading Kriptic Edition...</div>
-    </div>
-
     <!-- Connection Status Indicator -->
     <div class="status-indicator" id="statusIndicator">
         <div class="status-dot" id="statusDot"></div>
         <span id="statusText">Online</span>
     </div>
 
-    <!-- Main App Container -->
-    <div id="app"></div>
+    <!-- Polytrack Game Elements -->
+    <canvas id="screen"></canvas>
+    <div id="ui"></div>
+    <div id="transition-layer"></div>
 
     <!-- Service Worker Registration -->
     <script>
@@ -179,16 +138,10 @@
 
         // Initial status check
         updateConnectionStatus();
-
-        // Hide loading screen when bundle loads
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                document.getElementById('loadingScreen').classList.add('hidden');
-            }, 1000);
-        });
     </script>
 
-    <!-- Load the main bundle -->
+    <!-- Load the bundles in correct order -->
+    <script defer src="/Kriptic-Edition-3.0/Polytrack/error_screen.bundle.js"></script>
     <script src="/Kriptic-Edition-3.0/Polytrack/main_bundle.js"></script>
 </body>
 </html>
