@@ -748,6 +748,13 @@
                 if (!response.ok) throw new Error('Failed to load game');
                 
                 const gameHTML = await response.text();
+                
+                // Create a blob URL from the HTML
+                const blob = new Blob([gameHTML], { type: 'text/html' });
+                const blobURL = URL.createObjectURL(blob);
+                
+                // Open the blob URL in a new tab
+                window.open(blobURL, '_blank');
         
             } catch (error) {
                 console.error('Error launching game:', error);
