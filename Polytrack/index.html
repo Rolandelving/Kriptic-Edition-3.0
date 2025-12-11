@@ -140,8 +140,8 @@
         updateConnectionStatus();
     </script>
     <script>
-    const _fetch=fetch;
-    fetch=(u,...a)=>{const url=typeof u==='string'?u:u.url;return url?.includes?.('/user')?Promise.resolve({ok:1,json:()=>({id:1,username:'offline',coins:999999,unlocks:[]})}):_fetch(u,...a)};
+    const _open=XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open=function(m,u,...a){if(String(u).includes('/user')){this.send=()=>{this.status=200;this.responseText=JSON.stringify({id:1,username:'offline',coins:999999,unlocks:[]});this.readyState=4;setTimeout(()=>{this.onreadystatechange?.();this.onload?.()},0)};return}return _open.call(this,m,u,...a)};
     </script>
     <!-- Load the bundles in correct order -->
     <script defer src="/Kriptic-Edition-3.0/Polytrack/error_screen.bundle.js"></script>
