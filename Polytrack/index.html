@@ -141,8 +141,7 @@
     </script>
     <script>
     const _fetch=fetch;
-    fetch=(u,...a)=>u.includes('/user')?Promise.resolve({ok:1,json:()=>({id:1,username:'offline',coins:999999,unlocks:[]})}):_fetch(u,...a);
-    XMLHttpRequest.prototype.open=new Proxy(XMLHttpRequest.prototype.open,{apply(t,c,a){if(a[1]?.includes('/user'))c.abort=()=>{};return Reflect.apply(t,c,a)}});
+    fetch=(u,...a)=>{const url=typeof u==='string'?u:u.url;return url?.includes?.('/user')?Promise.resolve({ok:1,json:()=>({id:1,username:'offline',coins:999999,unlocks:[]})}):_fetch(u,...a)};
     </script>
     <!-- Load the bundles in correct order -->
     <script defer src="/Kriptic-Edition-3.0/Polytrack/error_screen.bundle.js"></script>
