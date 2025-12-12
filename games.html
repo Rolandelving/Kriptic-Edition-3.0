@@ -739,34 +739,129 @@
                 starfield.appendChild(star);
             }
         }
-
-        // ===== GAME LAUNCHER =====
-    async function launchGame(url) {
+        
+    // ===== GAME LAUNCHER WITH ABOUT:BLANK MASKING =====
+    function launchGame(url) {
+        // Open about:blank window
+        const gameWindow = window.open('about:blank', '_blank');
+        
+        if (!gameWindow) {
+            alert('Please allow pop-ups to play games!');
+            return;
+        }
+        
+        // Store game URL in the new window's sessionStorage for refresh support
+        gameWindow.addEventListener('load', () => {
+            gameWindow.sessionStorage.setItem('kripticGameURL', url);
+            loadGameInWindow(gameWindow, url);
+        });
+    }
+    
+    async function loadGameInWindow(targetWindow, url) {
         try {
-            // Check if it's a Unity WebGL game (like Polytrack)
+            // Check if it's a Unity WebGL game or complex multi-file game
             const isUnityGame = url.includes('/Build/') || 
-                               url.includes('Polytrack') || 
-                               url.includes('unity') ||
-                               url.endsWith('/'); // Ends with / typically means a directory with index.html
+                               url.includes('Polytrack') ||
+                               url.toLowerCase().includes('unity') ||
+                               url.endsWith('/');
             
             if (isUnityGame) {
-                // For Unity games, open directly - they need their resource paths intact
-                window.open(url, '_blank');
+                // For Unity games, create an iframe that points to the actual URL
+                // This maintains proper resource loading
+                targetWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Loading Game...</title>
+                        <style>
+                            * { margin: 0; padding: 0; }
+                            body, html { width: 100%; height: 100%; overflow: hidden; }
+                            iframe { width: 100%; height: 100%; border: none; }
+                        </style>
+                    </head>
+                    <body>
+                        <iframe src="${url}" allowfullscreen></iframe>
+                    </body>
+                    </html>
+                `);
             } else {
-                // For simple single-file HTML games, use blob method
+                // For simple HTML games, fetch and inject
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('Failed to load game');
                 
-                const gameHTML = await response.text();
-                const blob = new Blob([gameHTML], { type: 'text/html' });
-                const blobURL = URL.createObjectURL(blob);
-                window.open(blobURL, '_blank');
+                let gameHTML = await response.text();
+                
+                // Fix relative paths to absolute paths
+                const baseURL = url.substring(0, url.lastIndexOf('/') + 1);
+                gameHTML = gameHTML
+                    .replace(/src=["'](?!http|\/\/|data:)([^"']+)["']/gi, `src="${baseURL}$1"`)
+                    .replace(/href=["'](?!http|\/\/|#)([^"']+)["']/gi, `href="${baseURL}$1"`);
+                
+                targetWindow.document.write(gameHTML);
             }
+            
+            targetWindow.document.close();
+            
         } catch (error) {
-            console.error('Error launching game:', error);
-            // Fallback: try opening directly
-            window.open(url, '_blank');
+            console.error('Error loading game:', error);
+            targetWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Error</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            min-height: 100vh;
+                            margin: 0;
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            color: white;
+                            text-align: center;
+                            padding: 20px;
+                        }
+                        .error-box {
+                            background: rgba(0,0,0,0.3);
+                            padding: 40px;
+                            border-radius: 20px;
+                            max-width: 500px;
+                        }
+                        h1 { margin-bottom: 20px; }
+                        button {
+                            margin-top: 20px;
+                            padding: 12px 30px;
+                            background: white;
+                            color: #667eea;
+                            border: none;
+                            border-radius: 25px;
+                            font-size: 16px;
+                            font-weight: bold;
+                            cursor: pointer;
+                        }
+                        button:hover { transform: scale(1.05); }
+                    </style>
+                </head>
+                <body>
+                    <div class="error-box">
+                        <h1>Failed to Load Game</h1>
+                        <p>The game could not be loaded. Please try again or contact support.</p>
+                        <button onclick="window.close()">Close Window</button>
+                    </div>
+                </body>
+                </html>
+            `);
+            targetWindow.document.close();
         }
+    }
+    
+    // ===== HANDLE REFRESH IN GAME WINDOW =====
+    // This code runs when someone refreshes an about:blank game window
+    if (window.location.href === 'about:blank' && window.sessionStorage.getItem('kripticGameURL')) {
+        const savedGameURL = window.sessionStorage.getItem('kripticGameURL');
+        loadGameInWindow(window, savedGameURL);
     }
         }
         // ===== SEARCH & SORT =====
