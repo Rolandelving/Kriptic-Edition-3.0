@@ -741,25 +741,33 @@
         }
 
         // ===== GAME LAUNCHER =====
-        async function launchGame(url) {
-            try {
-                // Fetch the game HTML
+    async function launchGame(url) {
+        try {
+            // Check if it's a Unity WebGL game (like Polytrack)
+            const isUnityGame = url.includes('/Build/') || 
+                               url.includes('Polytrack') || 
+                               url.includes('unity') ||
+                               url.endsWith('/'); // Ends with / typically means a directory with index.html
+            
+            if (isUnityGame) {
+                // For Unity games, open directly - they need their resource paths intact
+                window.open(url, '_blank');
+            } else {
+                // For simple single-file HTML games, use blob method
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('Failed to load game');
                 
                 const gameHTML = await response.text();
-                
-                // Create a blob URL from the HTML
                 const blob = new Blob([gameHTML], { type: 'text/html' });
                 const blobURL = URL.createObjectURL(blob);
-                
-                // Open the blob URL in a new tab
                 window.open(blobURL, '_blank');
-        
-            } catch (error) {
-                console.error('Error launching game:', error);
-                alert('Failed to load game. Please check the URL or try again later.');
             }
+        } catch (error) {
+            console.error('Error launching game:', error);
+            // Fallback: try opening directly
+            window.open(url, '_blank');
+        }
+    }
         }
         // ===== SEARCH & SORT =====
         const searchBox = document.getElementById('searchBox');
