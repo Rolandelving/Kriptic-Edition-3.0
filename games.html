@@ -675,40 +675,34 @@
         document.body.className = savedTheme;
         const savedFont = localStorage.getItem('kripticFont') || 'DripOctober';
         document.body.style.fontFamily = `'${savedFont}', 'Segoe UI', sans-serif`;
-
+    
         // ===== ANTI-INSPECT ELEMENT PROTECTION =====
-        // Disable right-click
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
         });
-
-        // Disable common developer shortcuts
+    
         document.addEventListener('keydown', function(e) {
-            // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
-            if (e.keyCode === 123 || // F12
-                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
-                (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
-                (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl+Shift+C
-                (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
+            if (e.keyCode === 123 || 
+                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
+                (e.ctrlKey && e.shiftKey && e.keyCode === 74) || 
+                (e.ctrlKey && e.shiftKey && e.keyCode === 67) || 
+                (e.ctrlKey && e.keyCode === 85)) {
                 e.preventDefault();
                 return false;
             }
         });
-
-        // Disable text selection
+    
         document.addEventListener('selectstart', function(e) {
             e.preventDefault();
             return false;
         });
-
-        // Disable copy
+    
         document.addEventListener('copy', function(e) {
             e.preventDefault();
             return false;
         });
-
-        // Safe DevTools detection
+    
         setInterval(function() {
             try {
                 if (window.console && typeof console.clear === 'function') {
@@ -718,12 +712,12 @@
                 // Silently ignore
             }
         }, 2000);
-
+    
         // ===== STARFIELD =====
         function createStarfield() {
             const starfield = document.getElementById('starfield');
             const starCount = 100;
-
+    
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
@@ -739,145 +733,93 @@
                 starfield.appendChild(star);
             }
         }
-        
-    // ===== GAME LAUNCHER WITH ABOUT:BLANK MASKING =====
-    function launchGame(url) {
-        // Open about:blank window
-        const gameWindow = window.open('about:blank', '_blank');
-        
-        if (!gameWindow) {
-            alert('Please allow pop-ups to play games!');
-            return;
-        }
-        
-        // Store game URL in the new window's sessionStorage for refresh support
-        gameWindow.addEventListener('load', () => {
-            gameWindow.sessionStorage.setItem('kripticGameURL', url);
-            loadGameInWindow(gameWindow, url);
-        });
-    }
     
-    async function loadGameInWindow(targetWindow, url) {
-        try {
-            // Check if it's a Unity WebGL game or complex multi-file game
-            const isUnityGame = url.includes('/Build/') || 
-                               url.includes('Polytrack') ||
-                               url.toLowerCase().includes('unity') ||
-                               url.endsWith('/');
+        // ===== GAME LAUNCHER WITH ABOUT:BLANK MASKING =====
+        function launchGame(url) {
+            const gameWindow = window.open('about:blank', '_blank');
             
-            if (isUnityGame) {
-                // For Unity games, create an iframe that points to the actual URL
-                // This maintains proper resource loading
-                targetWindow.document.write(`
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <meta charset="UTF-8">
-                        <title>Loading Game...</title>
-                        <style>
-                            * { margin: 0; padding: 0; }
-                            body, html { width: 100%; height: 100%; overflow: hidden; }
-                            iframe { width: 100%; height: 100%; border: none; }
-                        </style>
-                    </head>
-                    <body>
-                        <iframe src="${url}" allowfullscreen></iframe>
-                    </body>
-                    </html>
-                `);
-            } else {
-                // For simple HTML games, fetch and inject
-                const response = await fetch(url);
-                if (!response.ok) throw new Error('Failed to load game');
-                
-                let gameHTML = await response.text();
-                
-                // Fix relative paths to absolute paths
-                const baseURL = url.substring(0, url.lastIndexOf('/') + 1);
-                gameHTML = gameHTML
-                    .replace(/src=["'](?!http|\/\/|data:)([^"']+)["']/gi, `src="${baseURL}$1"`)
-                    .replace(/href=["'](?!http|\/\/|#)([^"']+)["']/gi, `href="${baseURL}$1"`);
-                
-                targetWindow.document.write(gameHTML);
+            if (!gameWindow) {
+                alert('Please allow pop-ups to play games!');
+                return;
             }
             
-            targetWindow.document.close();
+            // Store game URL for refresh support
+            gameWindow.sessionStorage.setItem('kripticGameURL', url);
             
-        } catch (error) {
-            console.error('Error loading game:', error);
-            targetWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Error</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            min-height: 100vh;
-                            margin: 0;
-                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                            color: white;
-                            text-align: center;
-                            padding: 20px;
-                        }
-                        .error-box {
-                            background: rgba(0,0,0,0.3);
-                            padding: 40px;
-                            border-radius: 20px;
-                            max-width: 500px;
-                        }
-                        h1 { margin-bottom: 20px; }
-                        button {
-                            margin-top: 20px;
-                            padding: 12px 30px;
-                            background: white;
-                            color: #667eea;
-                            border: none;
-                            border-radius: 25px;
-                            font-size: 16px;
-                            font-weight: bold;
-                            cursor: pointer;
-                        }
-                        button:hover { transform: scale(1.05); }
-                    </style>
-                </head>
-                <body>
-                    <div class="error-box">
-                        <h1>Failed to Load Game</h1>
-                        <p>The game could not be loaded. Please try again or contact support.</p>
-                        <button onclick="window.close()">Close Window</button>
-                    </div>
-                </body>
-                </html>
-            `);
+            // Small delay to ensure window is ready
+            setTimeout(function() {
+                loadGameInWindow(gameWindow, url);
+            }, 100);
+        }
+    
+        function loadGameInWindow(targetWindow, url) {
+            try {
+                // Detect Unity WebGL games
+                const isUnityGame = url.includes('/Build/') || 
+                                   url.includes('Polytrack') ||
+                                   url.toLowerCase().includes('unity') ||
+                                   url.endsWith('/');
+                
+                if (isUnityGame) {
+                    // For Unity games, use iframe to maintain resource paths
+                    targetWindow.document.open();
+                    targetWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Kriptic Game</title><style>*{margin:0;padding:0}body,html{width:100%;height:100%;overflow:hidden}iframe{width:100%;height:100%;border:none}</style></head><body><iframe src="' + url + '" allowfullscreen></iframe></body></html>');
+                    targetWindow.document.close();
+                } else {
+                    // For simple HTML games, fetch and inject
+                    fetch(url)
+                        .then(function(response) {
+                            if (!response.ok) throw new Error('Failed to load');
+                            return response.text();
+                        })
+                        .then(function(gameHTML) {
+                            // Fix relative paths
+                            const baseURL = url.substring(0, url.lastIndexOf('/') + 1);
+                            gameHTML = gameHTML.replace(/src=["'](?!http|\/\/|data:)([^"']+)["']/gi, 'src="' + baseURL + '$1"');
+                            gameHTML = gameHTML.replace(/href=["'](?!http|\/\/|#)([^"']+)["']/gi, 'href="' + baseURL + '$1"');
+                            
+                            targetWindow.document.open();
+                            targetWindow.document.write(gameHTML);
+                            targetWindow.document.close();
+                        })
+                        .catch(function(error) {
+                            console.error('Error:', error);
+                            showErrorPage(targetWindow);
+                        });
+                }
+            } catch (error) {
+                console.error('Error loading game:', error);
+                showErrorPage(targetWindow);
+            }
+        }
+    
+        function showErrorPage(targetWindow) {
+            targetWindow.document.open();
+            targetWindow.document.write('<!DOCTYPE html><html><head><title>Error</title><style>body{font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;text-align:center;padding:20px}.error-box{background:rgba(0,0,0,0.3);padding:40px;border-radius:20px;max-width:500px}h1{margin-bottom:20px}button{margin-top:20px;padding:12px 30px;background:white;color:#667eea;border:none;border-radius:25px;font-size:16px;font-weight:bold;cursor:pointer}button:hover{transform:scale(1.05)}</style></head><body><div class="error-box"><h1>Failed to Load Game</h1><p>The game could not be loaded. Please try again.</p><button onclick="window.close()">Close Window</button></div></body></html>');
             targetWindow.document.close();
         }
-    }
     
-    // ===== HANDLE REFRESH IN GAME WINDOW =====
-    // This code runs when someone refreshes an about:blank game window
-    if (window.location.href === 'about:blank' && window.sessionStorage.getItem('kripticGameURL')) {
-        const savedGameURL = window.sessionStorage.getItem('kripticGameURL');
-        loadGameInWindow(window, savedGameURL);
-    }
+        // ===== HANDLE REFRESH IN GAME WINDOW =====
+        if (window.location.href === 'about:blank') {
+            const savedGameURL = window.sessionStorage.getItem('kripticGameURL');
+            if (savedGameURL) {
+                loadGameInWindow(window, savedGameURL);
+            }
         }
+    
         // ===== SEARCH & SORT =====
         const searchBox = document.getElementById('searchBox');
         const sortSelect = document.getElementById('sortSelect');
         const gamesGrid = document.getElementById('gamesGrid');
         const gameCount = document.getElementById('gameCount');
-
+    
         function filterAndSortGames() {
             const searchTerm = searchBox.value.toLowerCase();
             const sortMethod = sortSelect.value;
             const gameCards = Array.from(gamesGrid.querySelectorAll('.game-card'));
             
-            // Filter
             let visibleCount = 0;
-            gameCards.forEach(card => {
+            gameCards.forEach(function(card) {
                 const title = card.dataset.title.toLowerCase();
                 const description = card.dataset.description.toLowerCase();
                 const matches = title.includes(searchTerm) || description.includes(searchTerm);
@@ -885,30 +827,34 @@
                 card.style.display = matches ? '' : 'none';
                 if (matches) visibleCount++;
             });
-
-            // Sort
-            const visibleCards = gameCards.filter(card => card.style.display !== 'none');
+    
+            const visibleCards = gameCards.filter(function(card) {
+                return card.style.display !== 'none';
+            });
             
             if (sortMethod === 'title') {
-                visibleCards.sort((a, b) => a.dataset.title.localeCompare(b.dataset.title));
+                visibleCards.sort(function(a, b) {
+                    return a.dataset.title.localeCompare(b.dataset.title);
+                });
             } else if (sortMethod === 'title-desc') {
-                visibleCards.sort((a, b) => b.dataset.title.localeCompare(a.dataset.title));
+                visibleCards.sort(function(a, b) {
+                    return b.dataset.title.localeCompare(a.dataset.title);
+                });
             }
-
-            // Re-append in sorted order
-            visibleCards.forEach(card => gamesGrid.appendChild(card));
-
-            // Update count
-            gameCount.textContent = `${visibleCount} game${visibleCount !== 1 ? 's' : ''}`;
+    
+            visibleCards.forEach(function(card) {
+                gamesGrid.appendChild(card);
+            });
+            
+            gameCount.textContent = visibleCount + ' game' + (visibleCount !== 1 ? 's' : '');
         }
-
+    
         searchBox.addEventListener('input', filterAndSortGames);
         sortSelect.addEventListener('change', filterAndSortGames);
-
+    
         // ===== INITIALIZE =====
         createStarfield();
         filterAndSortGames();
-        
     </script>
         <!-- AdSense Ad Initialization -->
     <script>
