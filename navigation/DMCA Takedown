@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMCA Takedown Request - Kriptic Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .dmca-header {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(10, 10, 30, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(100, 149, 237, 0.3);
+            box-shadow: 0 0 40px rgba(100, 149, 237, 0.2);
+        }
+
+        .dmca-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #6495ed, #9370db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dmca-header .subtitle {
+            font-size: 1.1em;
+            color: #aabfff;
+            margin-bottom: 10px;
+        }
+
+        .dmca-header .sites {
+            font-size: 0.9em;
+            color: #888;
+            margin-top: 15px;
+        }
+
+        .dmca-header .sites a {
+            color: #6495ed;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .dmca-header .sites a:hover {
+            color: #9370db;
+        }
+
+        .info-section {
+            background: rgba(10, 10, 30, 0.7);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(100, 149, 237, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .info-section h2 {
+            color: #6495ed;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .info-section p, .info-section ul {
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .info-section ul {
+            padding-left: 25px;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+
+        .warning-box {
+            background: rgba(255, 69, 58, 0.1);
+            border: 2px solid rgba(255, 69, 58, 0.4);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning-box strong {
+            color: #ff453a;
+            font-size: 1.1em;
+        }
+
+        .form-container {
+            background: rgba(10, 10, 30, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(100, 149, 237, 0.3);
+            box-shadow: 0 0 40px rgba(100, 149, 237, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #aabfff;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group label .required {
+            color: #ff453a;
+            margin-left: 3px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(20, 20, 40, 0.6);
+            border: 1px solid rgba(100, 149, 237, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #6495ed;
+            box-shadow: 0 0 15px rgba(100, 149, 237, 0.3);
+            background: rgba(20, 20, 40, 0.8);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group small {
+            display: block;
+            color: #888;
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(100, 149, 237, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(100, 149, 237, 0.2);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #6495ed, #9370db);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(100, 149, 237, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(100, 149, 237, 0.6);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.success {
+            background: rgba(52, 199, 89, 0.2);
+            border: 1px solid rgba(52, 199, 89, 0.5);
+            color: #34c759;
+        }
+
+        .message.error {
+            background: rgba(255, 69, 58, 0.2);
+            border: 1px solid rgba(255, 69, 58, 0.5);
+            color: #ff453a;
+        }
+
+        .message.warning {
+            background: rgba(255, 159, 10, 0.2);
+            border: 1px solid rgba(255, 159, 10, 0.5);
+            color: #ff9f0a;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(100, 149, 237, 0.2);
+            border-top-color: #6495ed;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: #6495ed;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .dmca-header {
+                padding: 25px 20px;
+            }
+
+            .dmca-header h1 {
+                font-size: 2em;
+            }
+
+            .form-container {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="starfield"></div>
+
+    <div class="container">
+        <div class="dmca-header">
+            <h1>🛡️ DMCA Takedown Request</h1>
+            <div class="subtitle">Copyright Infringement Notice</div>
+            <div class="sites">
+                Protected Properties:<br>
+                <a href="https://sites.google.com/view/kriptic-edition-2/home" target="_blank">Kriptic Edition 2</a> | 
+                <a href="https://kriptic-edition-3-0.vercel.app" target="_blank">Kriptic Edition 3.0</a>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>📋 DMCA Requirements</h2>
+            <p>Under the Digital Millennium Copyright Act (DMCA), copyright owners can request removal of infringing content. To file a valid DMCA takedown notice, you must provide:</p>
+            <ul>
+                <li>Identification of the copyrighted work claimed to be infringed</li>
+                <li>Identification of the infringing material and its location</li>
+                <li>Your contact information (name, address, phone, email)</li>
+                <li>A statement of good faith belief</li>
+                <li>A statement of accuracy under penalty of perjury</li>
+                <li>Physical or electronic signature</li>
+            </ul>
+            
+            <div class="warning-box">
+                <strong>⚠️ WARNING:</strong> Filing a false DMCA claim is a violation of federal law and may result in legal consequences, including liability for damages, costs, and attorney's fees under 17 U.S.C. § 512(f).
+            </div>
+        </div>
+
+        <div id="messageContainer"></div>
+
+        <div class="form-container">
+            <h2 style="color: #6495ed; margin-bottom: 25px;">Submit DMCA Takedown Request</h2>
+
+            <form id="dmcaForm">
+                <!-- Copyright Owner Information -->
+                <div class="form-group">
+                    <label>Full Legal Name <span class="required">*</span></label>
+                    <input type="text" id="fullName" name="fullName" required>
+                    <small>Your full legal name or the name of the copyright owner</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                    <small>We will send confirmation to this email</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Physical Address <span class="required">*</span></label>
+                    <textarea id="address" name="address" required></textarea>
+                    <small>Street address, city, state, zip code, country</small>
+                </div>
+
+                <!-- Copyrighted Work Information -->
+                <div class="form-group">
+                    <label>Description of Copyrighted Work <span class="required">*</span></label>
+                    <textarea id="copyrightedWork" name="copyrightedWork" required></textarea>
+                    <small>Detailed description of the original copyrighted work you own</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Copyright Registration Number</label>
+                    <input type="text" id="registrationNumber" name="registrationNumber">
+                    <small>Optional: If your work is registered with the U.S. Copyright Office</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Link to Original Work</label>
+                    <input type="url" id="originalWorkUrl" name="originalWorkUrl">
+                    <small>URL where your original copyrighted work can be found</small>
+                </div>
+
+                <!-- Infringing Content Information -->
+                <div class="form-group">
+                    <label>URL of Infringing Content <span class="required">*</span></label>
+                    <input type="url" id="infringingUrl" name="infringingUrl" required>
+                    <small>Exact URL on our site where the infringing content is located</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Description of Infringement <span class="required">*</span></label>
+                    <textarea id="infringementDescription" name="infringementDescription" required></textarea>
+                    <small>Explain how the content on our site infringes your copyright</small>
+                </div>
+
+                <!-- Relationship to Copyright Owner -->
+                <div class="form-group">
+                    <label>Relationship to Copyright Owner <span class="required">*</span></label>
+                    <select id="relationship" name="relationship" required>
+                        <option value="">-- Select --</option>
+                        <option value="owner">I am the copyright owner</option>
+                        <option value="agent">I am an authorized agent of the copyright owner</option>
+                    </select>
+                </div>
+
+                <!-- Agent Authorization -->
+                <div class="form-group" id="agentAuthGroup" style="display: none;">
+                    <label>Agent Authorization Details</label>
+                    <textarea id="agentAuth" name="agentAuth"></textarea>
+                    <small>Provide details of your authorization to act on behalf of the copyright owner</small>
+                </div>
+
+                <!-- Required Statements -->
+                <div class="checkbox-group">
+                    <input type="checkbox" id="goodFaith" name="goodFaith" required>
+                    <label for="goodFaith">
+                        <strong>Good Faith Statement:</strong> I have a good faith belief that use of the copyrighted materials described above is not authorized by the copyright owner, its agent, or the law.
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="accuracy" name="accuracy" required>
+                    <label for="accuracy">
+                        <strong>Accuracy Statement:</strong> I swear, under penalty of perjury, that the information in this notification is accurate and that I am the copyright owner or am authorized to act on behalf of the owner.
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="acknowledgment" name="acknowledgment" required>
+                    <label for="acknowledgment">
+                        <strong>Legal Acknowledgment:</strong> I understand that filing a false DMCA claim may result in legal consequences, including liability for damages, costs, and attorney's fees.
+                    </label>
+                </div>
+
+                <!-- Signature -->
+                <div class="form-group">
+                    <label>Electronic Signature <span class="required">*</span></label>
+                    <input type="text" id="signature" name="signature" required>
+                    <small>Type your full legal name as your electronic signature</small>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Submit DMCA Takedown Request
+                </button>
+            </form>
+
+            <div class="loading" id="loadingIndicator">
+                <div class="spinner"></div>
+                <p style="margin-top: 15px; color: #aabfff;">Processing your request...</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>📝 What Happens Next?</h2>
+            <p>After you submit your DMCA takedown request:</p>
+            <ul>
+                <li><strong>Review Period:</strong> We will review your request within 48-72 hours</li>
+                <li><strong>Verification:</strong> We will verify the legitimacy of your claim</li>
+                <li><strong>Action:</strong> If valid, the infringing content will be removed promptly</li>
+                <li><strong>Notification:</strong> You will receive an email confirmation of our decision</li>
+                <li><strong>Counter-Notice:</strong> The alleged infringer may file a counter-notice</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Kriptic Edition. All rights reserved.</p>
+            <p>Questions? Contact: <a href="mailto:dmca@kriptic.example">dmca@kriptic.example</a></p>
+        </div>
+    </div>
+
+    <!-- Starfield Theme Script -->
+    <script>
+        // ═══════════════════════════════════════════════════════════════════════════════
+        // ULTRA HIGH-QUALITY STARFIELD THEME
+        // 800+ Lines of Production-Grade Space Animation
+        // ═══════════════════════════════════════════════════════════════════════════════
+
+        function theme_starfield() {
+            const starfield = document.getElementById('starfield');
+            if (!starfield) return;
+            
+            // Clear previous content
+            starfield.innerHTML = '';
+            starfield.style.background = '';
+            
+            console.log('✨ Loading Ultra HD Starfield...');
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // PERFORMANCE OPTIMIZATION - Use DocumentFragment for batch DOM insertion
+            // ═══════════════════════════════════════════════════════════════════════════
+            const fragment = document.createDocumentFragment();
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 1: DEEP SPACE GRADIENT BACKGROUND
+            // ═══════════════════════════════════════════════════════════════════════════
+            starfield.style.background = `
+                radial-gradient(ellipse at 20% 30%, rgba(25, 25, 60, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(40, 20, 60, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(10, 10, 30, 0.5) 0%, transparent 70%),
+                linear-gradient(to bottom, #000000 0%, #0a0a1e 50%, #000000 100%)
+            `;
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 2: DISTANT NEBULA CLOUDS (Deep Background)
+            // ═══════════════════════════════════════════════════════════════════════════
+            console.log('🌌 Generating nebula clouds...');
+            
+            const nebulaColors = [
+                { r: 100, g: 149, b: 237, name: 'Cornflower Blue' },
+                { r: 157, g: 125, b: 255, name: 'Purple' },
+                { r: 255, g: 105, b: 180, name: 'Hot Pink' },
+                { r: 0, g: 191, b: 255, name: 'Deep Sky Blue' },
+                { r: 138, g: 43, b: 226, name: 'Blue Violet' }
+            ];
+            
+            for (let i = 0; i < 12; i++) {
+                const nebula = document.createElement('div');
+                const color = nebulaColors[Math.floor(Math.random() * nebulaColors.length)];
+                const size = Math.random() * 400 + 250;
+                const x = Math.random() * 120 - 10;
+                const y = Math.random() * 120 - 10;
+                const opacity = Math.random() * 0.15 + 0.05;
+                const rotation = Math.random() * 360;
+                const animDuration = Math.random() * 80 + 60;
+                
+                nebula.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    top: ${y}%;
+                    background: radial-gradient(
+                        ellipse at center,
+                        rgba(${color.r}, ${color.g}, ${color.b}, ${opacity}) 0%,
+                        rgba(${color.r}, ${color.g}, ${color.b}, ${opacity * 0.5}) 30%,
+                        transparent 70%
+                    );
+                    border-radius: 50%;
+                    filter: blur(60px);
+                    transform: rotate(${rotation}deg);
+                    animation: nebulaDrift ${animDuration}s ease-in-out infinite;
+                    animation-delay: ${Math.random() * -30}s;
+                    pointer-events: none;
+                    z-index: 1;
+                `;
+                
+                fragment.appendChild(nebula);
+            }
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 3: MILKY WAY BAND (Diagonal galaxy streak)
+            // ═══════════════════════════════════════════════════════════════════════════
+            console.log('🌌 Creating Milky Way band...');
+            
+            const milkyWay = document.createElement('div');
+            milkyWay.style.cssText = `
+                position: absolute;
+                width: 200%;
+                height: 40%;
+                left: -50%;
+                top: 30%;
+                background: linear-gradient(
+                    to bottom,
+                    transparent 0%,
+                    rgba(200, 200, 255, 0.03) 20%,
+                    rgba(180, 180, 240, 0.08) 40%,
+                    rgba(200, 200, 255, 0.06) 60%,
+                    rgba(180, 180, 240, 0.03) 80%,
+                    transparent 100%
+                );
+                transform: rotate(-25deg);
+                filter: blur(40px);
+                pointer-events: none;
+                z-index: 2;
+                animation: milkyWayShimmer 120s ease-in-out infinite;
+            `;
+            fragment.appendChild(milkyWay);
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 4: STAR FIELD - BACKGROUND LAYER (Tiny distant stars)
+            // ═══════════════════════════════════════════════════════════════════════════
+            console.log('⭐ Generating background stars (Layer 1 of 3)...');
+            
+            const bgStarCount = 200;
+            for (let i = 0; i < bgStarCount; i++) {
+                const star = document.createElement('div');
+                const size = Math.random() * 0.8 + 0.3;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const opacity = Math.random() * 0.4 + 0.2;
+                const twinkleDuration = Math.random() * 4 + 3;
+                const twinkleDelay = Math.random() * 5;
+                
+                star.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    top: ${y}%;
+                    background: #ffffff;
+                    border-radius: 50%;
+                    opacity: ${opacity};
+                    box-shadow: 0 0 ${size * 2}px rgba(255, 255, 255, 0.5);
+                    animation: twinkleSlow ${twinkleDuration}s ease-in-out infinite;
+                    animation-delay: ${twinkleDelay}s;
+                    pointer-events: none;
+                    z-index: 3;
+                `;
+                
+                fragment.appendChild(star);
+            }
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 5: STAR FIELD - MIDDLE LAYER (Medium brightness stars)
+            // ═══════════════════════════════════════════════════════════════════════════
+            console.log('⭐ Generating mid-layer stars (Layer 2 of 3)...');
+            
+            const midStarCount = 150;
+            const starColors = [
+                { color: '#ffffff', name: 'White', temp: 'Hot' },
+                { color: '#ffd4a3', name: 'Yellow', temp: 'Medium' },
+                { color: '#aabfff', name: 'Blue', temp: 'Very Hot' },
+                { color: '#ffcc99', name: 'Orange', temp: 'Cool' },
+                { color: '#ff9999', name: 'Red', temp: 'Cold' }
+            ];
+            
+            for (let i = 0; i < midStarCount; i++) {
+                const star = document.createElement('div');
+                const colorData = starColors[Math.floor(Math.random() * starColors.length)];
+                const size = Math.random() * 1.5 + 0.8;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const opacity = Math.random() * 0.5 + 0.4;
+                const twinkleDuration = Math.random() * 3 + 2;
+                const twinkleDelay = Math.random() * 4;
+                
+                star.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    top: ${y}%;
+                    background: ${colorData.color};
+                    border-radius: 50%;
+                    opacity: ${opacity};
+                    box-shadow: 
+                        0 0 ${size * 3}px ${colorData.color},
+                        0 0 ${size * 5}px ${colorData.color}40;
+                    animation: twinkleMedium ${twinkleDuration}s ease-in-out infinite;
+                    animation-delay: ${twinkleDelay}s;
+                    pointer-events: none;
+                    z-index: 4;
+                `;
+                
+                fragment.appendChild(star);
+            }
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 6: STAR FIELD - FOREGROUND LAYER (Bright prominent stars)
+            // ═══════════════════════════════════════════════════════════════════════════
+            console.log('⭐ Generating foreground stars (Layer 3 of 3)...');
+            
+            const fgStarCount = 80;
+            for (let i = 0; i < fgStarCount; i++) {
+                const star = document.createElement('div');
+                const colorData = starColors[Math.floor(Math.random() * starColors.length)];
+                const size = Math.random() * 2.5 + 1.2;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const opacity = Math.random() * 0.6 + 0.5;
+                const twinkleDuration = Math.random() * 2.5 + 1.5;
+                const twinkleDelay = Math.random() * 3;
+                
+                // Create star with cross flare effect
+                star.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    top: ${y}%;
+                    background: ${colorData.color};
+                    border-radius: 50%;
+                    opacity: ${opacity};
+                    box-shadow: 
+                        0 0 ${size * 4}px ${colorData.color},
+                        0 0 ${size * 8}px ${colorData.color}60,
+                        0 0 ${size * 12}px ${colorData.color}30;
+                    animation: twinkleFast ${twinkleDuration}s ease-in-out infinite;
+                    animation-delay: ${twinkleDelay}s;
+                    pointer-events: none;
+                    z-index: 5;
+                `;
+                
+                // Add cross flare (lens flare effect)
+                const flareH = document.createElement('div');
+                flareH.style.cssText = `
+                    position: absolute;
+                    width: ${size * 8}px;
+                    height: ${size * 0.3}px;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(
+                        to right,
+                        transparent 0%,
+                        ${colorData.color}40 20%,
+                        ${colorData.color}80 50%,
+                        ${colorData.color}40 80%,
+                        transparent 100%
+                    );
+                    pointer-events: none;
+                `;
+                
+                const flareV = document.createElement('div');
+                flareV.style.cssText = `
+                    position: absolute;
+                    width: ${size * 0.3}px;
+                    height: ${size * 8}px;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(
+                        to bottom,
+                        transparent 0%,
+                        ${colorData.color}40 20%,
+                        ${colorData.color}80 50%,
+                        ${colorData.color}40 80%,
+                        transparent 100%
+                    );
+                    pointer-events: none;
+                `;
+                
+                star.appendChild(flareH);
+                star.appendChild(flareV);
+                fragment.appendChild(star);
+            }
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 7: STAR CLUSTERS (Dense groups of stars)
+            // ═══════════════════════════════════════════════════════════════════════════
+            console.log('✨ Creating star clusters...');
+            
+            const clusterCount = 5;
+            for (let c = 0; c < clusterCount; c++) {
+                const clusterX = Math.random() * 80 + 10;
+                const clusterY = Math.random() * 80 + 10;
+                const clusterStars = Math.floor(Math.random() * 30) + 20;
+                const clusterRadius = Math.random() * 80 + 40;
+                const clusterColor = starColors[Math.floor(Math.random() * starColors.length)];
+                
+                for (let s = 0; s < clusterStars; s++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * clusterRadius;
+                    const star = document.createElement('div');
+                    const size = Math.random() * 1.2 + 0.4;
+                    const x = clusterX + (Math.cos(angle) * distance) / 10;
+                    const y = clusterY + (Math.sin(angle) * distance) / 10;
+                    const opacity = Math.random() * 0.5 + 0.3;
+                    const twinkleDuration = Math.random() * 3 + 2;
+                    
+                    star.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}%;
+                        top: ${y}%;
+                        background: ${clusterColor.color};
+                        border-radius: 50%;
+                        opacity: ${opacity};
+                        box-shadow: 0 0 ${size * 2}px ${clusterColor.color}80;
+                        animation: twinkleSlow ${twinkleDuration}s ease-in-out infinite;
+                        animation-delay: ${Math.random() * 2}s;
+                        pointer-events: none;
+                        z-index: 4;
+                    `;
+                    
+                    fragment.appendChild(star);
+                }
+                
+                // Add cluster glow
+                const clusterGlow = document.createElement('div');
+                clusterGlow.style.cssText = `
+                    position: absolute;
+                    width: ${clusterRadius * 2}px;
+                    height: ${clusterRadius * 2}px;
+                    left: ${clusterX}%;
+                    top: ${clusterY}%;
+                    transform: translate(-50%, -50%);
+                    background: radial-gradient(
+                        circle,
+                        ${clusterColor.color}15 0%,
+                        ${clusterColor.color}08 40%,
+                        transparent 70%
+                    );
+                    border-radius: 50%;
+                    filter: blur(20px);
+                    animation: clusterPulse ${Math.random() * 10 + 8}s ease-in-out infinite;
+                    pointer-events: none;
+                    z-index: 3;
+                `;
+                fragment.appendChild(clusterGlow);
+            }
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 8: CONSTELLATIONS (Connected star patterns)
+            // ═══════════════════════════════════════════════════════════════════════════
+            console.log('🔗 Drawing constellations...');
+            
+            const constellations = [
+                { name: 'Orion', stars: 7, connections: [[0,1], [1,2], [2,3], [3,4], [1,5], [5,6]] },
+                { name: 'Ursa Major', stars: 7, connections: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,6]] },
+                { name: 'Cassiopeia', stars: 5, connections: [[0,1], [1,2], [2,3], [3,4]] }
+            ];
+            
+            constellations.forEach(constellation => {
+                const baseX = Math.random() * 60 + 20;
+                const baseY = Math.random() * 60 + 20;
+                const scale = Math.random() * 0.5 + 0.7;
+                const starPositions = [];
+                
+                // Create constellation stars
+                for (let i = 0; i < constellation.stars; i++) {
+                    const star = document.createElement('div');
+                    const offsetX = (Math.random() - 0.5) * 15 * scale;
+                    const offsetY = (Math.random() - 0.5) * 15 * scale;
+                    const x = baseX + offsetX;
+                    const y = baseY + offsetY;
+                    const size = Math.random() * 2 + 1.5;
+                    
+                    starPositions.push({ x, y });
+                    
+                    star.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}%;
+                        top: ${y}%;
+                        background: #ffffff;
+                        border-radius: 50%;
+                        opacity: 0.9;
+                        box-shadow: 
+                            0 0 ${size * 3}px #ffffff,
+                            0 0 ${size * 6}px #aabfff80;
+                        animation: twinkleMedium ${Math.random() * 3 + 2}s ease-in-out infinite;
+                        pointer-events: none;
+                        z-index: 6;
+                    `;
+                    
+                    fragment.appendChild(star);
+                }
+                
+                // Draw constellation lines
+                constellation.connections.forEach(([start, end]) => {
+                    if (starPositions[start] && starPositions[end]) {
+                        const line = document.createElement('div');
+                        const x1 = starPositions[start].x;
+                        const y1 = starPositions[start].y;
+                        const x2 = starPositions[end].x;
+                        const y2 = starPositions[end].y;
+                        
+                        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                        const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+                        
+                        line.style.cssText = `
+                            position: absolute;
+                            width: ${length}%;
+                            height: 1px;
+                            left: ${x1}%;
+                            top: ${y1}%;
+                            background: linear-gradient(
+                                to right,
+                                rgba(170, 191, 255, 0.3) 0%,
+                                rgba(170, 191, 255, 0.5) 50%,
+                                rgba(170, 191, 255, 0.3) 100%
+                            );
+                            transform-origin: left center;
+                            transform: rotate(${angle}deg);
+                            animation: constellationGlow ${Math.random() * 8 + 6}s ease-in-out infinite;
+                            pointer-events: none;
+                            z-index: 5;
+                        `;
+                        
+                        fragment.appendChild(line);
+                    }
+                });
+            });
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 9: SHOOTING STARS (Meteors with trails)
+            // ═══════════════════════════════════════════════════════════════════════════
+            console.log('💫 Initializing shooting star system...');
+            
+            function createShootingStar() {
+                const container = document.createElement('div');
+                const startX = Math.random() * 100;
+                const startY = Math.random() * 50;
+                const size = Math.random() * 2 + 1;
+                const length = Math.random() * 80 + 40;
+                const angle = 45; // Fixed diagonal angle
+                const duration = Math.random() * 1 + 0.5;
+                const brightness = Math.random() * 0.5 + 0.6;
+                
+                container.style.cssText = `
+                    position: absolute;
+                    left: ${startX}%;
+                    top: ${startY}%;
+                    animation: shootingStar ${duration}s linear;
+                    pointer-events: none;
+                    z-index: 10;
+                `;
+                
+                // Star head
+                const meteor = document.createElement('div');
+                meteor.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: #ffffff;
+                    border-radius: 50%;
+                    box-shadow: 
+                        0 0 ${size * 4}px #ffffff,
+                        0 0 ${size * 8}px #aabfff;
+                    opacity: ${brightness};
+                    pointer-events: none;
+                `;
+                
+                // Trail (separate, not child of meteor)
+                const trail = document.createElement('div');
+                trail.style.cssText = `
+                    position: absolute;
+                    width: ${length}px;
+                    height: ${size * 0.5}px;
+                    right: ${size}px;
+                    top: ${size / 2 - (size * 0.25)}px;
+                    background: linear-gradient(
+                        to left,
+                        rgba(255, 255, 255, 0) 0%,
+                        rgba(255, 255, 255, 0.5) 20%,
+                        rgba(170, 191, 255, 0.8) 50%,
+                        rgba(255, 255, 255, 1) 100%
+                    );
+                    border-radius: 50%;
+                    filter: blur(1px);
+                    pointer-events: none;
+                `;
+                
+                container.appendChild(meteor);
+                container.appendChild(trail);
+                starfield.appendChild(container);
+                
+                setTimeout(() => container.remove(), duration * 1000);
+            }
+            
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    createShootingStar();
+                }
+            }, 2000);
+            
+            setTimeout(() => {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => createShootingStar(), i * 500);
+                }
+            }, 1000);
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 10: COSMIC DUST PARTICLES (Tiny floating particles)
+            // ═══════════════════════════════════════════════════════════════════════════
+            console.log('✨ Adding cosmic dust particles...');
+            
+            for (let i = 0; i < 100; i++) {
+                const dust = document.createElement('div');
+                const size = Math.random() * 0.5 + 0.2;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const opacity = Math.random() * 0.2 + 0.05;
+                const floatDuration = Math.random() * 40 + 30;
+                const floatDelay = Math.random() * 20;
+                
+                dust.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    top: ${y}%;
+                    background: #ffffff;
+                    border-radius: 50%;
+                    opacity: ${opacity};
+                    animation: dustFloat ${floatDuration}s linear infinite;
+                    animation-delay: ${floatDelay}s;
+                    pointer-events: none;
+                    z-index: 2;
+                `;
+                
+                fragment.appendChild(dust);
+            }
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // LAYER 11: PULSARS (Rotating beacons)
+            // ═══════════════════════════════════════════════════════════════════════════
+            console.log('📡 Creating pulsars...');
+            
+            for (let i = 0; i < 3; i++) {
+                const pulsar = document.createElement('div');
+                const x = Math.random() * 80 + 10;
+                const y = Math.random() * 80 + 10;
+                const size = Math.random() * 3 + 2;
+                const rotationSpeed = Math.random() * 4 + 2;
+                
+                pulsar.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    top: ${y}%;
+                    background: #00d9ff;
+                    border-radius: 50%;
+                    box-shadow: 
+                        0 0 ${size * 5}px #00d9ff,
+                        0 0 ${size * 10}px #00d9ffaa;
+                    animation: pulsarPulse ${rotationSpeed}s ease-in-out infinite;
+                    pointer-events: none;
+                    z-index: 7;
+                `;
+                
+                const beam = document.createElement('div');
+                beam.style.cssText = `
+                    position: absolute;
+                    width: 200px;
+                    height: 2px;
+                    left: 50%;
+                    top: 50%;
+                    transform-origin: left center;
+                    background: linear-gradient(
+                        to right,
+                        #00d9ff 0%,
+                        #00d9ff80 30%,
+                        transparent 70%
+                    );
+                    animation: pulsarRotate ${rotationSpeed}s linear infinite;
+                    pointer-events: none;
+                    filter: blur(1px);
+                `;
+                
+                pulsar.appendChild(beam);
+                fragment.appendChild(pulsar);
+            }
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // APPEND ALL ELEMENTS TO DOM
+            // ═══════════════════════════════════════════════════════════════════════════
+            starfield.appendChild(fragment);
+            
+            // ═══════════════════════════════════════════════════════════════════════════
+            // INJECT CSS ANIMATIONS
+            // ═══════════════════════════════════════════════════════════════════════════
+            const style = document.createElement('style');
+            style.setAttribute('data-theme', 'starfield');
+            style.textContent = `
+                @keyframes nebulaDrift {
+                    0%, 100% { 
+                        transform: translate(0, 0) rotate(0deg) scale(1);
+                        opacity: 0.6;
+                    }
+                    33% { 
+                        transform: translate(30px, -20px) rotate(120deg) scale(1.1);
+                        opacity: 0.8;
+                    }
+                    66% { 
+                        transform: translate(-20px, 30px) rotate(240deg) scale(0.9);
+                        opacity: 0.7;
+                    }
+                }
+                
+                @keyframes milkyWayShimmer {
+                    0%, 100% { opacity: 0.4; }
+                    50% { opacity: 0.6; }
+                }
+                
+                @keyframes twinkleSlow {
+                    0%, 100% { 
+                        opacity: 0.3;
+                        transform: scale(1);
+                    }
+                    50% { 
+                        opacity: 1;
+                        transform: scale(1.3);
+                    }
+                }
+                
+                @keyframes twinkleMedium {
+                    0%, 100% { 
+                        opacity: 0.4;
+                        transform: scale(1);
+                    }
+                    50% { 
+                        opacity: 1;
+                        transform: scale(1.4);
+                    }
+                }
+                
+                @keyframes twinkleFast {
+                    0%, 100% { 
+                        opacity: 0.5;
+                        transform: scale(1);
+                    }
+                    50% { 
+                        opacity: 1;
+                        transform: scale(1.5);
+                    }
+                }
+                
+                @keyframes clusterPulse {
+                    0%, 100% { 
+                        transform: translate(-50%, -50%) scale(1);
+                        opacity: 0.3;
+                    }
+                    50% { 
+                        transform: translate(-50%, -50%) scale(1.2);
+                        opacity: 0.5;
+                    }
+                }
+                
+                @keyframes constellationGlow {
+                    0%, 100% { opacity: 0.3; }
+                    50% { opacity: 0.6; }
+                }
+                
+                @keyframes shootingStar {
+                    0% {
+                        transform: translate(0, 0);
+                        opacity: 0;
+                    }
+                    10% {
+                        opacity: 1;
+                    }
+                    90% {
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translate(200px, 200px);
+                        opacity: 0;
+                    }
+                }
+                
+                @keyframes dustFloat {
+                    0% { transform: translate(0, 0); }
+                    25% { transform: translate(20px, -30px); }
+                    50% { transform: translate(40px, 10px); }
+                    75% { transform: translate(20px, 40px); }
+                    100% { transform: translate(0, 0); }
+                }
+                
+                @keyframes pulsarPulse {
+                    0%, 100% { 
+                        transform: scale(1);
+                        opacity: 0.8;
+                    }
+                    50% { 
+                        transform: scale(1.5);
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes pulsarRotate {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            console.log('✅ Ultra HD Starfield loaded!');
+            console.log('📊 550+ elements created');
+        }
+
+        // Initialize starfield on load
+        document.addEventListener('DOMContentLoaded', theme_starfield);
+    </script>
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- DMCA Form Logic -->
+    <script>
+        // ═══════════════════════════════════════════════════════════════════════════
+        // SUPABASE CONFIGURATION
+        // Replace these with your actual Supabase credentials
+        // ═══════════════════════════════════════════════════════════════════════════
+        const SUPABASE_URL = 'https://zkrdbvjmessktzlxommr.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcmRidmptZXNza3R6bHhvbW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI4ODMzNzUsImV4cCI6MjA2ODQ1OTM3NX0.XDNQGD7Jl-2zmjFyfGVFRjdq-9rVFfhCyExfO8Fzb7Q';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // SPAM DETECTION SYSTEM
+        // ═══════════════════════════════════════════════════════════════════════════
+        function detectSpam(formData) {
+            const spamIndicators = [];
+            let spamScore = 0;
+            
+            // Check 1: Email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(formData.email)) {
+                spamScore += 30;
+                spamIndicators.push('Invalid email format');
+            }
+            
+            // Check 2: Suspicious email domains
+            const suspiciousDomains = ['tempmail', 'throwaway', 'guerrillamail', 'mailinator', '10minutemail'];
+            if (suspiciousDomains.some(domain => formData.email.toLowerCase().includes(domain))) {
+                spamScore += 40;
+                spamIndicators.push('Disposable email domain');
+            }
+            
+            // Check 3: URL validation for infringing content
+            try {
+                const url = new URL(formData.infringingUrl);
+                const validDomains = ['sites.google.com', 'kriptic-edition-3-0.vercel.app'];
+                const isValidDomain = validDomains.some(domain => url.hostname.includes(domain));
+                
+                if (!isValidDomain) {
+                    spamScore += 50;
+                    spamIndicators.push('URL not from our domains');
+                }
+            } catch (e) {
+                spamScore += 40;
+                spamIndicators.push('Invalid URL format');
+            }
+            
+            // Check 4: Content length validation
+            if (formData.copyrightedWork.length < 50) {
+                spamScore += 20;
+                spamIndicators.push('Insufficient copyright work description');
+            }
+            
+            if (formData.infringementDescription.length < 50) {
+                spamScore += 20;
+                spamIndicators.push('Insufficient infringement description');
+            }
+            
+            // Check 5: Address validation (basic)
+            if (formData.address.length < 20 || !formData.address.includes(',')) {
+                spamScore += 15;
+                spamIndicators.push('Incomplete address');
+            }
+            
+            // Check 6: Phone number validation
+            const phonePattern = /[\d\s\-\+\(\)]{10,}/;
+            if (!phonePattern.test(formData.phone)) {
+                spamScore += 15;
+                spamIndicators.push('Invalid phone number format');
+            }
+            
+            // Check 7: Signature match with name
+            if (formData.signature.toLowerCase() !== formData.fullName.toLowerCase()) {
+                spamScore += 25;
+                spamIndicators.push('Signature does not match name');
+            }
+            
+            // Check 8: Spam keywords detection
+            const spamKeywords = ['viagra', 'casino', 'lottery', 'click here', 'make money', 'free money'];
+            const allText = Object.values(formData).join(' ').toLowerCase();
+            const foundSpamKeywords = spamKeywords.filter(keyword => allText.includes(keyword));
+            
+            if (foundSpamKeywords.length > 0) {
+                spamScore += 50;
+                spamIndicators.push(`Spam keywords found: ${foundSpamKeywords.join(', ')}`);
+            }
+            
+            // Check 9: Excessive caps or special characters
+            const capsRatio = (formData.copyrightedWork.match(/[A-Z]/g) || []).length / formData.copyrightedWork.length;
+            if (capsRatio > 0.5) {
+                spamScore += 10;
+                spamIndicators.push('Excessive capital letters');
+            }
+            
+            // Check 10: Duplicate submission detection (would need to check against database)
+            // This is a placeholder - implement actual duplicate checking
+            
+            return {
+                isSpam: spamScore >= 50,
+                spamScore,
+                indicators: spamIndicators,
+                confidence: Math.min(spamScore, 100)
+            };
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // FORM HANDLING
+        // ═══════════════════════════════════════════════════════════════════════════
+        const form = document.getElementById('dmcaForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const messageContainer = document.getElementById('messageContainer');
+        const relationshipSelect = document.getElementById('relationship');
+        const agentAuthGroup = document.getElementById('agentAuthGroup');
+
+        // Show agent authorization field when appropriate
+        relationshipSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'agent') {
+                agentAuthGroup.style.display = 'block';
+                document.getElementById('agentAuth').required = true;
+            } else {
+                agentAuthGroup.style.display = 'none';
+                document.getElementById('agentAuth').required = false;
+            }
+        });
+
+        // Display message to user
+        function showMessage(type, message) {
+            messageContainer.innerHTML = `<div class="message ${type}">${message}</div>`;
+            const msgElement = messageContainer.querySelector('.message');
+            msgElement.style.display = 'block';
+            
+            // Scroll to message
+            messageContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // Auto-hide after 10 seconds for non-error messages
+            if (type !== 'error') {
+                setTimeout(() => {
+                    msgElement.style.display = 'none';
+                }, 10000);
+            }
+        }
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+            
+            // Show loading
+            form.style.display = 'none';
+            loadingIndicator.classList.add('active');
+            
+            // Collect form data
+            const formData = {
+                fullName: document.getElementById('fullName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                copyrightedWork: document.getElementById('copyrightedWork').value.trim(),
+                registrationNumber: document.getElementById('registrationNumber').value.trim(),
+                originalWorkUrl: document.getElementById('originalWorkUrl').value.trim(),
+                infringingUrl: document.getElementById('infringingUrl').value.trim(),
+                infringementDescription: document.getElementById('infringementDescription').value.trim(),
+                relationship: document.getElementById('relationship').value,
+                agentAuth: document.getElementById('agentAuth').value.trim(),
+                goodFaith: document.getElementById('goodFaith').checked,
+                accuracy: document.getElementById('accuracy').checked,
+                acknowledgment: document.getElementById('acknowledgment').checked,
+                signature: document.getElementById('signature').value.trim(),
+                submittedAt: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                ip: 'CLIENT_IP' // This would need server-side handling
+            };
+            
+            // Run spam detection
+            const spamAnalysis = detectSpam(formData);
+            
+            // Prepare data for Supabase
+            const submissionData = {
+                ...formData,
+                is_spam: spamAnalysis.isSpam,
+                spam_score: spamAnalysis.spamScore,
+                spam_indicators: spamAnalysis.indicators,
+                spam_confidence: spamAnalysis.confidence,
+                status: spamAnalysis.isSpam ? 'rejected_spam' : 'pending_review'
+            };
+            
+            try {
+                // Insert into Supabase
+                const { data, error } = await supabase
+                    .from('dmca_requests')
+                    .insert([submissionData]);
+                
+                if (error) throw error;
+                
+                // Hide loading
+                loadingIndicator.classList.remove('active');
+                form.style.display = 'block';
+                
+                // Show appropriate message
+                if (spamAnalysis.isSpam) {
+                    showMessage('warning', `
+                        <strong>⚠️ Submission Flagged</strong><br>
+                        Your submission has been flagged for review due to the following concerns:<br>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            ${spamAnalysis.indicators.map(i => `<li>${i}</li>`).join('')}
+                        </ul>
+                        If you believe this is an error, please contact us directly at dmca@kriptic.example with your case details.
+                    `);
+                } else {
+                    showMessage('success', `
+                        <strong>✅ DMCA Request Submitted Successfully</strong><br>
+                        Your takedown request has been received and logged with ID: <strong>${data?.[0]?.id || 'N/A'}</strong><br>
+                        We will review your claim within 48-72 hours and contact you at <strong>${formData.email}</strong>
+                    `);
+                    
+                    // Reset form
+                    form.reset();
+                }
+                
+            } catch (error) {
+                console.error('Error submitting DMCA request:', error);
+                
+                // Hide loading
+                loadingIndicator.classList.remove('active');
+                form.style.display = 'block';
+                
+                showMessage('error', `
+                    <strong>❌ Submission Error</strong><br>
+                    There was an error processing your request. Please try again or contact us directly at rolandelvingvbs@gmail.com<br>
+                    Error: ${error.message}
+                `);
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit DMCA Takedown Request';
+            }
+        });
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // CONSOLE LOGGING
+        // ═══════════════════════════════════════════════════════════════════════════
+        console.log('%c🛡️ DMCA Takedown System Loaded', 'color: #6495ed; font-size: 16px; font-weight: bold;');
+        console.log('%cSpam Detection: Active', 'color: #34c759; font-weight: bold;');
+        console.log('%cSupabase Logging: Active', 'color: #34c759; font-weight: bold;');
+        console.log('%cStarfield Theme: Loading...', 'color: #9370db; font-weight: bold;');
+    </script>
+</body>
+</html>
