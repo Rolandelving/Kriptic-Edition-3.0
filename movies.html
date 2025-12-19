@@ -188,6 +188,13 @@
             top: 80px;
             background: linear-gradient(to bottom, var(--bg-dark), transparent);
             z-index: 100;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .controls-section.hidden {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
         }
 
         .controls-container {
@@ -374,7 +381,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
-            animation: fadeIn 0.6s ease;
         }
 
         @keyframes fadeIn {
@@ -386,6 +392,40 @@
             from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        @keyframes cardAppear {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.95);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .show-card {
+            opacity: 0;
+            animation: cardAppear 0.5s ease forwards;
+        }
+
+        /* Staggered animation delays */
+        .show-card:nth-child(1) { animation-delay: 0.05s; }
+        .show-card:nth-child(2) { animation-delay: 0.1s; }
+        .show-card:nth-child(3) { animation-delay: 0.15s; }
+        .show-card:nth-child(4) { animation-delay: 0.2s; }
+        .show-card:nth-child(5) { animation-delay: 0.25s; }
+        .show-card:nth-child(6) { animation-delay: 0.3s; }
+        .show-card:nth-child(7) { animation-delay: 0.35s; }
+        .show-card:nth-child(8) { animation-delay: 0.4s; }
+        .show-card:nth-child(9) { animation-delay: 0.45s; }
+        .show-card:nth-child(10) { animation-delay: 0.5s; }
+        .show-card:nth-child(11) { animation-delay: 0.55s; }
+        .show-card:nth-child(12) { animation-delay: 0.6s; }
+        .show-card:nth-child(13) { animation-delay: 0.65s; }
+        .show-card:nth-child(14) { animation-delay: 0.7s; }
+        .show-card:nth-child(15) { animation-delay: 0.75s; }
+        .show-card:nth-child(n+16) { animation-delay: 0.8s; }
 
         /* Show Card */
         .show-card {
@@ -484,12 +524,14 @@
             gap: 5px;
         }
 
-        .meta-badge.year {
+        /* First badge (year) gets accent color */
+        .meta-badge:first-child {
             color: var(--accent);
             background: rgba(0, 217, 255, 0.15);
         }
 
-        .meta-badge.genre {
+        /* All badges after the second one (genres) get primary color */
+        .meta-badge:nth-child(n+3) {
             color: var(--primary);
             background: rgba(229, 9, 20, 0.15);
         }
@@ -759,9 +801,9 @@
                 <div class="show-info">
                     <h3 class="show-title">Squid Game</h3>
                     <div class="show-meta">
-                        <span class="meta-badge year">2021</span>
+                        <span class="meta-badge">2021</span>
                         <span class="meta-badge">3 Seasons</span>
-                        <span class="meta-badge genre">Thriller</span>
+                        <span class="meta-badge">Thriller</span>
                     </div>
                     <p class="show-description">
                         Hundreds of cash-strapped players accept a strange invitation to compete in children's games for a tempting prize, but the stakes are deadly.
@@ -781,10 +823,10 @@
                 <div class="show-info">
                     <h3 class="show-title">Family Guy</h3>
                     <div class="show-meta">
-                        <span class="meta-badge year">1999</span>
+                        <span class="meta-badge">1999</span>
                         <span class="meta-badge">23 Seasons</span>
-                        <span class="meta-badge genre">Comedy</span>
-                        <span class="meta-badge genre">Animation</span>
+                        <span class="meta-badge">Comedy</span>
+                        <span class="meta-badge">Animation</span>
                     </div>
                     <p class="show-description">
                         The Griffin family navigates life in Quahog, Rhode Island, where absurdity, satire, and chaos collide. From Peter's stupidity to Stewie's dark genius, Family Guy balances crude humor with cultural commentary.
@@ -824,10 +866,10 @@
                 <div class="show-info">
                     <h3 class="show-title">SpongeBob SquarePants</h3>
                     <div class="show-meta">
-                        <span class="meta-badge year">1999</span>
+                        <span class="meta-badge">1999</span>
                         <span class="meta-badge">16 Seasons</span>
-                        <span class="meta-badge genre">Comedy</span>
-                        <span class="meta-badge genre">Animation</span>
+                        <span class="meta-badge">Comedy</span>
+                        <span class="meta-badge">Animation</span>
                     </div>
                     <p class="show-description">
                         Deep in the underwater city of Bikini Bottom, SpongeBob SquarePants and his quirky friends get into hilarious adventures filled with laughs, nonsense, and heart.
@@ -861,10 +903,10 @@
                 <div class="show-info">
                     <h3 class="show-title">South Park</h3>
                     <div class="show-meta">
-                        <span class="meta-badge year">1997</span>
+                        <span class="meta-badge">1997</span>
                         <span class="meta-badge">27 Seasons</span>
-                        <span class="meta-badge genre">Comedy</span>
-                        <span class="meta-badge genre">Animation</span>
+                        <span class="meta-badge">Comedy</span>
+                        <span class="meta-badge">Animation</span>
                     </div>
                     <p class="show-description">
                         Four foul-mouthed kids wreak havoc in the small mountain town of South Park, Colorado. Satirical, absurd, and fearless, this show takes no prisoners in mocking pop culture and politics.
@@ -910,9 +952,9 @@
                 <div class="show-info">
                     <h3 class="show-title">The Boys</h3>
                     <div class="show-meta">
-                        <span class="meta-badge year">2019</span>
-                        <span class="meta-badge genre">Action</span>
-                        <span class="meta-badge genre">Thriller</span>
+                        <span class="meta-badge">2019</span>
+                        <span class="meta-badge">Action</span>
+                        <span class="meta-badge">Thriller</span>
                     </div>
                     <p class="show-description">
                         A group of vigilantes set out to take down corrupt superheroes who abuse their superpowers. Dark, violent, and satirical superhero series.
@@ -931,9 +973,9 @@
                 <div class="show-info">
                     <h3 class="show-title">Breaking Bad</h3>
                     <div class="show-meta">
-                        <span class="meta-badge year">2008</span>
-                        <span class="meta-badge genre">Drama</span>
-                        <span class="meta-badge genre">Thriller</span>
+                        <span class="meta-badge">2008</span>
+                        <span class="meta-badge">Drama</span>
+                        <span class="meta-badge">Thriller</span>
                     </div>
                     <p class="show-description">
                         A high school chemistry teacher diagnosed with cancer turns to producing meth to secure his family's future. Widely regarded as one of the greatest TV series ever made.
@@ -952,10 +994,10 @@
                 <div class="show-info">
                     <h3 class="show-title">Gravity Falls</h3>
                     <div class="show-meta">
-                        <span class="meta-badge year">2012</span>
+                        <span class="meta-badge">2012</span>
                         <span class="meta-badge">2 Seasons</span>
-                        <span class="meta-badge genre">Adventure</span>
-                        <span class="meta-badge genre">Mystery</span>
+                        <span class="meta-badge">Adventure</span>
+                        <span class="meta-badge">Mystery</span>
                     </div>
                     <p class="show-description">
                         Twin siblings Dipper and Mabel travel to the mysterious town of Gravity Falls for the summer and uncover weird creatures, hidden journals and conspiracies.
@@ -987,9 +1029,9 @@
                 <div class="show-info">
                     <h3 class="show-title">65</h3>
                     <div class="show-meta">
-                        <span class="meta-badge year">2023</span>
-                        <span class="meta-badge genre">Sci-Fi</span>
-                        <span class="meta-badge genre">Thriller</span>
+                        <span class="meta-badge">2023</span>
+                        <span class="meta-badge">Sci-Fi</span>
+                        <span class="meta-badge">Thriller</span>
                     </div>
                     <p class="show-description">
                         After a catastrophic crash on an unknown planet, pilot Mills discovers he's stranded on Earth 65 million years ago. Now he must survive prehistoric dangers to find a way home.
@@ -999,7 +1041,7 @@
                     </div>
                 </div>
             </div>
-            <!-- 10 Things I Hate About You -->
+                        <!-- 10 Things I Hate About You -->
             <div class="show-card">
                 <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(38).jpg');"></div>
                 <div class="show-info">
@@ -3523,15 +3565,36 @@
         let currentCategory = 'all';
         let currentType = 'all';
         let currentSort = 'alphabetical';
+        let lastScrollY = 0;
 
-        // Header scroll effect
+        // Header scroll effect and controls hide/show
         window.addEventListener('scroll', () => {
             const header = document.getElementById('header');
-            if (window.scrollY > 50) {
+            const controls = document.querySelector('.controls-section');
+            const currentScrollY = window.scrollY;
+            
+            // Header effect
+            if (currentScrollY > 50) {
                 header.classList.add('scrolled');
             } else {
                 header.classList.remove('scrolled');
             }
+            
+            // Hide controls when scrolling down, show when scrolling up
+            if (currentScrollY > 400) {
+                if (currentScrollY > lastScrollY) {
+                    // Scrolling down
+                    controls.classList.add('hidden');
+                } else {
+                    // Scrolling up
+                    controls.classList.remove('hidden');
+                }
+            } else {
+                // Always show when near top
+                controls.classList.remove('hidden');
+            }
+            
+            lastScrollY = currentScrollY;
         });
 
         // Category tabs
