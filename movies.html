@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kriptic TV | Premium Streaming</title>
+    <title>Kriptic TV | Movies & Shows</title>
     <style>
         @font-face {
             font-family: 'DripOctober';
@@ -16,795 +16,264 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #e50914;
-            --primary-dark: #b20710;
-            --accent: #00d9ff;
-            --bg-dark: #0a0a0a;
-            --bg-card: #1a1a1a;
-            --bg-card-hover: #252525;
-            --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --text-muted: #808080;
-        }
-
         body {
             font-family: 'DripOctober', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
+            background: #141414;
+            color: #ffffff;
             overflow-x: hidden;
-            line-height: 1.6;
         }
 
-        /* Header */
         .header {
             padding: 20px 50px;
-            background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+            background: linear-gradient(180deg, rgba(0,0,0,0.7) 10%, transparent);
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .header.scrolled {
-            background: rgba(10, 10, 10, 0.98);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
+            z-index: 100;
         }
 
         .logo {
             font-size: 2rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, #ff2a2a 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 3px;
-            text-shadow: 0 0 30px rgba(229, 9, 20, 0.3);
+            color: #e50914;
+            letter-spacing: 2px;
         }
 
-        .header-stats {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .stat-number {
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        /* Hero Section */
         .hero {
-            height: 85vh;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(10,10,10,0.95)), 
+            height: 80vh;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(20,20,20,0.95)), 
                         url('https://cdn.jsdelivr.net/gh/Rolandelving/image-storage@main/NetflixBG.png');
             background-size: cover;
             background-position: center top;
-            background-attachment: fixed;
             display: flex;
             align-items: center;
             padding: 0 50px;
-            position: relative;
             image-rendering: -webkit-optimize-contrast;
         }
 
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 150px;
-            background: linear-gradient(to bottom, transparent, var(--bg-dark));
-        }
-
         .hero-content {
-            max-width: 700px;
+            max-width: 600px;
             margin-top: 80px;
-            z-index: 2;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            background: rgba(229, 9, 20, 0.2);
-            border: 1px solid var(--primary);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            color: var(--primary);
         }
 
         .hero-title {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #ffffff 0%, #b3b3b3 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
         }
 
         .hero-description {
             font-size: 1.3rem;
-            color: var(--text-secondary);
-            margin-bottom: 35px;
-            line-height: 1.7;
+            color: #ddd;
+            margin-bottom: 30px;
+            line-height: 1.6;
         }
 
-        .hero-stats {
+        .search-container {
+            width: 100%;
             display: flex;
-            gap: 40px;
-            margin-top: 30px;
-        }
-
-        .hero-stat {
-            text-align: center;
-        }
-
-        .hero-stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--accent);
-            display: block;
-        }
-
-        .hero-stat-label {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Controls Section */
-        .controls-section {
-            padding: 40px 50px 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-            position: sticky;
-            top: 80px;
-            background: linear-gradient(to bottom, var(--bg-dark), transparent);
-            z-index: 100;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .controls-section.hidden {
-            opacity: 0;
-            transform: translateY(-20px);
-            pointer-events: none;
-        }
-
-        .controls-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .search-wrapper {
-            flex: 1;
-            min-width: 300px;
-            max-width: 500px;
-            position: relative;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1.1rem;
+            justify-content: center;
+            padding: 100px 20px 40px;
         }
 
         #searchInput {
-            width: 100%;
-            padding: 14px 20px 14px 48px;
-            border: 2px solid transparent;
-            border-radius: 50px;
+            width: 60%;
+            max-width: 600px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 30px;
             font-size: 1rem;
             outline: none;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            font-family: 'DripOctober', sans-serif;
+            background: #2a2a2a;
+            color: #fff;
+            transition: all 0.3s;
         }
 
         #searchInput::placeholder {
-            color: var(--text-muted);
+            color: #999;
         }
 
         #searchInput:focus {
-            background: var(--bg-card-hover);
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.2);
+            background: #333;
+            transform: scale(1.02);
         }
 
-        .filter-controls {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .filter-label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .control-select {
-            padding: 10px 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'DripOctober', sans-serif;
-            font-size: 0.9rem;
-        }
-
-        .control-select:hover {
-            border-color: var(--primary);
-            background: var(--bg-card-hover);
-        }
-
-        .control-select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        /* Category Tabs */
-        .category-tabs {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary) var(--bg-card);
-        }
-
-        .category-tabs::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .category-tabs::-webkit-scrollbar-track {
-            background: var(--bg-card);
-            border-radius: 10px;
-        }
-
-        .category-tabs::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
-
-        .category-tab {
-            padding: 10px 24px;
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .category-tab:hover {
-            background: var(--bg-card-hover);
-            color: var(--text-primary);
-            border-color: var(--primary);
-        }
-
-        .category-tab.active {
-            background: var(--primary);
-            color: var(--text-primary);
-            border-color: var(--primary);
-            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
-        }
-
-        /* Section */
         .section {
-            padding: 40px 50px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
+            padding: 50px;
         }
 
         .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            position: relative;
-            padding-left: 15px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #e5e5e5;
         }
 
-        .section-title::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 80%;
-            background: var(--primary);
-            border-radius: 2px;
-        }
-
-        .section-count {
-            font-size: 1rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        /* Show Grid */
         .show-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes cardAppear {
-            from { 
-                opacity: 0; 
-                transform: translateY(30px) scale(0.95);
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0) scale(1);
-            }
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .show-card {
-            opacity: 0;
-            animation: cardAppear 0.5s ease forwards;
-        }
-
-        /* Staggered animation delays */
-        .show-card:nth-child(1) { animation-delay: 0.05s; }
-        .show-card:nth-child(2) { animation-delay: 0.1s; }
-        .show-card:nth-child(3) { animation-delay: 0.15s; }
-        .show-card:nth-child(4) { animation-delay: 0.2s; }
-        .show-card:nth-child(5) { animation-delay: 0.25s; }
-        .show-card:nth-child(6) { animation-delay: 0.3s; }
-        .show-card:nth-child(7) { animation-delay: 0.35s; }
-        .show-card:nth-child(8) { animation-delay: 0.4s; }
-        .show-card:nth-child(9) { animation-delay: 0.45s; }
-        .show-card:nth-child(10) { animation-delay: 0.5s; }
-        .show-card:nth-child(11) { animation-delay: 0.55s; }
-        .show-card:nth-child(12) { animation-delay: 0.6s; }
-        .show-card:nth-child(13) { animation-delay: 0.65s; }
-        .show-card:nth-child(14) { animation-delay: 0.7s; }
-        .show-card:nth-child(15) { animation-delay: 0.75s; }
-        .show-card:nth-child(n+16) { animation-delay: 0.8s; }
-
-        /* Show Card */
-        .show-card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: #2a2a2a;
+            border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
         }
 
         .show-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-            border-color: rgba(229, 9, 20, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
         }
 
         .show-thumbnail {
             width: 100%;
-            height: 420px;
+            height: 400px;
             background-size: cover;
             background-position: center;
             position: relative;
-            overflow: hidden;
-        }
-
-        .show-thumbnail::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, var(--bg-card) 0%, transparent 60%);
-            z-index: 1;
         }
 
         .show-thumbnail::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: rgba(229, 9, 20, 0.1);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 0;
-        }
-
-        .show-card:hover .show-thumbnail::after {
-            opacity: 1;
-        }
-
-        .wip-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 6px 12px;
-            background: rgba(255, 165, 0, 0.9);
-            color: #000;
-            font-size: 0.7rem;
-            font-weight: 700;
-            border-radius: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            z-index: 2;
-            backdrop-filter: blur(10px);
+            background: linear-gradient(to top, rgba(42,42,42,1) 0%, transparent 50%);
         }
 
         .show-info {
-            padding: 25px;
-            position: relative;
+            padding: 20px;
         }
 
         .show-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--text-primary);
-            line-height: 1.3;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
         .show-meta {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-
-        .meta-badge {
-            padding: 4px 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* First badge (year) gets accent color */
-        .meta-badge:first-child {
-            color: var(--accent);
-            background: rgba(0, 217, 255, 0.15);
-        }
-
-        /* All badges after the second one (genres) get primary color */
-        .meta-badge:nth-child(n+3) {
-            color: var(--primary);
-            background: rgba(229, 9, 20, 0.15);
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
         }
 
         .show-description {
-            color: var(--text-secondary);
+            color: #ccc;
             font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            line-height: 1.5;
+            margin-bottom: 15px;
         }
 
-        /* Season Links */
+        .content-counter {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            width: fit-content;
+        }
+
+        .content-counter span {
+            color: #00d9ff;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
         .season-links {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 15px;
         }
 
         .season-link {
-            padding: 9px 18px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 8px 16px;
+            background: #e50914;
             color: white;
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .season-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .season-link:hover::before {
-            left: 100%;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
         }
 
         .season-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+            background: #f40612;
+            transform: translateY(-2px);
         }
 
-        /* Empty State */
-        .empty-state {
+        .sort-container {
+            margin: 20px 0;
             text-align: center;
-            padding: 80px 20px;
-            color: var(--text-muted);
         }
 
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-
-        .empty-state-text {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        .empty-state-subtext {
-            font-size: 0.95rem;
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(229, 9, 20, 0.1);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .show-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
+        .sort-select {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: #2a2a2a;
+            color: white;
         }
 
         @media (max-width: 768px) {
-            .header, .hero, .section, .controls-section {
+            .header, .hero, .section {
                 padding: 20px;
-            }
-
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .header-stats {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .hero {
-                height: 70vh;
-                background-attachment: scroll;
             }
 
             .hero-title {
                 font-size: 2.5rem;
             }
 
-            .hero-description {
-                font-size: 1.1rem;
-            }
-
-            .hero-stats {
-                gap: 20px;
-            }
-
-            .hero-stat-number {
-                font-size: 2rem;
-            }
-
-            .controls-container {
-                flex-direction: column;
-            }
-
-            .search-wrapper {
-                max-width: 100%;
-            }
-
-            .filter-controls {
-                width: 100%;
-                flex-wrap: wrap;
-            }
-
             .show-grid {
                 grid-template-columns: 1fr;
             }
-
-            .section-title {
-                font-size: 1.5rem;
-            }
-        }
-
-        /* Smooth Scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Selection */
-        ::selection {
-            background: var(--primary);
-            color: white;
         }
     </style>
 </head>
 <body>
-    <div class="header" id="header">
-        <div class="header-content">
-            <div class="logo">KRIPTIC TV</div>
-            <div class="header-stats">
-                <div class="stat-item">
-                    <span class="stat-number" id="headerTotalCount">0</span>
-                    <span>Content</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="headerShowCount">0</span>
-                    <span>Shows</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="headerMovieCount">0</span>
-                    <span>Movies</span>
-                </div>
-            </div>
-        </div>
+    <div class="header">
+        <div class="logo">KRIPTIC TV</div>
     </div>
 
     <div class="hero">
         <div class="hero-content">
-            <div class="hero-badge">PREMIUM STREAMING</div>
-            <h1 class="hero-title">Unlimited Entertainment</h1>
+            <h1 class="hero-title">Unlimited entertainment</h1>
             <p class="hero-description">Stream your favorite shows and movies, anytime, anywhere. New content added regularly.</p>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-number" id="heroTotalCount">0</span>
-                    <span class="hero-stat-label">Total Content</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number" id="heroEpisodeCount">0+</span>
-                    <span class="hero-stat-label">Episodes</span>
-                </div>
-            </div>
         </div>
     </div>
 
-    <div class="controls-section">
-        <div class="controls-container">
-            <div class="search-wrapper">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Search movies, shows, genres..." onkeyup="filterContent()">
-            </div>
-            <div class="filter-controls">
-                <div class="filter-group">
-                    <span class="filter-label">Sort:</span>
-                    <select id="sortSelect" class="control-select" onchange="sortContent(this.value)">
-                        <option value="alphabetical">A → Z</option>
-                        <option value="year">Newest First</option>
-                        <option value="genre">By Genre</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <span class="filter-label">Type:</span>
-                    <select id="typeFilter" class="control-select" onchange="filterByType(this.value)">
-                        <option value="all">All Content</option>
-                        <option value="show">Shows Only</option>
-                        <option value="movie">Movies Only</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="category-tabs" id="categoryTabs">
-            <div class="category-tab active" data-category="all">All</div>
-            <div class="category-tab" data-category="Comedy">Comedy</div>
-            <div class="category-tab" data-category="Animation">Animation</div>
-            <div class="category-tab" data-category="Thriller">Thriller</div>
-            <div class="category-tab" data-category="Action">Action</div>
-            <div class="category-tab" data-category="Drama">Drama</div>
-            <div class="category-tab" data-category="Sci-Fi">Sci-Fi</div>
-            <div class="category-tab" data-category="Adventure">Adventure</div>
-            <div class="category-tab" data-category="Mystery">Mystery</div>
-        </div>
+    <div class="sort-container">
+        <label for="sortSelect" style="font-weight: bold;">Sort by: </label>
+        <select id="sortSelect" class="sort-select">
+            <option value="alphabetical">Title (A–Z)</option>
+            <option value="year">Year (Newest → Oldest)</option>
+            <option value="genre">Genre (A–Z)</option>
+        </select>
+    </div>
+
+    <div class="content-counter">
+        <span id="movieCount">0</span> Movies & Shows Available
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search movies or shows..." onkeyup="filterShows()">
     </div>
 
     <div class="section">
-        <div class="section-header">
-            <h2 class="section-title">Popular Shows</h2>
-            <span class="section-count"><span id="showsCount">0</span> shows available</span>
-        </div>
-        <div class="show-grid" id="showsGrid">
+        <h2 class="section-title">Popular Shows</h2>
+        <div class="show-grid">
             
             <!-- Squid Game -->
-            <div class="show-card" data-type="show" data-genres="Thriller" data-year="2021">
+            <div class="show-card">
                 <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(34).jpg');"></div>
                 <div class="show-info">
                     <h3 class="show-title">Squid Game</h3>
-                    <div class="show-meta">
-                        <span class="meta-badge">2021</span>
-                        <span class="meta-badge">3 Seasons</span>
-                        <span class="meta-badge">Thriller</span>
-                    </div>
+                    <div class="show-meta">2021 • 3 Seasons • Thriller</div>
                     <p class="show-description">
                         Hundreds of cash-strapped players accept a strange invitation to compete in children's games for a tempting prize, but the stakes are deadly.
                     </p>
@@ -816,20 +285,14 @@
                     </div>
                 </div>
             </div>
-
             <!-- Family Guy -->
-            <div class="show-card" data-type="show" data-genres="Comedy,Animation" data-year="1999">
+            <div class="show-card">
                 <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Family%20Guy.jpg');"></div>
                 <div class="show-info">
                     <h3 class="show-title">Family Guy</h3>
-                    <div class="show-meta">
-                        <span class="meta-badge">1999</span>
-                        <span class="meta-badge">23 Seasons</span>
-                        <span class="meta-badge">Comedy</span>
-                        <span class="meta-badge">Animation</span>
-                    </div>
+                    <div class="show-meta">1999 • 23 Seasons • Comedy • Animation</div>
                     <p class="show-description">
-                        The Griffin family navigates life in Quahog, Rhode Island, where absurdity, satire, and chaos collide. From Peter's stupidity to Stewie's dark genius, Family Guy balances crude humor with cultural commentary.
+                        The Griffin family navigates life in Quahog, Rhode Island, where absurdity, satire, and chaos collide. From Peter’s stupidity to Stewie’s dark genius, Family Guy balances crude humor with cultural commentary that’s as outrageous as it is clever.
                     </p>
                     <div class="season-links">
                         <a href="https://drive.google.com/drive/folders/1k0ndzzsCScUVY5l011g_5Q2MsuZK1oDx?usp=drive_link" class="season-link" target="_blank">Season 1</a>
@@ -859,20 +322,14 @@
                     </div>
                 </div>
             </div>
-
             <!-- SpongeBob SquarePants -->
-            <div class="show-card" data-type="show" data-genres="Comedy,Animation" data-year="1999">
+            <div class="show-card">
                 <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Spongebob.jpg');"></div>
                 <div class="show-info">
                     <h3 class="show-title">SpongeBob SquarePants</h3>
-                    <div class="show-meta">
-                        <span class="meta-badge">1999</span>
-                        <span class="meta-badge">16 Seasons</span>
-                        <span class="meta-badge">Comedy</span>
-                        <span class="meta-badge">Animation</span>
-                    </div>
+                    <div class="show-meta">1999 • 16 Seasons • Comedy • Animation</div>
                     <p class="show-description">
-                        Deep in the underwater city of Bikini Bottom, SpongeBob SquarePants and his quirky friends get into hilarious adventures filled with laughs, nonsense, and heart.
+                        Deep in the underwater city of Bikini Bottom, SpongeBob SquarePants and his quirky friends get into hilarious adventures filled with laughs, nonsense, and heart. From flipping Krabby Patties to jellyfishing with Patrick, it’s pure oceanic chaos and fun.
                     </p>
                     <div class="season-links">
                         <a href="https://drive.google.com/drive/folders/1POW9PmENDMDvuymjEPshRHavjreeeCel?usp=drive_link" class="season-link" target="_blank">Season 1</a>
@@ -896,20 +353,14 @@
                     </div>
                 </div>
             </div>
-
-            <!-- South Park -->
-            <div class="show-card" data-type="show" data-genres="Comedy,Animation" data-year="1997">
+                        <!-- South Park -->
+            <div class="show-card">
                 <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/South%20Park.jpg');"></div>
                 <div class="show-info">
                     <h3 class="show-title">South Park</h3>
-                    <div class="show-meta">
-                        <span class="meta-badge">1997</span>
-                        <span class="meta-badge">27 Seasons</span>
-                        <span class="meta-badge">Comedy</span>
-                        <span class="meta-badge">Animation</span>
-                    </div>
+                    <div class="show-meta">1997 • 27(ish) Seasons • Comedy • Animation</div>
                     <p class="show-description">
-                        Four foul-mouthed kids wreak havoc in the small mountain town of South Park, Colorado. Satirical, absurd, and fearless, this show takes no prisoners in mocking pop culture and politics.
+                        Four foul-mouthed kids wreak havoc in the small mountain town of South Park, Colorado. Satirical, absurd, and fearless, this show takes no prisoners in mocking pop culture, politics, and everyday life.
                     </p>
                     <div class="season-links">
                         <a href="https://drive.google.com/open?id=1cUiEckvNFBO5KWJwJnouWIljMER6ugTC&usp=drive_copy" class="season-link" target="_blank">Season 0</a>
@@ -945,17 +396,12 @@
             </div>
 
             <!-- The Boys -->
-            <div class="show-card" data-type="show" data-genres="Action,Thriller" data-year="2019">
-                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(35).jpg');">
-                    <div class="wip-badge">WORK IN PROGRESS</div>
-                </div>
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(35).jpg');"></div>
                 <div class="show-info">
+                    <div class="wip-badge">WORK IN PROGRESS</div>
                     <h3 class="show-title">The Boys</h3>
-                    <div class="show-meta">
-                        <span class="meta-badge">2019</span>
-                        <span class="meta-badge">Action</span>
-                        <span class="meta-badge">Thriller</span>
-                    </div>
+                    <div class="show-meta">2019 • Action • Superhero</div>
                     <p class="show-description">
                         A group of vigilantes set out to take down corrupt superheroes who abuse their superpowers. Dark, violent, and satirical superhero series.
                     </p>
@@ -966,17 +412,12 @@
             </div>
 
             <!-- Breaking Bad -->
-            <div class="show-card" data-type="show" data-genres="Drama,Thriller" data-year="2008">
-                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(36).jpg');">
-                    <div class="wip-badge">WORK IN PROGRESS</div>
-                </div>
+            <div class="show-card">
+                <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(36).jpg');"></div>
                 <div class="show-info">
+                    <div class="wip-badge">WORK IN PROGRESS</div>
                     <h3 class="show-title">Breaking Bad</h3>
-                    <div class="show-meta">
-                        <span class="meta-badge">2008</span>
-                        <span class="meta-badge">Drama</span>
-                        <span class="meta-badge">Thriller</span>
-                    </div>
+                    <div class="show-meta">2008 • Crime • Drama</div>
                     <p class="show-description">
                         A high school chemistry teacher diagnosed with cancer turns to producing meth to secure his family's future. Widely regarded as one of the greatest TV series ever made.
                     </p>
@@ -987,61 +428,45 @@
                     </div>
                 </div>
             </div>
-
             <!-- Gravity Falls -->
-            <div class="show-card" data-type="show" data-genres="Adventure,Mystery,Animation" data-year="2012">
+            <div class="show-card">
                 <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/Gravity%20Falls.jpg');"></div>
                 <div class="show-info">
                     <h3 class="show-title">Gravity Falls</h3>
-                    <div class="show-meta">
-                        <span class="meta-badge">2012</span>
-                        <span class="meta-badge">2 Seasons</span>
-                        <span class="meta-badge">Adventure</span>
-                        <span class="meta-badge">Mystery</span>
-                    </div>
+                    <div class="show-meta">2012 • 2 Seasons • Adventure • Mystery • Animation</div>
                     <p class="show-description">
-                        Twin siblings Dipper and Mabel travel to the mysterious town of Gravity Falls for the summer and uncover weird creatures, hidden journals and conspiracies.
+                        Twin siblings Dipper and Mabel travel to the mysterious town of Gravity Falls for the summer — and uncover weird creatures, hidden journals and conspiracies that turn their vacation into a wild ride.
                     </p>
                     <div class="season-links">
-                        <a href="https://drive.google.com/open?id=1rwLVdLs5KZKtCtyftqx-UXHHueNHo8nW&usp=drive_copy" class="season-link" target="_blank">Season 1</a>
-                        <a href="https://drive.google.com/open?id=1BzXrs_cSkKNJYtWO4CFzXGJLLVKcN1vC&usp=drive_copy" class="season-link" target="_blank">Season 2</a>
+                        <a href="https://drive.google.com/open?id=1rwLVdLs5KZKtCtyftqx-UXHHueNHo8nW&usp=drive_copy" class="season-link" target="_blank">Season 1</a>
+                        <a href="https://drive.google.com/open?id=1BzXrs_cSkKNJYtWO4CFzXGJLLVKcN1vC&usp=drive_copy" class="season-link" target="_blank">Season 2</a>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="empty-state" id="showsEmpty" style="display: none;">
-            <div class="empty-state-icon">📺</div>
-            <div class="empty-state-text">No shows found</div>
-            <div class="empty-state-subtext">Try adjusting your filters or search terms</div>
+       <!-- DO NOT REPLACE ANYTHING UNDER THIS -->
         </div>
     </div>
 
     <div class="section">
-        <div class="section-header">
-            <h2 class="section-title">Movies</h2>
-            <span class="section-count"><span id="moviesCount">0</span> movies available</span>
-        </div>
-        <div class="show-grid" id="moviesGrid">
+        <h2 class="section-title">Movies</h2>
+        <div class="show-grid">
             
             <!-- 65 -->
-            <div class="show-card" data-type="movie" data-genres="Sci-Fi,Thriller" data-year="2023">
+            <div class="show-card">
                 <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(37).jpg');"></div>
                 <div class="show-info">
                     <h3 class="show-title">65</h3>
-                    <div class="show-meta">
-                        <span class="meta-badge">2023</span>
-                        <span class="meta-badge">Sci-Fi</span>
-                        <span class="meta-badge">Thriller</span>
-                    </div>
+                    <div class="show-meta">2023 • Sci-Fi • Thriller</div>
                     <p class="show-description">
-                        After a catastrophic crash on an unknown planet, pilot Mills discovers he's stranded on Earth 65 million years ago. Now he must survive prehistoric dangers to find a way home.
+                        After a catastrophic crash on an unknown planet, pilot Mills discovers he's stranded on Earth 65 million years ago.
                     </p>
                     <div class="season-links">
                         <a href="https://drive.google.com/file/d/1Mva-frIx-PjwLfoV08BxlwQ44glMzBnZ/view" class="season-link" target="_blank">Watch Now</a>
                     </div>
                 </div>
             </div>
-                        <!-- 10 Things I Hate About You -->
+
+            <!-- 10 Things I Hate About You -->
             <div class="show-card">
                 <div class="show-thumbnail" style="background-image: url('https://cdn.jsdelivr.net/gh/Rolandelving/krptcedtn@main/download%20(38).jpg');"></div>
                 <div class="show-info">
@@ -3553,75 +2978,29 @@
                 </div>
             </div>
         </div>
-        <div class="empty-state" id="moviesEmpty" style="display: none;">
-            <div class="empty-state-icon">🎬</div>
-            <div class="empty-state-text">No movies found</div>
-            <div class="empty-state-subtext">Try adjusting your filters or search terms</div>
-        </div>
     </div>
 
     <script>
-        // Global state
-        let currentCategory = 'all';
-        let currentType = 'all';
-        let currentSort = 'alphabetical';
-        let lastScrollY = 0;
-
-        // Header scroll effect and controls hide/show
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            const controls = document.querySelector('.controls-section');
-            const currentScrollY = window.scrollY;
-            
-            // Header effect
-            if (currentScrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-            
-            // Hide controls when scrolling down, show when scrolling up
-            if (currentScrollY > 400) {
-                if (currentScrollY > lastScrollY) {
-                    // Scrolling down
-                    controls.classList.add('hidden');
-                } else {
-                    // Scrolling up
-                    controls.classList.remove('hidden');
-                }
-            } else {
-                // Always show when near top
-                controls.classList.remove('hidden');
-            }
-            
-            lastScrollY = currentScrollY;
-        });
-
-        // Category tabs
-        document.querySelectorAll('.category-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                currentCategory = tab.dataset.category;
-                filterContent();
-            });
-        });
-
-        // Sort content
-        function sortContent(mode) {
-            currentSort = mode;
-            const sections = document.querySelectorAll('.show-grid');
+        function sortShows(mode = 'alphabetical') {
+            const sections = document.querySelectorAll('.section');
             
             sections.forEach(section => {
-                const cards = Array.from(section.querySelectorAll('.show-card'));
+                const grid = section.querySelector('.show-grid');
+                if (!grid) return;
+
+                const cards = Array.from(grid.querySelectorAll('.show-card'));
 
                 cards.sort((a, b) => {
                     const titleA = a.querySelector('.show-title')?.textContent.trim().toLowerCase() || '';
                     const titleB = b.querySelector('.show-title')?.textContent.trim().toLowerCase() || '';
-                    const yearA = parseInt(a.dataset.year) || 0;
-                    const yearB = parseInt(b.dataset.year) || 0;
-                    const genresA = a.dataset.genres?.split(',')[0]?.toLowerCase() || '';
-                    const genresB = b.dataset.genres?.split(',')[0]?.toLowerCase() || '';
+                    const metaA = a.querySelector('.show-meta')?.textContent.trim() || '';
+                    const metaB = b.querySelector('.show-meta')?.textContent.trim() || '';
+
+                    const yearA = parseInt(metaA.match(/\b\d{4}\b/)?.[0]) || 0;
+                    const yearB = parseInt(metaB.match(/\b\d{4}\b/)?.[0]) || 0;
+
+                    const genreA = metaA.split('•')[1]?.trim().toLowerCase() || '';
+                    const genreB = metaB.split('•')[1]?.trim().toLowerCase() || '';
 
                     if (mode === 'alphabetical') {
                         return titleA.localeCompare(titleB);
@@ -3630,114 +3009,49 @@
                         return yearB - yearA;
                     } 
                     else if (mode === 'genre') {
-                        return genresA.localeCompare(genresB);
+                        return genreA.localeCompare(genreB);
+                    } 
+                    else {
+                        return 0;
                     }
-                    return 0;
                 });
 
-                section.innerHTML = '';
-                cards.forEach(card => section.appendChild(card));
+                grid.innerHTML = '';
+                cards.forEach(card => grid.appendChild(card));
             });
         }
 
-        // Filter by type
-        function filterByType(type) {
-            currentType = type;
-            filterContent();
+        function updateMovieCount() {
+            const cards = document.querySelectorAll('.show-card');
+            const visibleCards = Array.from(cards).filter(card => card.style.display !== 'none');
+            document.getElementById('movieCount').textContent = visibleCards.length;
         }
 
-        // Main filter function
-        function filterContent() {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const allCards = document.querySelectorAll('.show-card');
+        function filterShows() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.show-card');
             
-            let visibleShows = 0;
-            let visibleMovies = 0;
-
-            allCards.forEach(card => {
+            cards.forEach(card => {
                 const title = card.querySelector('.show-title').textContent.toLowerCase();
                 const description = card.querySelector('.show-description').textContent.toLowerCase();
-                const genres = card.dataset.genres?.toLowerCase() || '';
-                const type = card.dataset.type;
-                
-                // Search match
-                const searchMatch = title.includes(searchInput) || 
-                                  description.includes(searchInput) || 
-                                  genres.includes(searchInput);
-                
-                // Category match
-                const categoryMatch = currentCategory === 'all' || 
-                                    genres.split(',').some(g => g.trim() === currentCategory.toLowerCase());
-                
-                // Type match
-                const typeMatch = currentType === 'all' || type === currentType;
-                
-                if (searchMatch && categoryMatch && typeMatch) {
+                if (title.includes(input) || description.includes(input)) {
                     card.style.display = 'block';
-                    if (type === 'show') visibleShows++;
-                    if (type === 'movie') visibleMovies++;
                 } else {
                     card.style.display = 'none';
                 }
             });
-
-            // Update counts
-            document.getElementById('showsCount').textContent = visibleShows;
-            document.getElementById('moviesCount').textContent = visibleMovies;
             
-            // Show/hide empty states
-            const showsEmpty = document.getElementById('showsEmpty');
-            const moviesEmpty = document.getElementById('moviesEmpty');
-            const showsGrid = document.getElementById('showsGrid');
-            const moviesGrid = document.getElementById('moviesGrid');
-            
-            if (visibleShows === 0 && (currentType === 'all' || currentType === 'show')) {
-                showsEmpty.style.display = 'block';
-                showsGrid.style.display = 'none';
-            } else {
-                showsEmpty.style.display = 'none';
-                showsGrid.style.display = 'grid';
-            }
-            
-            if (visibleMovies === 0 && (currentType === 'all' || currentType === 'movie')) {
-                moviesEmpty.style.display = 'block';
-                moviesGrid.style.display = 'none';
-            } else {
-                moviesEmpty.style.display = 'none';
-                moviesGrid.style.display = 'grid';
-            }
-
-            updateHeaderStats();
+            updateMovieCount();
         }
 
-        // Update all counters
-        function updateHeaderStats() {
-            const allCards = document.querySelectorAll('.show-card');
-            const visibleCards = Array.from(allCards).filter(card => card.style.display !== 'none');
-            
-            const totalShows = Array.from(allCards).filter(c => c.dataset.type === 'show').length;
-            const totalMovies = Array.from(allCards).filter(c => c.dataset.type === 'movie').length;
-            const visibleTotal = visibleCards.length;
-
-            document.getElementById('headerTotalCount').textContent = visibleTotal;
-            document.getElementById('headerShowCount').textContent = totalShows;
-            document.getElementById('headerMovieCount').textContent = totalMovies;
-            document.getElementById('heroTotalCount').textContent = allCards.length;
-        }
-
-        // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
-            sortContent('alphabetical');
-            updateHeaderStats();
-            
-            // Calculate approximate episode count for hero
-            const showCards = document.querySelectorAll('[data-type="show"]');
-            let episodeCount = 0;
-            showCards.forEach(card => {
-                const seasonLinks = card.querySelectorAll('.season-link').length;
-                episodeCount += seasonLinks * 12; // Rough estimate
-            });
-            document.getElementById('heroEpisodeCount').textContent = episodeCount + '+';
+            sortShows('alphabetical');
+            updateMovieCount();
+
+            const selector = document.getElementById('sortSelect');
+            if (selector) {
+                selector.addEventListener('change', e => sortShows(e.target.value));
+            }
         });
     </script>
 </body>
