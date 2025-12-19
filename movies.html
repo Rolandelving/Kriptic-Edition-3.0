@@ -531,6 +531,83 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        .season-links.has-dropdown {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .season-dropdown-toggle {
+            padding: 12px 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'DripOctober', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .season-dropdown-toggle:hover {
+            background: #f40612;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+        }
+
+        .season-dropdown-toggle:focus {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .season-dropdown-arrow {
+            transition: transform 0.3s ease;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+
+        .season-dropdown-toggle.active .season-dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .season-dropdown-content {
+            display: none;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 5px 0 10px 0;
+            max-height: 250px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--bg-card);
+        }
+
+        .season-dropdown-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .season-dropdown-content::-webkit-scrollbar-track {
+            background: var(--bg-card-hover);
+            border-radius: 10px;
+        }
+
+        .season-dropdown-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .season-dropdown-content::-webkit-scrollbar-thumb:hover {
+            background: #f40612;
+        }
+
+        .season-dropdown-content.active {
+            display: flex;
+        }
+
         .season-link {
             padding: 9px 18px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -562,6 +639,192 @@
         .season-link:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+        }
+
+        .season-link:focus {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Grid Density Controls */
+        .view-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: var(--bg-card);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .view-controls span {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .density-btn {
+            padding: 7px 14px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'DripOctober', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .density-btn:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .density-btn:focus {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .density-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Grid Density Variations */
+        .show-grid.compact {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .show-grid.compact .show-card {
+            font-size: 0.9rem;
+        }
+
+        .show-grid.compact .show-thumbnail {
+            height: 280px;
+        }
+
+        .show-grid.compact .show-info {
+            padding: 12px;
+        }
+
+        .show-grid.compact .show-title {
+            font-size: 1.1rem;
+        }
+
+        .show-grid.compact .show-description {
+            font-size: 0.8rem;
+            -webkit-line-clamp: 2;
+        }
+
+        .show-grid.compact .season-link {
+            padding: 7px 12px;
+            font-size: 0.75rem;
+        }
+
+        .show-grid.cozy {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .show-grid.spacious {
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .show-grid.spacious .show-thumbnail {
+            height: 450px;
+        }
+
+        .show-grid.spacious .show-info {
+            padding: 25px;
+        }
+
+        /* Accessibility Improvements */
+        .skip-link {
+            position: absolute;
+            top: -50px;
+            left: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 0 0 8px 8px;
+            z-index: 10000;
+            font-weight: 700;
+            transition: top 0.3s ease;
+        }
+
+        .skip-link:focus {
+            top: 0;
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Focus visible for keyboard navigation */
+        *:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .show-card {
+                border: 2px solid rgba(255, 255, 255, 0.5);
+            }
+            
+            .season-link,
+            .season-dropdown-toggle,
+            .density-btn {
+                border: 2px solid white;
+            }
+
+            .control-btn,
+            .category-btn,
+            .type-btn,
+            .sort-btn {
+                border: 2px solid rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .show-card {
+                animation: none !important;
+            }
+        }
+
+        /* Dark mode adjustments for better accessibility */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-primary: #ffffff;
+                --text-secondary: #b3b3b3;
+            }
         }
 
         /* Empty State */
@@ -686,6 +949,8 @@
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <div class="header" id="header">
         <div class="header-content">
             <div class="logo">KRIPTIC TV</div>
@@ -727,13 +992,13 @@
     <div class="controls-section">
         <div class="controls-container">
             <div class="search-wrapper">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Search movies, shows, genres..." onkeyup="filterContent()">
+                <span class="search-icon" aria-hidden="true">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search movies, shows, genres..." onkeyup="filterContent()" aria-label="Search movies, shows, and genres">
             </div>
             <div class="filter-controls">
                 <div class="filter-group">
                     <span class="filter-label">Sort:</span>
-                    <select id="sortSelect" class="control-select" onchange="sortContent(this.value)">
+                    <select id="sortSelect" class="control-select" onchange="sortContent(this.value)" aria-label="Sort content">
                         <option value="alphabetical">A → Z</option>
                         <option value="year">Newest First</option>
                         <option value="genre">By Genre</option>
@@ -741,15 +1006,22 @@
                 </div>
                 <div class="filter-group">
                     <span class="filter-label">Type:</span>
-                    <select id="typeFilter" class="control-select" onchange="filterByType(this.value)">
+                    <select id="typeFilter" class="control-select" onchange="filterByType(this.value)" aria-label="Filter by content type">
                         <option value="all">All Content</option>
                         <option value="show">Shows Only</option>
                         <option value="movie">Movies Only</option>
                     </select>
                 </div>
             </div>
+            
+            <div class="view-controls">
+                <span>View:</span>
+                <button class="density-btn" data-density="compact" onclick="changeGridDensity('compact')" aria-label="Compact view - more items per row" aria-pressed="false">Compact</button>
+                <button class="density-btn active" data-density="cozy" onclick="changeGridDensity('cozy')" aria-label="Cozy view - balanced layout" aria-pressed="true">Cozy</button>
+                <button class="density-btn" data-density="spacious" onclick="changeGridDensity('spacious')" aria-label="Spacious view - larger cards" aria-pressed="false">Spacious</button>
+            </div>
         </div>
-        <div class="category-tabs" id="categoryTabs">
+        <div class="category-tabs" id="categoryTabs" role="navigation" aria-label="Category filter">
             <div class="category-tab active" data-category="all">All</div>
             <div class="category-tab" data-category="Comedy">Comedy</div>
             <div class="category-tab" data-category="Animation">Animation</div>
@@ -762,7 +1034,7 @@
         </div>
     </div>
 
-    <div class="section">
+    <div class="section" id="main-content">
         <div class="section-header">
             <h2 class="section-title">Popular Shows</h2>
             <span class="section-count"><span id="showsCount">0</span> shows available</span>
@@ -3701,10 +3973,98 @@
             document.getElementById('heroTotalCount').textContent = allCards.length;
         }
 
+        // Grid Density Controls
+        let currentDensity = 'cozy';
+        
+        function changeGridDensity(density) {
+            currentDensity = density;
+            const grids = document.querySelectorAll('.show-grid');
+            const buttons = document.querySelectorAll('.density-btn');
+            
+            // Update grid classes
+            grids.forEach(grid => {
+                grid.classList.remove('compact', 'cozy', 'spacious');
+                grid.classList.add(density);
+            });
+            
+            // Update button states
+            buttons.forEach(btn => {
+                if (btn.dataset.density === density) {
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-pressed', 'true');
+                } else {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-pressed', 'false');
+                }
+            });
+            
+            // Save preference
+            localStorage.setItem('gridDensity', density);
+        }
+
+        // Season Dropdown Toggle
+        function toggleSeasonDropdown(button) {
+            const content = button.nextElementSibling;
+            const isActive = button.classList.contains('active');
+            
+            button.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            // Update ARIA
+            button.setAttribute('aria-expanded', !isActive);
+        }
+
+        // Initialize Season Dropdowns (for shows with 6+ seasons)
+        function initializeSeasonDropdowns() {
+            const showCards = document.querySelectorAll('.show-card');
+            
+            showCards.forEach(card => {
+                const seasonLinks = card.querySelector('.season-links');
+                if (!seasonLinks) return;
+                
+                const links = seasonLinks.querySelectorAll('.season-link');
+                const seasonCount = links.length;
+                
+                // Convert to dropdown if 6+ seasons
+                if (seasonCount >= 6) {
+                    seasonLinks.classList.add('has-dropdown');
+                    
+                    // Create dropdown toggle button
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.className = 'season-dropdown-toggle';
+                    toggleBtn.innerHTML = `<span>View All ${seasonCount} Seasons</span><span class="season-dropdown-arrow">▼</span>`;
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                    toggleBtn.setAttribute('aria-label', `Toggle ${seasonCount} seasons`);
+                    toggleBtn.onclick = function() { toggleSeasonDropdown(this); };
+                    
+                    // Create dropdown content wrapper
+                    const dropdownContent = document.createElement('div');
+                    dropdownContent.className = 'season-dropdown-content';
+                    dropdownContent.setAttribute('role', 'region');
+                    dropdownContent.setAttribute('aria-label', 'Season links');
+                    
+                    // Move all links into dropdown
+                    links.forEach(link => {
+                        dropdownContent.appendChild(link.cloneNode(true));
+                    });
+                    
+                    // Clear original links and add new structure
+                    seasonLinks.innerHTML = '';
+                    seasonLinks.appendChild(toggleBtn);
+                    seasonLinks.appendChild(dropdownContent);
+                }
+            });
+        }
+
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
             sortContent('alphabetical');
             updateHeaderStats();
+            initializeSeasonDropdowns();
+            
+            // Load saved density preference
+            const savedDensity = localStorage.getItem('gridDensity') || 'cozy';
+            changeGridDensity(savedDensity);
             
             // Calculate approximate episode count for hero
             const showsSection = document.querySelector('.section .section-title');
