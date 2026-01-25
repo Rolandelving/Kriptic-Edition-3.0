@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing.com Auto-Typer - Lightning Fast</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        :root {
+            --primary: #4169e1;
+            --secondary: #9d4edd;
+            --accent: #00d9ff;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .nebula-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 1000px 800px at 15% 30%, rgba(65, 105, 225, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 800px 1000px at 85% 70%, rgba(157, 78, 221, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 900px 900px at 50% 50%, rgba(0, 217, 255, 0.08) 0%, transparent 70%);
+            z-index: 2;
+            pointer-events: none;
+            animation: nebulaPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes nebulaPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .logo {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: cosmicShift 8s ease infinite, logoFloat 4s ease-in-out infinite;
+            text-shadow: 0 0 60px var(--primary);
+            filter: drop-shadow(0 0 20px var(--primary));
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-15px) scale(1.02); }
+        }
+
+        @keyframes cosmicShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .tagline {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: var(--accent);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 3rem;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 2.5rem 3.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+            margin-bottom: 4rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            position: relative;
+            padding: 2.5rem 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0s; }
+        .feature-card:nth-child(2) { animation-delay: 0.5s; }
+        .feature-card:nth-child(3) { animation-delay: 1s; }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 25px 70px rgba(65, 105, 225, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 15px var(--primary));
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: #ffffff;
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+            margin: 3rem auto;
+        }
+
+        .cta-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--accent);
+            margin-bottom: 2rem;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .step-card {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.15;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-desc {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .code-section {
+            margin: 3rem 0;
+        }
+
+        .code-container {
+            position: relative;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .code-title {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .copy-btn {
+            padding: 0.7rem 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(65, 105, 225, 0.5);
+        }
+
+        .code-block {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #00ff88;
+            white-space: pre;
+            overflow-x: auto;
+            text-align: left;
+            line-height: 1.5;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .placeholder-text {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1.5rem 2rem;
+            }
+
+            .code-block {
+                font-size: 0.7rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <div class="nebula-overlay"></div>
+
+    <div class="content">
+        <div class="header-section">
+            <h1 class="logo">TYPING.COM AUTO-TYPER</h1>
+            <p class="tagline">Ultra-Fast Automated Typing</p>
+            <p class="subtitle">Complete Lessons Instantly</p>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-value">150+</div>
+                <div class="stat-label">WPM Speed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">⚡</div>
+                <div class="stat-label">Auto-Continue</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">♾️</div>
+                <div class="stat-label">Infinite Lessons</div>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3 class="feature-title">Fully Automated</h3>
+                <p class="feature-desc">Set it once and forget it. Automatically types every lesson and clicks continue buttons.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">Human-Like Typing</h3>
+                <p class="feature-desc">Realistic typing patterns with random variations, occasional errors, and natural pauses.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3 class="feature-title">Continuous Loop</h3>
+                <p class="feature-desc">Keeps running through unlimited lessons. Works even after page refreshes!</p>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2 class="cta-title">Setup in 3 Simple Steps</h2>
+            
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Install Requirements</div>
+                    <div class="step-desc">Run: pip install pyautogui flask flask-cors</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Run Python Server</div>
+                    <div class="step-desc">Save the script below and run: python typer.py</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Paste JavaScript</div>
+                    <div class="step-desc">Copy the browser code shown in terminal, paste in console, press Enter. Done!</div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">Python Server Script - Save as typer.py</span>
+                        <button class="copy-btn" onclick="copyCode()">📋 Copy Complete Script</button>
+                    </div>
+<pre class="code-block" id="codeBlock">
+                    #!/usr/bin/env python3
+"""
+Typing.com Auto-Typer - Server that receives text from browser and types it
+Run this, then run the JavaScript bookmarklet in your browser
+
+Requirements: pip install pyautogui flask flask-cors
+Usage: python typer.py
+"""
+
+import time
+import random
+import pyautogui
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)  # Allow requests from browser
+
+# Configuration
+CONFIG = {
+    'base_wpm': 150,  # Much faster!
+    'wpm_variation': 15,
+    'error_rate': 0.01,  # Fewer errors at high speed
+    'pause_after_word': 0.02,  # Shorter pauses
+}
+
+def get_keystroke_delay():
+    """Calculate delay between keystrokes based on WPM with variation"""
+    wpm = CONFIG['base_wpm'] + (random.random() * CONFIG['wpm_variation'] * 2 - CONFIG['wpm_variation'])
+    cpm = wpm * 5
+    ms_per_char = 60.0 / cpm
+    return ms_per_char + (random.random() * 0.02 - 0.01)
+
+def type_text_realistic(text):
+    """Type text with realistic timing and occasional errors"""
+    print(f"\nTyping text ({len(text)} chars): {text[:50]}...")
+    print("You have 3 seconds to switch to typing.com window!")
+    time.sleep(3)
+    
+    print("Typing now...")
+    
+    for i, char in enumerate(text):
+        # Check for special characters
+        if char == '⏎':
+            print("  [Enter key]")
+            pyautogui.press('enter')
+            time.sleep(0.1)
+            continue
+        elif char == '⇥' or char == '→':  # Tab key (various arrow symbols)
+            print("  [Tab key]")
+            pyautogui.press('tab')
+            time.sleep(0.1)
+            continue
+        
+        # Simulate occasional typo (skip for spaces and special keys)
+        if random.random() < CONFIG['error_rate'] and char != ' ':
+            wrong_char = chr(ord(char) + (1 if random.random() > 0.5 else -1))
+            pyautogui.write(wrong_char, interval=0)
+            time.sleep(0.05)
+            pyautogui.press('backspace')
+            time.sleep(0.05)
+        
+        # Type correct character
+        if char == ' ':
+            pyautogui.press('space')
+            time.sleep(CONFIG['pause_after_word'])
+        else:
+            pyautogui.write(char, interval=0)
+            time.sleep(get_keystroke_delay())
+        
+        # Progress indicator every 50 chars
+        if (i + 1) % 50 == 0:
+            print(f"Progress: {i+1}/{len(text)} chars")
+    
+    print("\n✓ Typing complete!")
+    
+    # Wait a moment before pressing Enter
+    time.sleep(1.0)
+    
+    # Press Enter to submit/continue
+    print("Pressing Enter to continue...")
+    pyautogui.press('enter')
+    time.sleep(0.3)
+    
+    print("✓ Waiting for next lesson to load...")
+
+@app.route('/type', methods=['POST'])
+def type_endpoint():
+    """Endpoint that receives text from browser and types it"""
+    data = request.get_json()
+    text = data.get('text', '')
+    
+    if not text:
+        return jsonify({'error': 'No text provided'}), 400
+    
+    print(f"\n{'='*60}")
+    print(f"Received text from browser")
+    print(f"{'='*60}")
+    
+    # Type the text
+    type_text_realistic(text)
+    
+    return jsonify({'success': True, 'message': 'Typing complete'})
+
+@app.route('/health', methods=['GET'])
+def health():
+    """Health check endpoint"""
+    return jsonify({'status': 'running', 'message': 'Typer server is ready'})
+
+if __name__ == '__main__':
+    pyautogui.FAILSAFE = True  # Move mouse to corner to stop
+    
+    print("="*60)
+    print("Typing.com Auto-Typer Server")
+    print("="*60)
+    print("\nServer starting on http://localhost:5000")
+    print("\nNow run this JavaScript in your browser console:")
+    print("\n" + "="*60)
+    print("""
+// === PASTE THIS IN BROWSER CONSOLE ===
+
+(async function() {
+    // Extract text from typing.com
+    function extractText() {
+        const words = [];
+        const wordElements = document.querySelectorAll('.screenBasic-word');
+        
+        wordElements.forEach(wordEl => {
+            let word = '';
+            const letters = wordEl.querySelectorAll('.screenBasic-letter');
+            
+            letters.forEach(letter => {
+                const text = letter.textContent.trim();
+                if (text && text !== '\\u00A0') {
+                    word += text;
+                }
+            });
+            
+            if (word) {
+                words.push(word);
+            }
+        });
+        
+        return words.join(' ');
+    }
+    
+    // Wait for continue button and click it
+    function waitForContinueButton() {
+        return new Promise((resolve) => {
+            const checkInterval = setInterval(() => {
+                const continueBtn = document.querySelector('.js-continue-button');
+                if (continueBtn && continueBtn.offsetParent !== null) {
+                    console.log('✓ Found continue button, clicking...');
+                    clearInterval(checkInterval);
+                    continueBtn.click();
+                    setTimeout(resolve, 1000);
+                }
+            }, 500);
+        });
+    }
+    
+    // Main loop - keeps running lessons
+    async function autoTypeLoop() {
+        while (true) {
+            // Wait a bit for page to load
+            await new Promise(r => setTimeout(r, 2000));
+            
+            // Check if we're on completion screen
+            const continueBtn = document.querySelector('.js-continue-button');
+            if (continueBtn && continueBtn.offsetParent !== null) {
+                console.log('On completion screen, clicking continue...');
+                continueBtn.click();
+                await new Promise(r => setTimeout(r, 2000));
+                continue;
+            }
+            
+            // Extract text from current lesson
+            const text = extractText();
+            if (!text) {
+                console.log('No text found, waiting...');
+                await new Promise(r => setTimeout(r, 2000));
+                continue;
+            }
+            
+            console.log('Extracted text:', text);
+            console.log('Sending to typer server...');
+            
+            try {
+                const response = await fetch('http://localhost:5000/type', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+                
+                const result = await response.json();
+                console.log('Server response:', result);
+                
+                if (result.success) {
+                    console.log('✓ Typing complete! Waiting for next lesson...');
+                    // Wait for completion screen and continue button
+                    await waitForContinueButton();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                console.error('Make sure Python server is running: python typer.py');
+                break;
+            }
+        }
+    }
+    
+    console.log('🚀 Starting auto-typer loop! It will continue through all lessons.');
+    console.log('To stop: Close this console or refresh the page');
+    autoTypeLoop();
+})();
+
+// === END ===
+""")
+    print("="*60)
+    print("\nInstructions:")
+    print("1. Go to typing.com and start any lesson")
+    print("2. Open browser console (F12)")
+    print("3. Copy and paste the JavaScript code ONCE")
+    print("4. Press Enter")
+    print("5. DONE! It will now:")
+    print("   ✓ Auto-click instruction screens")
+    print("   ✓ Type every lesson automatically")
+    print("   ✓ Click continue to next lesson")
+    print("   ✓ Keep running forever (even after page refreshes)")
+    print("   ✓ You NEVER need to paste it again!")
+    print("\nTo stop permanently:")
+    print("   localStorage.removeItem('autoTyperScript')")
+    print("   Then refresh the page")
+    print("\nFailsafe: Move mouse to top-left corner")
+    print("="*60)
+    
+    app.run(host='localhost', port=5000, debug=False)
+                     </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Starfield Animation
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const stars = Array.from({ length: 200 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2,
+            speed: Math.random() * 0.5
+        }));
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                star.y += star.speed;
+                if (star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
+            
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+
+        // Copy Code Function
+        function copyCode() {
+            const codeBlock = document.getElementById('codeBlock');
+            const scriptText = codeBlock.textContent;
+            
+            // Check if placeholder text is still there
+            if (scriptText.includes('👉 PASTE YOUR PYTHON SCRIPT HERE 👈')) {
+                alert('⚠️ Please paste your Python script first before copying!');
+                return;
+            }
+            
+            // Try modern Clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(scriptText).then(() => {
+                    showCopySuccess();
+                }).catch(() => {
+                    fallbackCopy(scriptText);
+                });
+            } else {
+                fallbackCopy(scriptText);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopySuccess();
+                } else {
+                    alert('Copy failed. Please manually select and copy the code.');
+                }
+            } catch (err) {
+                alert('Copy failed. Please manually select and copy the code.');
+            }
+            
+            document.body.removeChild(textarea);
+        }
+
+        function showCopySuccess() {
+            const btn = document.querySelector('.copy-btn');
+            btn.textContent = '✅ Copied!';
+            setTimeout(() => btn.textContent = '📋 Copy Complete Script', 2000);
+        }
+    </script>
+</body>
+</html>
